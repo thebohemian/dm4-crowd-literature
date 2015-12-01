@@ -1,0 +1,21 @@
+{
+  "name": "DeepaMehta 4 CROWD",
+  "version": "0.1-SNAPSHOT",
+  "homepage": "https://github.com/jri/dm4-crowd",
+  "authors": [
+    "Jörg Richter <jri@deepamehta.de>"
+  ],
+  "description": "CROWD Omnibus 2016",
+  "main": "index.html",
+  "license": "GPLv3",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "angular": "~1.4.8"
+  }
+}

@@ -1,11 +1,11 @@
 {
-  "name": "DeepaMehta 4 CROWD",
+  "name": "DeepaMehta 4 CROWD Literature",
   "version": "0.1-SNAPSHOT",
-  "homepage": "https://github.com/jri/dm4-crowd",
+  "homepage": "https://github.com/jri/dm4-crowd-literature",
   "authors": [
     "Jörg Richter <jri@deepamehta.de>"
   ],
-  "description": "CROWD Omnibus 2016",
+  "description": "Web frontend for the CROWD Literature Omnibus",
   "main": "index.html",
   "license": "GPLv3",
   "ignore": [

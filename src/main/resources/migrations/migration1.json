@@ -1,6 +1,6 @@
 {
     "topic_types": [
-        # Work
+        # Base Types
         {
             "value":            "Work Title",
             "uri":              "crowd.work.title",
@@ -36,6 +36,39 @@
             "uri":              "crowd.work.isbn",
             "data_type_uri":    "dm4.core.text"
         },
+        # Translation
+        {
+            "value":            "Translation",
+            "uri":              "crowd.work.translation",
+            "data_type_uri":    "dm4.core.composite",
+            "assoc_defs": [
+                {
+                    "child_type_uri":         "crowd.work.title",
+                    "child_cardinality_uri":  "dm4.core.one",
+                    "assoc_type_uri":         "dm4.core.composition_def"
+                },
+                {
+                    "child_type_uri":         "crowd.work.language",
+                    "child_cardinality_uri":  "dm4.core.one",
+                    "parent_cardinality_uri": "dm4.core.many",
+                    "assoc_type_uri":         "dm4.core.aggregation_def"
+                },
+                {
+                    "child_type_uri":         "crowd.work.isbn",
+                    "child_cardinality_uri":  "dm4.core.one",
+                    "assoc_type_uri":         "dm4.core.composition_def"
+                }
+            ],
+            "view_config_topics": [
+                {
+                    "type_uri": "dm4.webclient.view_config",
+                    "childs": {
+                        "dm4.webclient.icon": "/eu.crowd-literature/images/book-alt.png"
+                    }
+                }
+            ]
+        },
+        # Work
         {
             "value":            "Work",
             "uri":              "crowd.work",
@@ -78,6 +111,11 @@
                     "child_type_uri":         "dm4.webbrowser.url",
                     "child_cardinality_uri":  "dm4.core.one",
                     "assoc_type_uri":         "dm4.core.composition_def"
+                },
+                {
+                    "child_type_uri":         "crowd.work.translation",
+                    "child_cardinality_uri":  "dm4.core.many",
+                    "assoc_type_uri":         "dm4.core.composition_def"
                 }
             ],
             "view_config_topics": [
@@ -85,39 +123,6 @@
                     "type_uri": "dm4.webclient.view_config",
                     "childs": {
                         "dm4.webclient.icon": "/eu.crowd-literature/images/book.png",
-                        "dm4.webclient.show_in_create_menu": true
-                    }
-                }
-            ]
-        },
-        # Translation
-        {
-            "value":            "Translation",
-            "uri":              "crowd.work.translation",
-            "data_type_uri":    "dm4.core.composite",
-            "assoc_defs": [
-                {
-                    "child_type_uri":         "crowd.work.title",
-                    "child_cardinality_uri":  "dm4.core.one",
-                    "assoc_type_uri":         "dm4.core.composition_def"
-                },
-                {
-                    "child_type_uri":         "crowd.work.language",
-                    "child_cardinality_uri":  "dm4.core.one",
-                    "parent_cardinality_uri": "dm4.core.many",
-                    "assoc_type_uri":         "dm4.core.aggregation_def"
-                },
-                {
-                    "child_type_uri":         "crowd.work.isbn",
-                    "child_cardinality_uri":  "dm4.core.one",
-                    "assoc_type_uri":         "dm4.core.composition_def"
-                }
-            ],
-            "view_config_topics": [
-                {
-                    "type_uri": "dm4.webclient.view_config",
-                    "childs": {
-                        "dm4.webclient.icon": "/eu.crowd-literature/images/book-alt.png",
                         "dm4.webclient.show_in_create_menu": true
                     }
                 }

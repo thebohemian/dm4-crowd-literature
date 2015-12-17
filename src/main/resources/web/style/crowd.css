@@ -10,3 +10,25 @@ body {
 #map {
     height: 100%;
 }
+
+#details {
+    height: 100%;
+    background-color: beige;
+}
+
+@media (orientation: landscape) {
+    #map {
+        width: 70%;
+        float: left;
+    }
+}
+
+@media (orientation: portrait) {
+    #details {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        z-index: 1001;      /* Leaflet controls have 1000 */
+    }
+}

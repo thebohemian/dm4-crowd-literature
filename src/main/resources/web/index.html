@@ -3,19 +3,24 @@
     <head>
         <meta charset="utf-8">
         <title>CROWD -- Omnibus 2016</title>
-        <!-- AngularJS -->
+        <!-- Angular -->
         <script src="lib/angular/angular.min.js"></script>
         <script src="lib/angular/angular-route.min.js"></script>
         <!-- Leaflet -->
         <link rel="stylesheet" href="lib/leaflet/leaflet.css" />
         <script src="lib/leaflet/leaflet.js"></script>
+        <!-- Angular-Leaflet -->
+        <script src="lib/angular-leaflet/angular-leaflet-directive.min.js"></script>
         <!-- CROWD -->
         <link rel="stylesheet" href="style/crowd.css" />
         <script src="script/crowd.js"></script>
         <script src="script/tourGeoJson.js"></script>
     </head>
     <body ng-controller="crowdController">
-        <div id="map"></div>
-        <div id="details"></div>
+        <leaflet id="map" lf-center="center" tiles="tiles"></leaflet>
+        <div id="details">
+            <div>Event2 {{event.childs["dm4.events.title"].value}}</div>
+            <div>{{eventId}}</div>
+        </div>
     </body>
 </html>

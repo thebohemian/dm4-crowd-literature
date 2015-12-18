@@ -14,10 +14,9 @@
         <!-- CROWD -->
         <link rel="stylesheet" href="style/crowd.css" />
         <script src="script/crowd.js"></script>
-        <script src="script/tourGeoJson.js"></script>
     </head>
     <body ng-controller="crowdController">
-        <leaflet id="map" lf-center="center" tiles="tiles"></leaflet>
+        <leaflet id="map" lf-center="center" tiles="tiles" geojson="bustour"></leaflet>
         <div id="details">
             <div>Event2 {{event.childs["dm4.events.title"].value}}</div>
             <div>{{eventId}}</div>

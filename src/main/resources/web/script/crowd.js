@@ -23,6 +23,7 @@ angular.module("crowd", [/*"ngRoute"*/ "leaflet-directive"])
             accessToken: 'pk.eyJ1IjoianJpIiwiYSI6ImNpaG5ubmtsdDAwaHB1bG00aGk1c3BhamcifQ.2XkYFs4hGOel8DYCy4qKKw'
         }
     }
+    $scope.markers = {}
 
     crowdService.loadBustourGeojson(function(data) {
         $scope.bustour = {
@@ -35,16 +36,17 @@ angular.module("crowd", [/*"ngRoute"*/ "leaflet-directive"])
 
     crowdService.getEvents(function(events) {
         console.log("Events", events)
-        events.items.forEach(function(evt) {
-            createMarker(evt);
+        events.items.forEach(function(event) {
+            addMarker(event);
         });
     })
 
-    function createMarker(evt) {
-        var geoCoordinate = evt.childs["dm4.contacts.address"].childs["dm4.geomaps.geo_coordinate"].childs;
-        // geoCoordinate["dm4.geomaps.latitude"].value
-        // geoCoordinate["dm4.geomaps.longitude"].value
-        // $scope.event = evt;
+    function addMarker(event) {
+        var geoCoordinate = event.childs["dm4.contacts.address"].childs["dm4.geomaps.geo_coordinate"].childs;
+        $scope.markers[event.id] = {
+            lat: geoCoordinate["dm4.geomaps.latitude"].value,
+            lng: geoCoordinate["dm4.geomaps.longitude"].value
+        }
     }
 })    
 .service("crowdService", function($http) {

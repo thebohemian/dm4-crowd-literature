@@ -1,4 +1,4 @@
-<div class="event">
+<div class="event" ng-show="event">
     <div class="title">{{event.childs["dm4.events.title"].value}}</div>
     <div class="date">
         <div class="from">From: {{event.childs["dm4.datetime#dm4.events.from"].value}}</div>
@@ -14,4 +14,5 @@
     </div>
     <div class="notes">{{event.childs["dm4.events.notes"].value}}</div>
     <div class="url">{{event.childs["dm4.webbrowser.url"].value}}</div>
+    <button ng-click="backToMap()" ng-if="portrait">Back to map</button>
 </div>

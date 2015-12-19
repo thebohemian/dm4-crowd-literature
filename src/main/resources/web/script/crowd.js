@@ -6,7 +6,24 @@ angular.module("crowd", [/*"ngRoute"*/ "leaflet-directive"])
         })
         .otherwise({redirectTo: "/event"})
 })*/
+.config(function($logProvider) {
+    $logProvider.debugEnabled(false);
+})
 .controller("crowdController", function($scope, $location, crowdService) {
+
+    // application scope
+
+    $scope.events = {};
+
+    $scope.showEvent = function(eventId) {
+        $scope.event = $scope.events[eventId]
+    }
+
+    $scope.backToMap = function() {
+        $scope.event = null;
+    }
+
+    // map scope
 
     $scope.center = {
         lat: 55,
@@ -27,12 +44,12 @@ angular.module("crowd", [/*"ngRoute"*/ "leaflet-directive"])
         }
     }
     $scope.markers = {}
-    $scope.events = {}
-
     $scope.$on("leafletDirectiveMarker.map.click", function(event, args) {
-        console.log("event", event, "args", args)
-        $scope.event = $scope.events[args.modelName]
+        var eventId = args.modelName
+        $scope.showEvent(eventId)
     })
+
+    // startup code
 
     crowdService.loadBustourGeojson(function(data) {
         $scope.bustour = {
@@ -44,12 +61,17 @@ angular.module("crowd", [/*"ngRoute"*/ "leaflet-directive"])
     })
 
     crowdService.getEvents(function(events) {
-        console.log("Events", events)
         events.items.forEach(function(event) {
-            $scope.events[event.id] = event;
-            addMarker(event);
+            $scope.events[event.id] = event;    // put in model
+            addMarker(event);                   // add to map
         });
     })
+
+    var mql = matchMedia("(orientation: landscape)");
+    updateOrientation(mql);
+    mql.addListener(updateOrientation);
+
+    // private
 
     function addMarker(event) {
         var geoCoordinate = event.childs["dm4.contacts.address"].childs["dm4.geomaps.geo_coordinate"].childs;
@@ -57,6 +79,11 @@ angular.module("crowd", [/*"ngRoute"*/ "leaflet-directive"])
             lat: geoCoordinate["dm4.geomaps.latitude"].value,
             lng: geoCoordinate["dm4.geomaps.longitude"].value
         }
+    }
+
+    function updateOrientation(mql) {
+        $scope.landscape = mql.matches;
+        $scope.portrait = !$scope.landscape;
     }
 })    
 .service("crowdService", function($http) {

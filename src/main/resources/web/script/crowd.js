@@ -13,6 +13,9 @@ angular.module("crowd", [/*"ngRoute"*/ "leaflet-directive"])
         lng: 20,
         zoom: 4
     }
+    $scope.defaults = {
+        scrollWheelZoom: false
+    }
     $scope.tiles = {
         url: "https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}",
         options: {

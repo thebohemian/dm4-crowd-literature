@@ -16,7 +16,8 @@
         <script src="script/crowd.js"></script>
     </head>
     <body ng-controller="crowdController">
-        <leaflet id="map" lf-center="center" tiles="tiles" geojson="bustour" markers="markers"></leaflet>
+        <leaflet id="map" lf-center="center" defaults="defaults" tiles="tiles" geojson="bustour" markers="markers">
+        </leaflet>
         <div id="details">
             <ng-include src="'partials/event.html'">
         </div>

@@ -1,4 +1,4 @@
-angular.module("crowd", [/*"ngRoute"*/ "leaflet-directive"])
+angular.module("crowd", [/*"ngRoute"*/ "ngSanitize", "leaflet-directive"])
 /*.config(function($routeProvider) {
     $routeProvider
         .when("/event/:eventId", {

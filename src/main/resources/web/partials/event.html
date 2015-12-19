@@ -12,7 +12,9 @@
         </div>
         <div class="country">{{event.childs["dm4.contacts.address"].childs["dm4.contacts.country"].value}}</div>
     </div>
-    <div class="notes">{{event.childs["dm4.events.notes"].value}}</div>
-    <div class="url">{{event.childs["dm4.webbrowser.url"].value}}</div>
+    <div class="notes" ng-bind-html="event.childs['dm4.events.notes'].value"></div>
+    <div class="url">
+        <a ng-href="{{event.childs['dm4.webbrowser.url'].value}}">{{event.childs["dm4.webbrowser.url"].value}}</a>
+    </div>
     <button ng-click="backToMap()" ng-if="portrait">Back to map</button>
 </div>

@@ -24,6 +24,12 @@ angular.module("crowd", [/*"ngRoute"*/ "leaflet-directive"])
         }
     }
     $scope.markers = {}
+    $scope.events = {}
+
+    $scope.$on("leafletDirectiveMarker.map.click", function(event, args) {
+        console.log("event", event, "args", args)
+        $scope.event = $scope.events[args.modelName]
+    })
 
     crowdService.loadBustourGeojson(function(data) {
         $scope.bustour = {
@@ -37,6 +43,7 @@ angular.module("crowd", [/*"ngRoute"*/ "leaflet-directive"])
     crowdService.getEvents(function(events) {
         console.log("Events", events)
         events.items.forEach(function(event) {
+            $scope.events[event.id] = event;
             addMarker(event);
         });
     })

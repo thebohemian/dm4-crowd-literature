@@ -18,8 +18,7 @@
     <body ng-controller="crowdController">
         <leaflet id="map" lf-center="center" tiles="tiles" geojson="bustour" markers="markers"></leaflet>
         <div id="details">
-            <div>Event2 {{event.childs["dm4.events.title"].value}}</div>
-            <div>{{eventId}}</div>
+            <ng-include src="'partials/event.html'">
         </div>
     </body>
 </html>

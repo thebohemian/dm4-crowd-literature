@@ -5,7 +5,8 @@ html {
 }
 
 body {
-    font-family: "Lucida Grande", Arial, sans-serif;
+    font-family: "Lucida Grande", "Trebuchet MS", Arial, sans-serif;
+    line-height: 1.5em;
     margin: 0;
     height: 100%;
 }
@@ -16,12 +17,14 @@ body {
 
 #details {
     height: 100%;
+    padding: 1em;
     background-color: beige;
 }
 
 @media (orientation: landscape) {
     #map {
         width: 70%;
+        margin-right: 1em;
         float: left;
     }
 }
@@ -34,4 +37,18 @@ body {
         width: 100%;
         z-index: 1001;      /* Leaflet controls have 1000 */
     }
+}
+
+/* Events */
+
+.event .title {
+    font-size: 1.5em;
+    font-weight: bold;
+}
+
+.event .date,
+.event .address,
+.event .notes,
+.event .url {
+    margin-top: 1em;
 }

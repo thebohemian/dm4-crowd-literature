@@ -1,12 +1,24 @@
 angular.module("crowd", ["ngRoute", "ngSanitize", "leaflet-directive"])
-.config(function($routeProvider, $logProvider) {
+.config(function($routeProvider, $logProvider, $httpProvider) {
     $routeProvider
         .when("/welcome",        {templateUrl: "partials/welcome.html"})
-        .when("/event/:eventId", {templateUrl: "partials/event.html"})
+        .when("/event/:eventId", {templateUrl: "partials/event.html", controller: "eventController", resolve: {
+            eventsModel: function($rootScope) {
+                return $rootScope.eventsModel.promise;
+            } 
+        }})
         .otherwise({redirectTo: "/welcome"})
     $logProvider.debugEnabled(false);
+    $httpProvider.useLegacyPromiseExtensions(false);
 })
-.controller("crowdController", function($scope, $location, $routeParams, crowdService) {
+.controller("eventController", function($scope, $routeParams) {
+    var eventId = $routeParams.eventId;
+    console.log("CONSTRUCTING eventController", eventId);
+    $scope.showEvent(eventId);
+})
+.controller("crowdController", function($scope, $location, $q, $rootScope, crowdService) {
+
+    console.log("CONSTRUCTING crowdController");
 
     // application scope
 
@@ -14,7 +26,10 @@ angular.module("crowd", ["ngRoute", "ngSanitize", "leaflet-directive"])
 
     $scope.showEvent = function(eventId) {
         $location.path("/event/" + eventId);
-        showEvent(eventId);
+        $scope.event = $scope.events[eventId];
+        crowdService.getEventParticipants(eventId, function(response) {
+            $scope.participants = response.data.items;
+        })
     }
 
     $scope.backToMap = function() {
@@ -52,26 +67,23 @@ angular.module("crowd", ["ngRoute", "ngSanitize", "leaflet-directive"])
 
     // startup code
 
-    crowdService.loadBustourGeojson(function(data) {
+    crowdService.loadBustourGeojson(function(response) {
         $scope.bustour = {
-            data: data,
+            data: response.data,
             style: {
                 color: "#f86767"
             }
         }
     })
 
-    crowdService.getEvents(function(events) {
-        events.items.forEach(function(event) {
+    $rootScope.eventsModel = $q.defer();
+    crowdService.getEvents(function(response) {
+        response.data.items.forEach(function(event) {
             $scope.events[event.id] = event;    // put in model
             addMarker(event);                   // add to map
         });
-        //
-        console.log("$routeParams", $routeParams);
-        var eventId = $routeParams.eventId;
-        if (eventId) {
-            showEvent(eventId);
-        }
+        console.log("Events model complete");
+        $rootScope.eventsModel.resolve();
     })
 
     var mql = matchMedia("(orientation: landscape)");
@@ -88,13 +100,6 @@ angular.module("crowd", ["ngRoute", "ngSanitize", "leaflet-directive"])
         }
     }
 
-    function showEvent(eventId) {
-        $scope.event = $scope.events[eventId];
-        crowdService.getEventParticipants(eventId, function(participants) {
-            $scope.participants = participants.items;
-        })
-    }
-
     function updateOrientation(mql) {
         $scope.landscape = mql.matches;
         $scope.portrait = !$scope.landscape;
@@ -103,14 +108,14 @@ angular.module("crowd", ["ngRoute", "ngSanitize", "leaflet-directive"])
 .service("crowdService", function($http) {
 
     this.loadBustourGeojson = function(callback) {
-        $http.get("json/bustour.geo.json").success(callback);
+        $http.get("json/bustour.geo.json").then(callback);
     }
 
     this.getEvents = function(callback) {
-        $http.get("/core/topic/by_type/dm4.events.event?include_childs=true").success(callback);
+        $http.get("/core/topic/by_type/dm4.events.event?include_childs=true").then(callback);
     }
 
     this.getEventParticipants = function(eventId, callback) {
-        $http.get("/event/" + eventId + "/participants").success(callback);
+        $http.get("/event/" + eventId + "/participants").then(callback);
     }
 })

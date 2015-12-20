@@ -4,7 +4,7 @@ angular.module("crowd", ["ngRoute", "ngSanitize", "leaflet-directive"])
         .when("/welcome",        {templateUrl: "partials/welcome.html"})
         .when("/event/:eventId", {templateUrl: "partials/event.html", controller: "eventController", resolve: {
             eventsModel: function($rootScope) {
-                return $rootScope.eventsModel.promise;
+                return $rootScope.eventsModel;
             } 
         }})
         .otherwise({redirectTo: "/welcome"})
@@ -76,14 +76,12 @@ angular.module("crowd", ["ngRoute", "ngSanitize", "leaflet-directive"])
         }
     })
 
-    $rootScope.eventsModel = $q.defer();
-    crowdService.getEvents(function(response) {
+    $rootScope.eventsModel = crowdService.getEvents().then(function(response) {     // put promise in root scope
         response.data.items.forEach(function(event) {
             $scope.events[event.id] = event;    // put in model
             addMarker(event);                   // add to map
         });
         console.log("Events model complete");
-        $rootScope.eventsModel.resolve();
     })
 
     var mql = matchMedia("(orientation: landscape)");
@@ -112,7 +110,12 @@ angular.module("crowd", ["ngRoute", "ngSanitize", "leaflet-directive"])
     }
 
     this.getEvents = function(callback) {
-        $http.get("/core/topic/by_type/dm4.events.event?include_childs=true").then(callback);
+        var promise = $http.get("/core/topic/by_type/dm4.events.event?include_childs=true");
+        if (callback) {
+            promise.then(callback);
+        } else {
+            return promise;
+        }
     }
 
     this.getEventParticipants = function(eventId, callback) {

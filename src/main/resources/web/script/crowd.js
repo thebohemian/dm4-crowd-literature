@@ -1,16 +1,20 @@
 angular.module("crowd", ["ngRoute", "ngSanitize", "leaflet-directive"])
 .config(function($routeProvider, $logProvider, $httpProvider) {
     $routeProvider
-        .when("/welcome",          {templateUrl: "partials/welcome.html"})
-        .when("/event/:eventId",   {templateUrl: "partials/event.html", controller: "eventController", resolve: {
+        .when("/welcome",          {templateUrl: "partials/welcome.html", controller: "welcomeController"})
+        .when("/event/:eventId",   {templateUrl: "partials/event.html",   controller: "eventController", resolve: {
             eventsModel: function($rootScope) {
                 return $rootScope.eventsModel;
             } 
         }})
-        .when("/person/:personId", {templateUrl: "partials/person.html", controller: "personController"})
+        .when("/person/:personId", {templateUrl: "partials/person.html",  controller: "personController"})
         .otherwise({redirectTo: "/welcome"})
     $logProvider.debugEnabled(false);
     $httpProvider.useLegacyPromiseExtensions(false);
+})
+.controller("welcomeController", function($scope) {
+    console.log("CONSTRUCTING welcomeController");
+    $scope.event = null;
 })
 .controller("eventController", function($scope, $routeParams) {
     var eventId = $routeParams.eventId;
@@ -44,7 +48,7 @@ angular.module("crowd", ["ngRoute", "ngSanitize", "leaflet-directive"])
     }
 
     $scope.backToMap = function() {
-        $scope.event = null;
+        $location.path("/welcome");
     }
 
     // map scope

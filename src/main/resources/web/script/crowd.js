@@ -1,12 +1,13 @@
 angular.module("crowd", ["ngRoute", "ngSanitize", "leaflet-directive"])
 .config(function($routeProvider, $logProvider, $httpProvider) {
     $routeProvider
-        .when("/welcome",        {templateUrl: "partials/welcome.html"})
-        .when("/event/:eventId", {templateUrl: "partials/event.html", controller: "eventController", resolve: {
+        .when("/welcome",          {templateUrl: "partials/welcome.html"})
+        .when("/event/:eventId",   {templateUrl: "partials/event.html", controller: "eventController", resolve: {
             eventsModel: function($rootScope) {
                 return $rootScope.eventsModel;
             } 
         }})
+        .when("/person/:personId", {templateUrl: "partials/person.html", controller: "personController"})
         .otherwise({redirectTo: "/welcome"})
     $logProvider.debugEnabled(false);
     $httpProvider.useLegacyPromiseExtensions(false);
@@ -15,6 +16,17 @@ angular.module("crowd", ["ngRoute", "ngSanitize", "leaflet-directive"])
     var eventId = $routeParams.eventId;
     console.log("CONSTRUCTING eventController", eventId);
     $scope.showEvent(eventId);
+})
+.controller("personController", function($scope, $routeParams, crowdService) {
+    var personId = $routeParams.personId;
+    console.log("CONSTRUCTING personController", personId);
+    showPerson(personId);
+
+    function showPerson(personId) {
+        crowdService.getPerson(personId, function(response) {
+            $scope.person = response.data;
+        })
+    }
 })
 .controller("crowdController", function($scope, $location, $q, $rootScope, crowdService) {
 
@@ -25,7 +37,6 @@ angular.module("crowd", ["ngRoute", "ngSanitize", "leaflet-directive"])
     $scope.events = {};
 
     $scope.showEvent = function(eventId) {
-        $location.path("/event/" + eventId);
         $scope.event = $scope.events[eventId];
         crowdService.getEventParticipants(eventId, function(response) {
             $scope.participants = response.data.items;
@@ -62,6 +73,7 @@ angular.module("crowd", ["ngRoute", "ngSanitize", "leaflet-directive"])
 
     $scope.$on("leafletDirectiveMarker.map.click", function(event, args) {
         var eventId = args.modelName
+        $location.path("/event/" + eventId);
         $scope.showEvent(eventId)
     })
 
@@ -120,5 +132,9 @@ angular.module("crowd", ["ngRoute", "ngSanitize", "leaflet-directive"])
 
     this.getEventParticipants = function(eventId, callback) {
         $http.get("/event/" + eventId + "/participants").then(callback);
+    }
+
+    this.getPerson = function(personId, callback) {
+        $http.get("/core/topic/" + personId + "?include_childs=true").then(callback);
     }
 })

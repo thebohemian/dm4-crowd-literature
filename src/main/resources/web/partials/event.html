@@ -1,4 +1,4 @@
-<div class="event" ng-show="event">
+<div class="event">
     <div class="title">{{event.childs["dm4.events.title"].value}}</div>
     <div class="date">
         <div class="from">From: {{event.childs["dm4.datetime#dm4.events.from"].value}}</div>
@@ -18,7 +18,9 @@
     <div class="participants">
         Participants:
         <ul>
-            <li ng-repeat="person in participants | orderBy:'value'">{{person.value}}</li>
+            <li ng-repeat="person in participants | orderBy:'value'">
+                <a ng-href="#/person/{{person.id}}">{{person.value}}</a>
+            </li>
         </ul>
     </div>
     <div class="url">

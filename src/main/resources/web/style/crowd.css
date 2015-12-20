@@ -63,3 +63,10 @@ body {
 .event button {
     margin-top: 2em;
 }
+
+/* Person Details */
+
+.person .name {
+    font-size: 1.5em;
+    font-weight: bold;
+}

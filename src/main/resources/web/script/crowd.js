@@ -16,7 +16,10 @@ angular.module("crowd", [/*"ngRoute"*/ "ngSanitize", "leaflet-directive"])
     $scope.events = {};
 
     $scope.showEvent = function(eventId) {
-        $scope.event = $scope.events[eventId]
+        $scope.event = $scope.events[eventId];
+        crowdService.getEventParticipants(eventId, function(participants) {
+            $scope.participants = participants.items;
+        })
     }
 
     $scope.backToMap = function() {
@@ -25,25 +28,28 @@ angular.module("crowd", [/*"ngRoute"*/ "ngSanitize", "leaflet-directive"])
 
     // map scope
 
-    $scope.center = {
-        lat: 55,
-        lng: 20,
-        zoom: 4
-    }
-    $scope.defaults = {
-        scrollWheelZoom: false
-    }
-    $scope.tiles = {
-        url: "https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}",
-        options: {
-            attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, ' +
-                '<a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
-                'Imagery © <a href="http://mapbox.com">Mapbox</a>',
-            id: 'jri.oaem7303',
-            accessToken: 'pk.eyJ1IjoianJpIiwiYSI6ImNpaG5ubmtsdDAwaHB1bG00aGk1c3BhamcifQ.2XkYFs4hGOel8DYCy4qKKw'
-        }
-    }
-    $scope.markers = {}
+    angular.extend($scope, {
+        center: {
+            lat: 55,
+            lng: 20,
+            zoom: 4
+        },
+        defaults: {
+            scrollWheelZoom: false
+        },
+        tiles: {
+            url: "https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}",
+            options: {
+                attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, ' +
+                    '<a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
+                    'Imagery © <a href="http://mapbox.com">Mapbox</a>',
+                id: 'jri.oaem7303',
+                accessToken: 'pk.eyJ1IjoianJpIiwiYSI6ImNpaG5ubmtsdDAwaHB1bG00aGk1c3BhamcifQ.2XkYFs4hGOel8DYCy4qKKw'
+            }
+        },
+        markers: {}
+    });
+
     $scope.$on("leafletDirectiveMarker.map.click", function(event, args) {
         var eventId = args.modelName
         $scope.showEvent(eventId)
@@ -94,5 +100,9 @@ angular.module("crowd", [/*"ngRoute"*/ "ngSanitize", "leaflet-directive"])
 
     this.getEvents = function(callback) {
         $http.get("/core/topic/by_type/dm4.events.event?include_childs=true").success(callback);
+    }
+
+    this.getEventParticipants = function(eventId, callback) {
+        $http.get("/event/" + eventId + "/participants").success(callback);
     }
 })

@@ -50,8 +50,14 @@ body {
 .event .date,
 .event .address,
 .event .notes,
-.event .url {
+.event .url,
+.event .participants {
     margin-top: 1em;
+}
+
+.event ul {
+    margin-top: 0;
+    margin-bottom: 0;
 }
 
 .event button {

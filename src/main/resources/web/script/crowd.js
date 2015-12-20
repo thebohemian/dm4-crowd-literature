@@ -1,25 +1,20 @@
-angular.module("crowd", [/*"ngRoute"*/ "ngSanitize", "leaflet-directive"])
-/*.config(function($routeProvider) {
+angular.module("crowd", ["ngRoute", "ngSanitize", "leaflet-directive"])
+.config(function($routeProvider, $logProvider) {
     $routeProvider
-        .when("/event/:eventId", {
-            templateUrl: "partials/event.html", controller: "eventController"
-        })
-        .otherwise({redirectTo: "/event"})
-})*/
-.config(function($logProvider) {
+        .when("/welcome",        {templateUrl: "partials/welcome.html"})
+        .when("/event/:eventId", {templateUrl: "partials/event.html"})
+        .otherwise({redirectTo: "/welcome"})
     $logProvider.debugEnabled(false);
 })
-.controller("crowdController", function($scope, $location, crowdService) {
+.controller("crowdController", function($scope, $location, $routeParams, crowdService) {
 
     // application scope
 
     $scope.events = {};
 
     $scope.showEvent = function(eventId) {
-        $scope.event = $scope.events[eventId];
-        crowdService.getEventParticipants(eventId, function(participants) {
-            $scope.participants = participants.items;
-        })
+        $location.path("/event/" + eventId);
+        showEvent(eventId);
     }
 
     $scope.backToMap = function() {
@@ -71,6 +66,12 @@ angular.module("crowd", [/*"ngRoute"*/ "ngSanitize", "leaflet-directive"])
             $scope.events[event.id] = event;    // put in model
             addMarker(event);                   // add to map
         });
+        //
+        console.log("$routeParams", $routeParams);
+        var eventId = $routeParams.eventId;
+        if (eventId) {
+            showEvent(eventId);
+        }
     })
 
     var mql = matchMedia("(orientation: landscape)");
@@ -85,6 +86,13 @@ angular.module("crowd", [/*"ngRoute"*/ "ngSanitize", "leaflet-directive"])
             lat: geoCoordinate["dm4.geomaps.latitude"].value,
             lng: geoCoordinate["dm4.geomaps.longitude"].value
         }
+    }
+
+    function showEvent(eventId) {
+        $scope.event = $scope.events[eventId];
+        crowdService.getEventParticipants(eventId, function(participants) {
+            $scope.participants = participants.items;
+        })
     }
 
     function updateOrientation(mql) {

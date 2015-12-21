@@ -30,6 +30,9 @@ angular.module("crowd", ["ngRoute", "ngSanitize", "leaflet-directive"])
         crowdService.getPerson(personId, function(response) {
             $scope.person = response.data;
         })
+        crowdService.getEventsByParticipant(personId, function(response) {
+            $scope.events = response.data.items;
+        })
     }
 })
 .controller("crowdController", function($scope, $location, $q, $rootScope, crowdService) {
@@ -63,13 +66,12 @@ angular.module("crowd", ["ngRoute", "ngSanitize", "leaflet-directive"])
             scrollWheelZoom: false
         },
         tiles: {
-            url: "https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}",
+            url: "https://api.tiles.mapbox.com/v4/{mapId}/{z}/{x}/{y}.png?access_token={accessToken}",
             options: {
-                attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, ' +
-                    '<a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
-                    'Imagery © <a href="http://mapbox.com">Mapbox</a>',
-                id: 'jri.oaem7303',
-                accessToken: 'pk.eyJ1IjoianJpIiwiYSI6ImNpaG5ubmtsdDAwaHB1bG00aGk1c3BhamcifQ.2XkYFs4hGOel8DYCy4qKKw'
+                mapId: 'jri.oaem7303',
+                accessToken: 'pk.eyJ1IjoianJpIiwiYSI6ImNpaG5ubmtsdDAwaHB1bG00aGk1c3BhamcifQ.2XkYFs4hGOel8DYCy4qKKw',
+                attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a>, ' +
+                    'Imagery &copy; <a href="http://mapbox.com">Mapbox</a>'
             }
         },
         markers: {}
@@ -83,6 +85,10 @@ angular.module("crowd", ["ngRoute", "ngSanitize", "leaflet-directive"])
 
     // startup code
 
+    var mql = matchMedia("(orientation: landscape)");
+    updateOrientation(mql);
+    mql.addListener(updateOrientation);
+
     crowdService.loadBustourGeojson(function(response) {
         $scope.bustour = {
             data: response.data,
@@ -92,17 +98,13 @@ angular.module("crowd", ["ngRoute", "ngSanitize", "leaflet-directive"])
         }
     })
 
-    $rootScope.eventsModel = crowdService.getEvents().then(function(response) {     // put promise in root scope
+    $rootScope.eventsModel = crowdService.getAllEvents().then(function(response) {     // store promise in root scope
         response.data.items.forEach(function(event) {
             $scope.events[event.id] = event;    // put in model
             addMarker(event);                   // add to map
         });
         console.log("Events model complete");
     })
-
-    var mql = matchMedia("(orientation: landscape)");
-    updateOrientation(mql);
-    mql.addListener(updateOrientation);
 
     // private
 

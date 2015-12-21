@@ -1,4 +1,23 @@
 <div class="person">
     <div class="name">{{person.value}}</div>
+    <div class="birth">
+        Born {{person.childs["dm4.datetime.date#dm4.contacts.date_of_birth"].childs["dm4.datetime.year"].value}}
+    </div>
+    <div class="notes" ng-bind-html="person.childs['dm4.contacts.notes'].value"></div>
+    <div class="url">
+        <ul>
+            <li ng-repeat="url in person.childs['dm4.webbrowser.url']">
+                <a ng-href="{{url.value}}">{{url.value}}</a>
+            </li>
+        </ul>
+    </div>
+    <div class="events">
+        Events:
+        <ul>
+            <li ng-repeat="event in events">
+                <a ng-href="#/event/{{event.id}}">{{event.value}}</a>
+            </li>
+        </ul>
+    </div>
     <button ng-click="backToMap()" ng-if="portrait">Back to map</button>
 </div>

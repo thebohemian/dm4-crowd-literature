@@ -71,6 +71,10 @@ html[ng-app] > body {
     font-weight: bold;
 }
 
+#details .person .birth {
+    margin-top: 1em;
+}
+
 #details .person button {
     margin-top: 2em;
 }

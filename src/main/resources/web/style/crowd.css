@@ -17,6 +17,7 @@ body {
 
 #details {
     height: 100%;
+    overflow: auto;
     padding: 1em;
     box-sizing: border-box;
     background-color: beige;
@@ -25,7 +26,6 @@ body {
 @media (orientation: landscape) {
     #map {
         width: 50%;
-        margin-right: 1em;
         float: left;
     }
 }

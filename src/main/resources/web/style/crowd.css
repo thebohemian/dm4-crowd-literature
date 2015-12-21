@@ -1,11 +1,11 @@
 /* Keep in mind this CSS is loaded into the DM4 Webclient as well */
 
-html {
+html[ng-app] {
     height: 100%;
 }
 
-body {
-    font-family: "Lucida Grande", "Trebuchet MS", Arial, sans-serif;
+html[ng-app] > body {
+    font-family: "Lucida Grande", "Trebuchet MS", sans-serif;
     line-height: 1.5em;
     margin: 0;
     height: 100%;
@@ -42,35 +42,35 @@ body {
 
 /* Event Details */
 
-.event .title {
+#details .event .title {
     font-size: 1.5em;
     font-weight: bold;
 }
 
-.event .date,
-.event .address,
-.event .notes,
-.event .url,
-.event .participants {
+#details .event .date,
+#details .event .address,
+#details .event .notes,
+#details .event .url,
+#details .event .participants {
     margin-top: 1em;
 }
 
-.event ul {
+#details .event ul {
     margin-top: 0;
     margin-bottom: 0;
 }
 
-.event button {
+#details .event button {
     margin-top: 2em;
 }
 
 /* Person Details */
 
-.person .name {
+#details .person .name {
     font-size: 1.5em;
     font-weight: bold;
 }
 
-.person button {
+#details .person button {
     margin-top: 2em;
 }

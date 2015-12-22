@@ -33,6 +33,9 @@ angular.module("crowd", ["ngRoute", "ngSanitize", "leaflet-directive"])
         crowdService.getEventsByParticipant(personId, function(response) {
             $scope.events = response.data.items;
         })
+        crowdService.getInstitutions(personId, function(response) {
+            $scope.institutions = response.data.items;
+        })
     }
 })
 .controller("crowdController", function($scope, $location, $q, $rootScope, crowdService) {

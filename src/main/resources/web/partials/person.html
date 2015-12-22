@@ -11,6 +11,14 @@
             </li>
         </ul>
     </div>
+    <div class="institutions">
+        Associations:
+        <ul>
+            <li ng-repeat="institution in institutions">
+                <a ng-href="#/institution/{{institution.id}}">{{institution.value}}</a> ({{institution.assoc.value}})
+            </li>
+        </ul>
+    </div>
     <div class="events">
         Events:
         <ul>

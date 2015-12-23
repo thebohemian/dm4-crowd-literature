@@ -8,32 +8,36 @@ angular.module("crowd")
 })
 .controller("personController", function($scope, $routeParams, crowdService) {
     var personId = $routeParams.personId;
-    showPerson(personId);
-
-    function showPerson(personId) {
-        crowdService.getPerson(personId, function(response) {
-            $scope.person = response.data;
-        })
-        crowdService.getEventsByParticipant(personId, function(response) {
-            $scope.events = response.data.items;
-        })
-        crowdService.getInstitutions(personId, function(response) {
-            $scope.institutions = response.data.items;
-        })
-    }
+    crowdService.getPerson(personId, function(response) {
+        $scope.person = response.data;
+    })
+    crowdService.getInstitutions(personId, function(response) {
+        $scope.institutions = response.data.items;
+    })
+    crowdService.getWorks(personId, function(response) {
+        $scope.works = response.data.items;
+    })
+    crowdService.getEventsByParticipant(personId, function(response) {
+        $scope.events = response.data.items;
+    })
 })
 .controller("institutionController", function($scope, $routeParams, crowdService) {
     var instId = $routeParams.instId;
-    showInstitution(instId);
-
-    function showInstitution(instId) {
-        crowdService.getInstitution(instId, function(response) {
-            $scope.institution = response.data;
-        })
-        crowdService.getPersons(instId, function(response) {
-            $scope.persons = response.data.items;
-        })
-    }
+    crowdService.getInstitution(instId, function(response) {
+        $scope.institution = response.data;
+    })
+    crowdService.getInstitutionPersons(instId, function(response) {
+        $scope.persons = response.data.items;
+    })
+})
+.controller("workController", function($scope, $routeParams, crowdService) {
+    var workId = $routeParams.workId;
+    crowdService.getWork(workId, function(response) {
+        $scope.work = response.data;
+    })
+    crowdService.getWorkPersons(workId, function(response) {
+        $scope.persons = response.data.items;
+    })
 })
 .controller("crowdController", function($scope, $location, $q, $rootScope, crowdService) {
 

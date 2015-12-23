@@ -1,24 +1,20 @@
 angular.module("crowd").service("crowdService", function($http) {
 
     this.loadBustourGeojson = function(callback) {
-        $http.get("json/bustour.geo.json").then(callback);
+        $http.get("bustour.geo.json").then(callback);
     }
 
-    // Core
-
-    this.getAllEvents = function() {
-        return $http.get("/core/topic/by_type/dm4.events.event?include_childs=true");
-    }
+    // Person
 
     this.getPerson = function(personId, callback) {
         getTopic(personId, callback);
     }
 
-    this.getInstitution = function(instId, callback) {
-        getTopic(instId, callback);
-    }
-
     // Events
+
+    this.getAllEvents = function() {
+        return $http.get("/core/topic/by_type/dm4.events.event?include_childs=true");
+    }
 
     this.getEventParticipants = function(eventId, callback) {
         $http.get("/event/" + eventId + "/participants").then(callback);
@@ -28,13 +24,31 @@ angular.module("crowd").service("crowdService", function($http) {
         $http.get("/event/participant/" + personId).then(callback);
     }
 
-    // Contacts
+    // Work
+
+    this.getWork = function(workId, callback) {
+        getTopic(workId, callback);
+    }
+
+    this.getWorks = function(personId, callback) {
+        $http.get("/crowd/person/" + personId + "/works").then(callback);
+    }
+
+    this.getWorkPersons = function(workId, callback) {
+        $http.get("/crowd/work/" + workId + "/persons").then(callback);
+    }
+
+    // Institution
+
+    this.getInstitution = function(instId, callback) {
+        getTopic(instId, callback);
+    }
 
     this.getInstitutions = function(personId, callback) {
         $http.get("/contact/" + personId + "/institutions").then(callback);
     }
 
-    this.getPersons = function(instId, callback) {
+    this.getInstitutionPersons = function(instId, callback) {
         $http.get("/contact/" + instId + "/persons").then(callback);
     }
 

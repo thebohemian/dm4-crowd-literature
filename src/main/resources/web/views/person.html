@@ -1,6 +1,7 @@
 <div class="person">
     <div class="name">{{person.value}}</div>
-    <div class="birth" ng-show="person.childs['dm4.datetime.date#dm4.contacts.date_of_birth'].childs['dm4.datetime.year'].value">
+    <div class="birth"
+            ng-show="person.childs['dm4.datetime.date#dm4.contacts.date_of_birth'].childs['dm4.datetime.year'].value">
         Born {{person.childs["dm4.datetime.date#dm4.contacts.date_of_birth"].childs["dm4.datetime.year"].value}}
     </div>
     <div class="notes" ng-bind-html="person.childs['dm4.contacts.notes'].value"></div>
@@ -16,6 +17,14 @@
         <ul>
             <li ng-repeat="institution in institutions">
                 <a ng-href="#/institution/{{institution.id}}">{{institution.value}}</a> ({{institution.assoc.value}})
+            </li>
+        </ul>
+    </div>
+    <div class="works" ng-show="works.length">
+        Works:
+        <ul>
+            <li ng-repeat="work in works">
+                <a ng-href="#/work/{{work.id}}">{{work.value}}</a> ({{work.assoc.value}})
             </li>
         </ul>
     </div>

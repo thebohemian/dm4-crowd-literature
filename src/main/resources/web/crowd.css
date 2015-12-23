@@ -89,3 +89,15 @@ html[ng-app] > body {
 #details .institution .address {
     margin-top: 1em;
 }
+
+/* Work Details */
+
+#details .work .title {
+    font-size: 1.5em;
+    font-weight: bold;
+}
+
+#details .work .persons,
+#details .work .url {
+    margin-top: 1em;
+}

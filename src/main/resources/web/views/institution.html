@@ -10,15 +10,7 @@
     <div>
         <ul>
             <li ng-repeat="address in institution.childs['dm4.contacts.address#dm4.contacts.address_entry']">
-                <div class="address">
-                    <div class="label"><i>{{address.assoc.value}}:</i></div>
-                    <div class="street">{{address.childs["dm4.contacts.street"].value}}</div>
-                    <div>
-                        <span class="postal-code">{{address.childs["dm4.contacts.postal_code"].value}}</span>
-                        <span class="city">{{address.childs["dm4.contacts.city"].value}}</span>
-                    </div>
-                    <div class="country">{{address.childs["dm4.contacts.country"].value}}</div>
-                </div>
+                <div dm4-address="address"></div>
             </li>
         </ul>
     </div>

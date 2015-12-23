@@ -4,16 +4,7 @@
         <div class="from">From: {{event.childs["dm4.datetime#dm4.events.from"].value}}</div>
         <div class="to">To: {{event.childs["dm4.datetime#dm4.events.to"].value}}</div>
     </div>
-    <div class="address">
-        <div class="street">{{event.childs["dm4.contacts.address"].childs["dm4.contacts.street"].value}}</div>
-        <div>
-            <span class="postal-code">
-                {{event.childs["dm4.contacts.address"].childs["dm4.contacts.postal_code"].value}}
-            </span>
-            <span class="city">{{event.childs["dm4.contacts.address"].childs["dm4.contacts.city"].value}}</span>
-        </div>
-        <div class="country">{{event.childs["dm4.contacts.address"].childs["dm4.contacts.country"].value}}</div>
-    </div>
+    <div dm4-address="event.childs['dm4.contacts.address']"></div>
     <div class="notes" ng-bind-html="event.childs['dm4.events.notes'].value"></div>
     <div class="participants">
         Participants:

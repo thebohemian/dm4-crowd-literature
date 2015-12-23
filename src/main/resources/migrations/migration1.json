@@ -1,6 +1,6 @@
 {
     "topic_types": [
-        # Base Types
+        # Base Types (Work)
         {
             "value":            "Work Title",
             "uri":              "crowd.work.title",

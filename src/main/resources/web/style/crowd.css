@@ -40,6 +40,18 @@ html[ng-app] > body {
     }
 }
 
+/* Details */
+
+#details ul {
+    margin-top: 0.5em;      /* browser default is 1em */
+    padding-left: 0;        /* browser default is 40px */
+    list-style-type: none;
+}
+
+#details button {
+    margin-top: 2em;
+}
+
 /* Event Details */
 
 #details .event .title {
@@ -55,15 +67,6 @@ html[ng-app] > body {
     margin-top: 1em;
 }
 
-#details .event ul {
-    margin-top: 0;
-    margin-bottom: 0;
-}
-
-#details .event button {
-    margin-top: 2em;
-}
-
 /* Person Details */
 
 #details .person .name {
@@ -75,6 +78,14 @@ html[ng-app] > body {
     margin-top: 1em;
 }
 
-#details .person button {
-    margin-top: 2em;
+/* Institution Details */
+
+#details .institution .name {
+    font-size: 1.5em;
+    font-weight: bold;
+}
+
+#details .institution .url,
+#details .institution .address {
+    margin-top: 1em;
 }

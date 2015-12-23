@@ -1,0 +1,51 @@
+<div class="institution">
+    <div class="name">{{institution.value}}</div>
+    <div class="url">
+        <ul>
+            <li ng-repeat="url in institution.childs['dm4.webbrowser.url']">
+                <a ng-href="{{url.value}}">{{url.value}}</a>
+            </li>
+        </ul>
+    </div>
+    <div>
+        <ul>
+            <li ng-repeat="address in institution.childs['dm4.contacts.address#dm4.contacts.address_entry']">
+                <div class="address">
+                    <div class="label"><i>{{address.assoc.value}}:</i></div>
+                    <div class="street">{{address.childs["dm4.contacts.street"].value}}</div>
+                    <div>
+                        <span class="postal-code">{{address.childs["dm4.contacts.postal_code"].value}}</span>
+                        <span class="city">{{address.childs["dm4.contacts.city"].value}}</span>
+                    </div>
+                    <div class="country">{{address.childs["dm4.contacts.country"].value}}</div>
+                </div>
+            </li>
+        </ul>
+    </div>
+    <div>
+        <ul>
+            <li ng-repeat="phone in institution.childs['dm4.contacts.phone_number#dm4.contacts.phone_entry']">
+                <div class="phone">
+                    <span><i>{{phone.assoc.value}}:</i></span> <span>{{phone.value}}</span>
+                </div>
+            </li>
+        </ul>
+    </div>
+    <div class="email">
+        <ul>
+            <li ng-repeat="email in institution.childs['dm4.contacts.email_address']">
+                {{email.value}}
+            </li>
+        </ul>
+    </div>
+    <div class="notes" ng-bind-html="institution.childs['dm4.contacts.notes'].value"></div>
+    <div class="persons">
+        Associates:
+        <ul>
+            <li ng-repeat="person in persons">
+                <a ng-href="#/person/{{person.id}}">{{person.value}}</a> ({{person.assoc.value}})
+            </li>
+        </ul>
+    </div>
+    <button ng-click="backToMap()" ng-if="portrait">Back to map</button>
+</div>

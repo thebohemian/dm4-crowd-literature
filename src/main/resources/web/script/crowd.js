@@ -1,29 +1,27 @@
 angular.module("crowd", ["ngRoute", "ngSanitize", "leaflet-directive"])
 .config(function($routeProvider, $logProvider, $httpProvider) {
     $routeProvider
-        .when("/welcome",          {templateUrl: "partials/welcome.html", controller: "welcomeController"})
-        .when("/event/:eventId",   {templateUrl: "partials/event.html",   controller: "eventController", resolve: {
+        .when("/welcome",          {templateUrl: "views/welcome.html", controller: "welcomeController"})
+        .when("/event/:eventId",   {templateUrl: "views/event.html",   controller: "eventController", resolve: {
             eventsModel: function($rootScope) {
                 return $rootScope.eventsModel;
             } 
         }})
-        .when("/person/:personId", {templateUrl: "partials/person.html",  controller: "personController"})
+        .when("/person/:personId",    {templateUrl: "views/person.html",       controller: "personController"})
+        .when("/institution/:instId", {templateUrl: "views/institution.html",  controller: "institutionController"})
         .otherwise({redirectTo: "/welcome"})
     $logProvider.debugEnabled(false);
     $httpProvider.useLegacyPromiseExtensions(false);
 })
 .controller("welcomeController", function($scope) {
-    console.log("CONSTRUCTING welcomeController");
     $scope.event = null;
 })
 .controller("eventController", function($scope, $routeParams) {
     var eventId = $routeParams.eventId;
-    console.log("CONSTRUCTING eventController", eventId);
     $scope.showEvent(eventId);
 })
 .controller("personController", function($scope, $routeParams, crowdService) {
     var personId = $routeParams.personId;
-    console.log("CONSTRUCTING personController", personId);
     showPerson(personId);
 
     function showPerson(personId) {
@@ -38,9 +36,20 @@ angular.module("crowd", ["ngRoute", "ngSanitize", "leaflet-directive"])
         })
     }
 })
-.controller("crowdController", function($scope, $location, $q, $rootScope, crowdService) {
+.controller("institutionController", function($scope, $routeParams, crowdService) {
+    var instId = $routeParams.instId;
+    showInstitution(instId);
 
-    console.log("CONSTRUCTING crowdController");
+    function showInstitution(instId) {
+        crowdService.getInstitution(instId, function(response) {
+            $scope.institution = response.data;
+        })
+        crowdService.getPersons(instId, function(response) {
+            $scope.persons = response.data.items;
+        })
+    }
+})
+.controller("crowdController", function($scope, $location, $q, $rootScope, crowdService) {
 
     // application scope
 

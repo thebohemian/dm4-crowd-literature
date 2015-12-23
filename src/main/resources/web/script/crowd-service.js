@@ -6,12 +6,16 @@ angular.module("crowd").service("crowdService", function($http) {
 
     // Core
 
-    this.getPerson = function(personId, callback) {
-        $http.get("/core/topic/" + personId + "?include_childs=true").then(callback);
-    }
-
     this.getAllEvents = function() {
         return $http.get("/core/topic/by_type/dm4.events.event?include_childs=true");
+    }
+
+    this.getPerson = function(personId, callback) {
+        getTopic(personId, callback);
+    }
+
+    this.getInstitution = function(instId, callback) {
+        getTopic(instId, callback);
     }
 
     // Events
@@ -30,7 +34,13 @@ angular.module("crowd").service("crowdService", function($http) {
         $http.get("/contact/" + personId + "/institutions").then(callback);
     }
 
-    this.getPersons = function(institutionId, callback) {
-        $http.get("/contact/" + institutionId + "/persons").then(callback);
+    this.getPersons = function(instId, callback) {
+        $http.get("/contact/" + instId + "/persons").then(callback);
+    }
+
+    // ------------------------------------------------------------------------------------------------- Private Methods
+
+    function getTopic(topicId, callback) {
+        $http.get("/core/topic/" + topicId + "?include_childs=true").then(callback);
     }
 })

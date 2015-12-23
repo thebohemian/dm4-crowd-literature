@@ -20,7 +20,7 @@
     <body ng-controller="crowdController">
         <leaflet id="map" lf-center="center" defaults="defaults" tiles="tiles" geojson="bustour" markers="markers">
         </leaflet>
-        <div id="details" ng-show="event || person || landscape" ng-view>
+        <div id="details" ng-show="event || person || institution || landscape" ng-view>
         </div>
     </body>
 </html>

@@ -11,14 +11,13 @@
     </div>
     <div class="participants" ng-show="participants.length">
         Participants:
-        <ul>
-            <li ng-repeat="person in participants | orderBy:'value'">
-                <a ng-href="#/person/{{person.id}}">{{person.value}}</a>
-            </li>
-        </ul>
+        <span ng-repeat-start="person in participants | orderBy:'value'" ng-show="!$first">,</span>
+        <a ng-repeat-end ng-href="#/person/{{person.id}}">{{person.value}}</a>.
     </div>
-    <div class="series" ng-show="series.value">
-        This event takes place in the context of <a ng-href="#/series/{{series.id}}">{{series.value}}</a>
+    <div class="series" ng-show="seriesOfEvents.length">
+        This event takes place in the context of
+        <span ng-repeat-start="series in seriesOfEvents" ng-show="!$first"> and</span>
+        <a ng-repeat-end ng-href="#/series/{{series.id}}">{{series.value}}</a>.
     </div>
     <button ng-click="backToMap()" ng-if="portrait">Back to map</button>
 </div>

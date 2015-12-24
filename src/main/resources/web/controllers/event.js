@@ -5,6 +5,6 @@ angular.module("crowd").controller("eventController", function($scope, $routePar
         $scope.participants = response.data.items;
     })
     crowdService.getSeriesOfEvents(eventId, function(response) {
-        $scope.series = response.data;
+        $scope.seriesOfEvents = response.data.items;
     })
 })

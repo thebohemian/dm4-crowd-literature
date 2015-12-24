@@ -24,6 +24,10 @@ angular.module("crowd").service("crowdService", function($http) {
         $http.get("/event/participant/" + personId).then(callback);
     }
 
+    this.getSeriesOfEvents = function(eventId, callback) {
+        $http.get("/crowd/event/" + eventId + "/series").then(callback);
+    }
+
     // Work
 
     this.getWork = function(workId, callback) {

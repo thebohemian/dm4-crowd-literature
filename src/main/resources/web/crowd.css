@@ -67,7 +67,8 @@ html[ng-app] > body {
 #details .event .address,
 #details .event .notes,
 #details .event .url,
-#details .event .participants {
+#details .event .participants,
+#details .event .series {
     margin-top: 1em;
 }
 

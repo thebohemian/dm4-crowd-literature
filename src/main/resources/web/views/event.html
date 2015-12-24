@@ -6,7 +6,10 @@
     </div>
     <div dm4-address="event.childs['dm4.contacts.address']"></div>
     <div class="notes" ng-bind-html="event.childs['dm4.events.notes'].value"></div>
-    <div class="participants">
+    <div class="url">
+        <a ng-href="{{event.childs['dm4.webbrowser.url'].value}}">{{event.childs["dm4.webbrowser.url"].value}}</a>
+    </div>
+    <div class="participants" ng-show="participants.length">
         Participants:
         <ul>
             <li ng-repeat="person in participants | orderBy:'value'">
@@ -14,8 +17,8 @@
             </li>
         </ul>
     </div>
-    <div class="url">
-        <a ng-href="{{event.childs['dm4.webbrowser.url'].value}}">{{event.childs["dm4.webbrowser.url"].value}}</a>
+    <div class="series" ng-show="series.value">
+        This event takes place in the context of <a ng-href="#/series/{{series.id}}">{{series.value}}</a>
     </div>
     <button ng-click="backToMap()" ng-if="portrait">Back to map</button>
 </div>

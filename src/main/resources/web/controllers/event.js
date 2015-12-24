@@ -4,4 +4,7 @@ angular.module("crowd").controller("eventController", function($scope, $routePar
     crowdService.getEventParticipants(eventId, function(response) {
         $scope.participants = response.data.items;
     })
+    crowdService.getSeriesOfEvents(eventId, function(response) {
+        $scope.series = response.data;
+    })
 })

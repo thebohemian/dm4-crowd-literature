@@ -7,7 +7,7 @@ angular.module("crowd").controller("personController", function($scope, $routePa
         $scope.institutions = response.data.items;
     })
     crowdService.getWorks(personId, function(response) {
-        $scope.works = response.data.items;
+        $scope.works = response.data;
     })
     crowdService.getEventsByParticipant(personId, function(response) {
         $scope.events = response.data.items;

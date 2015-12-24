@@ -4,13 +4,6 @@ angular.module("crowd").controller("mapController", function($scope, $location, 
 
     $scope.events = {};
 
-    $scope.showEvent = function(eventId) {
-        $scope.event = $scope.events[eventId];
-        crowdService.getEventParticipants(eventId, function(response) {
-            $scope.participants = response.data.items;
-        })
-    }
-
     $scope.backToMap = function() {
         $location.path("/welcome");
     }
@@ -29,7 +22,7 @@ angular.module("crowd").controller("mapController", function($scope, $location, 
         tiles: {
             url: "https://api.tiles.mapbox.com/v4/{mapId}/{z}/{x}/{y}.png?access_token={accessToken}",
             options: {
-                mapId: 'jri.oaem7303',
+                mapId: 'jri.ogoig93d',
                 accessToken: 'pk.eyJ1IjoianJpIiwiYSI6ImNpaG5ubmtsdDAwaHB1bG00aGk1c3BhamcifQ.2XkYFs4hGOel8DYCy4qKKw',
                 attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a>, ' +
                     'Imagery &copy; <a href="http://mapbox.com">Mapbox</a>'
@@ -41,7 +34,6 @@ angular.module("crowd").controller("mapController", function($scope, $location, 
     $scope.$on("leafletDirectiveMarker.map.click", function(event, args) {
         var eventId = args.modelName
         $location.path("/event/" + eventId);
-        $scope.showEvent(eventId)
     })
 
     // startup code

@@ -1,45 +1,4 @@
-angular.module("crowd")
-.controller("welcomeController", function($scope) {
-    $scope.event = null;
-})
-.controller("eventController", function($scope, $routeParams) {
-    var eventId = $routeParams.eventId;
-    $scope.showEvent(eventId);
-})
-.controller("personController", function($scope, $routeParams, crowdService) {
-    var personId = $routeParams.personId;
-    crowdService.getPerson(personId, function(response) {
-        $scope.person = response.data;
-    })
-    crowdService.getInstitutions(personId, function(response) {
-        $scope.institutions = response.data.items;
-    })
-    crowdService.getWorks(personId, function(response) {
-        $scope.works = response.data.items;
-    })
-    crowdService.getEventsByParticipant(personId, function(response) {
-        $scope.events = response.data.items;
-    })
-})
-.controller("institutionController", function($scope, $routeParams, crowdService) {
-    var instId = $routeParams.instId;
-    crowdService.getInstitution(instId, function(response) {
-        $scope.institution = response.data;
-    })
-    crowdService.getInstitutionPersons(instId, function(response) {
-        $scope.persons = response.data.items;
-    })
-})
-.controller("workController", function($scope, $routeParams, crowdService) {
-    var workId = $routeParams.workId;
-    crowdService.getWork(workId, function(response) {
-        $scope.work = response.data;
-    })
-    crowdService.getWorkPersons(workId, function(response) {
-        $scope.persons = response.data.items;
-    })
-})
-.controller("crowdController", function($scope, $location, $q, $rootScope, crowdService) {
+angular.module("crowd").controller("mapController", function($scope, $location, $rootScope, crowdService) {
 
     // application scope
 
@@ -105,7 +64,6 @@ angular.module("crowd")
             $scope.events[event.id] = event;    // put in model
             addMarker(event);                   // add to map
         });
-        console.log("Events model complete");
     })
 
     // private

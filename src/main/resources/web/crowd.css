@@ -48,6 +48,10 @@ html[ng-app] > body {
     list-style-type: none;
 }
 
+#details ul ul {
+    margin-top: 0;
+}
+
 #details button {
     margin-top: 2em;
 }
@@ -98,6 +102,8 @@ html[ng-app] > body {
 }
 
 #details .work .persons,
+#details .work .translations,
+#details .work .translation,
 #details .work .url {
     margin-top: 1em;
 }

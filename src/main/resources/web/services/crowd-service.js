@@ -34,6 +34,9 @@ angular.module("crowd").service("crowdService", function($http) {
         $http.get("/crowd/person/" + personId + "/works").then(callback);
     }
 
+    /**
+     * @param   workId      ID of a work or a translation
+     */
     this.getWorkPersons = function(workId, callback) {
         $http.get("/crowd/work/" + workId + "/persons").then(callback);
     }

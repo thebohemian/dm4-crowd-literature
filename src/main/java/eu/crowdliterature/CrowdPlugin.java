@@ -31,6 +31,8 @@ public class CrowdPlugin extends PluginActivator implements CrowdService {
 
 
 
+    // --- Works ---
+
     @GET
     @Path("/person/{id}/works")
     @Override
@@ -62,6 +64,16 @@ public class CrowdPlugin extends PluginActivator implements CrowdService {
     public ResultList<RelatedTopic> getPersons(@PathParam("id") long workId) {
         return dms.getTopic(workId).getRelatedTopics("crowd.work.involvement", "dm4.core.default", "dm4.core.default",
             "dm4.contacts.person");
+    }
+
+    // --- Events ---
+
+    @GET
+    @Path("/event/{id}/series")
+    @Override
+    public Topic getSeriesOfEvents(@PathParam("id") long eventId) {
+        return dms.getTopic(eventId).getRelatedTopic("dm4.core.association", "dm4.core.default", "dm4.core.default",
+            "crowd.series_of_events");
     }
 
 

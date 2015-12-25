@@ -30,7 +30,7 @@
             </li>
         </ul>
     </div>
-    <div class="notes" ng-bind-html="institution.childs['dm4.contacts.notes'].value"></div>
+    <div class="notes" ng-bind-html="institution.childs['dm4.contacts.notes'].value | trusted"></div>
     <div class="persons">
         Associates:
         <ul>

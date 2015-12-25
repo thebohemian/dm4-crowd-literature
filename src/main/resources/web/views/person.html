@@ -4,7 +4,7 @@
             ng-show="person.childs['dm4.datetime.date#dm4.contacts.date_of_birth'].childs['dm4.datetime.year'].value">
         Born {{person.childs["dm4.datetime.date#dm4.contacts.date_of_birth"].childs["dm4.datetime.year"].value}}
     </div>
-    <div class="notes" ng-bind-html="person.childs['dm4.contacts.notes'].value"></div>
+    <div class="notes" ng-bind-html="person.childs['dm4.contacts.notes'].value | trusted"></div>
     <div class="url">
         <ul>
             <li ng-repeat="url in person.childs['dm4.webbrowser.url']">

@@ -5,7 +5,7 @@
         <div class="to">To: {{event.childs["dm4.datetime#dm4.events.to"].value}}</div>
     </div>
     <div dm4-address="event.childs['dm4.contacts.address']"></div>
-    <div class="notes" ng-bind-html="event.childs['dm4.events.notes'].value"></div>
+    <div class="notes" ng-bind-html="event.childs['dm4.events.notes'].value | trusted"></div>
     <div class="participants" ng-show="participants.length">
         Participants:
         <span ng-repeat-start="person in participants | orderBy:'value'" ng-show="!$first">,</span>

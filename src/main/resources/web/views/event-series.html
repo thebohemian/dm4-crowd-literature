@@ -1,6 +1,6 @@
 <div class="event-series">
     <div class="title">{{eventSeries.value}}</div>
-    <div class="notes" ng-bind-html="eventSeries.childs['crowd.event_series.notes'].value"></div>
+    <div class="notes" ng-bind-html="eventSeries.childs['crowd.event_series.notes'].value | trusted"></div>
     <div class="events" ng-show="events.length">
         Events:
         <ul>

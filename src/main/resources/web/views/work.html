@@ -9,7 +9,7 @@
     </div>
     <div>{{work.childs["crowd.work.type"].value}}, {{work.childs["crowd.work.language"].value}}</div>
     <div>{{work.childs["crowd.work.genre"].value}}</div>
-    <div class="notes" ng-bind-html="work.childs['crowd.work.notes'].value"></div>
+    <div class="notes" ng-bind-html="work.childs['crowd.work.notes'].value | trusted"></div>
     <div ng-show="work.childs['crowd.work.isbn'].value">ISBN: {{work.childs["crowd.work.isbn"].value}}</div>
     <div class="url">
         <a ng-href="{{work.childs['dm4.webbrowser.url'].value}}">{{work.childs["dm4.webbrowser.url"].value}}</a>

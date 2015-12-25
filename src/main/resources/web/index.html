@@ -6,7 +6,6 @@
         <!-- Angular -->
         <script src="lib/angular/angular.min.js"></script>
         <script src="lib/angular/angular-route.min.js"></script>
-        <script src="lib/angular/angular-sanitize.min.js"></script>
         <!-- Leaflet -->
         <link rel="stylesheet" href="lib/leaflet/leaflet.css" />
         <script src="lib/leaflet/leaflet.js"></script>
@@ -24,6 +23,7 @@
         <script src="controllers/work.js"></script>
         <script src="services/crowd-service.js"></script>
         <script src="directives/dm4-address.js"></script>
+        <script src="filters/trusted.js"></script>
     </head>
     <body ng-controller="mapController">
         <leaflet id="map" lf-center="center" defaults="defaults" tiles="tiles" geojson="bustour" markers="markers">

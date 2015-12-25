@@ -1,4 +1,4 @@
-angular.module("crowd", ["ngRoute", "ngSanitize", "leaflet-directive"])
+angular.module("crowd", ["ngRoute", "leaflet-directive"])
 .config(function($routeProvider, $logProvider, $httpProvider) {
     $routeProvider
         .when("/welcome",             {templateUrl: "views/welcome.html",      controller: "welcomeController"})

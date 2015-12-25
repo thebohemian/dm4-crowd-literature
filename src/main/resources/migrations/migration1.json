@@ -23,15 +23,7 @@
             "value":            "Genre",
             "uri":              "crowd.work.genre",
             "data_type_uri":    "dm4.core.text",
-            "index_mode_uris": ["dm4.core.fulltext"],
-            "view_config_topics": [
-                {
-                    "type_uri": "dm4.webclient.view_config",
-                    "childs": {
-                        "dm4.webclient.multi_renderer_uri": "dm4.webclient.checkbox_renderer"
-                    }
-                }
-            ]
+            "index_mode_uris": ["dm4.core.fulltext"]
         },
         {
             "value":            "Notes",
@@ -40,7 +32,7 @@
             "index_mode_uris": ["dm4.core.fulltext"]
         },
         {
-            "value":            "ISBN",
+            "value":            "ISBN/ISSN",
             "uri":              "crowd.work.isbn",
             "data_type_uri":    "dm4.core.text"
         },
@@ -103,7 +95,15 @@
                     "child_type_uri":         "crowd.work.genre",
                     "child_cardinality_uri":  "dm4.core.many",
                     "parent_cardinality_uri": "dm4.core.many",
-                    "assoc_type_uri":         "dm4.core.aggregation_def"
+                    "assoc_type_uri":         "dm4.core.aggregation_def",
+                    "view_config_topics": [
+                        {
+                            "type_uri": "dm4.webclient.view_config",
+                            "childs": {
+                                "dm4.webclient.multi_renderer_uri": "dm4.webclient.checkbox_renderer"
+                            }
+                        }
+                    ]
                 },
                 {
                     "child_type_uri":         "crowd.work.notes",

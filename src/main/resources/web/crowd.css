@@ -110,6 +110,7 @@ html[ng-app] > body {
 }
 
 #details .work .persons,
+#details .work .isbn,
 #details .work .translations,
 #details .work .translation,
 #details .work .url {

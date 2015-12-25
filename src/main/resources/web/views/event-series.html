@@ -1,0 +1,18 @@
+<div class="event-series">
+    <div class="title">{{eventSeries.value}}</div>
+    <div class="notes" ng-bind-html="eventSeries.childs['crowd.event_series.notes'].value"></div>
+    <div class="events" ng-show="events.length">
+        Events:
+        <ul>
+            <li ng-repeat="event in events">
+                <a ng-href="#/event/{{event.id}}">{{event.value}}</a>
+            </li>
+        </ul>
+    </div>
+    <div class="url">
+        <a ng-href="{{eventSeries.childs['dm4.webbrowser.url'].value}}">
+            {{eventSeries.childs["dm4.webbrowser.url"].value}}
+        </a>
+    </div>
+    <button ng-click="backToMap()" ng-if="portrait">Back to map</button>
+</div>

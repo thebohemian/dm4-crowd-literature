@@ -20,7 +20,9 @@ public interface CrowdService {
      */
     ResultList<RelatedTopic> getPersons(long workId);
 
-    // --- Events ---
+    // --- Event Series ---
 
-    ResultList<RelatedTopic> getSeriesOfEvents(long eventId);
+    ResultList<RelatedTopic> getEventSeriesOfEvent(long eventId);
+
+    ResultList<RelatedTopic> getEventsOfEventSeries(long eventSeriesId);
 }

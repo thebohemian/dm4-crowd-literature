@@ -18,6 +18,7 @@
         <script src="controllers/welcome.js"></script>
         <script src="controllers/map.js"></script>
         <script src="controllers/event.js"></script>
+        <script src="controllers/eventSeries.js"></script>
         <script src="controllers/person.js"></script>
         <script src="controllers/institution.js"></script>
         <script src="controllers/work.js"></script>
@@ -27,7 +28,7 @@
     <body ng-controller="mapController">
         <leaflet id="map" lf-center="center" defaults="defaults" tiles="tiles" geojson="bustour" markers="markers">
         </leaflet>
-        <div id="details" ng-show="event || person || institution || work || landscape" ng-view>
+        <div id="details" ng-show="event || eventSeries || person || institution || work || landscape" ng-view>
         </div>
     </body>
 </html>

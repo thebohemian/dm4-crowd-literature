@@ -69,11 +69,19 @@ public class CrowdPlugin extends PluginActivator implements CrowdService {
     // --- Events ---
 
     @GET
-    @Path("/event/{id}/series")
+    @Path("/event/{id}/event_series")
     @Override
-    public ResultList<RelatedTopic> getSeriesOfEvents(@PathParam("id") long eventId) {
+    public ResultList<RelatedTopic> getEventSeriesOfEvent(@PathParam("id") long eventId) {
         return dms.getTopic(eventId).getRelatedTopics("dm4.core.association", "dm4.core.default", "dm4.core.default",
-            "crowd.series_of_events");
+            "crowd.event_series");
+    }
+
+    @GET
+    @Path("/event_series/{id}/events")
+    @Override
+    public ResultList<RelatedTopic> getEventsOfEventSeries(@PathParam("id") long eventSeriesId) {
+        return dms.getTopic(eventSeriesId).getRelatedTopics("dm4.core.association", "dm4.core.default",
+            "dm4.core.default", "dm4.events.event");
     }
 
 

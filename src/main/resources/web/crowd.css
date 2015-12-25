@@ -68,8 +68,15 @@ html[ng-app] > body {
 #details .event .notes,
 #details .event .url,
 #details .event .participants,
-#details .event .series {
+#details .event .event-series {
     margin-top: 1em;
+}
+
+/* Event Series Details */
+
+#details .event-series .title {
+    font-size: 1.5em;
+    font-weight: bold;
 }
 
 /* Person Details */

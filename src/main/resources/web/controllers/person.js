@@ -9,7 +9,7 @@ angular.module("crowd").controller("personController", function($scope, $routePa
     crowdService.getWorks(personId, function(response) {
         $scope.works = response.data;
     })
-    crowdService.getEventsByParticipant(personId, function(response) {
+    crowdService.getEventsOfParticipant(personId, function(response) {
         $scope.events = response.data.items;
     })
 })

@@ -6,18 +6,18 @@
     </div>
     <div dm4-address="event.childs['dm4.contacts.address']"></div>
     <div class="notes" ng-bind-html="event.childs['dm4.events.notes'].value"></div>
-    <div class="url">
-        <a ng-href="{{event.childs['dm4.webbrowser.url'].value}}">{{event.childs["dm4.webbrowser.url"].value}}</a>
-    </div>
     <div class="participants" ng-show="participants.length">
         Participants:
         <span ng-repeat-start="person in participants | orderBy:'value'" ng-show="!$first">,</span>
         <a ng-repeat-end ng-href="#/person/{{person.id}}">{{person.value}}</a>.
     </div>
-    <div class="series" ng-show="seriesOfEvents.length">
-        This event takes place in the context of
-        <span ng-repeat-start="series in seriesOfEvents" ng-show="!$first"> and</span>
-        <a ng-repeat-end ng-href="#/series/{{series.id}}">{{series.value}}</a>.
+    <div class="url">
+        <a ng-href="{{event.childs['dm4.webbrowser.url'].value}}">{{event.childs["dm4.webbrowser.url"].value}}</a>
+    </div>
+    <div class="event-series" ng-show="eventSeries.length">
+        This event is part of series
+        <span ng-repeat-start="series in eventSeries" ng-show="!$first"> and</span>
+        <a ng-repeat-end ng-href="#/event_series/{{series.id}}">{{series.value}}</a>.
     </div>
     <button ng-click="backToMap()" ng-if="portrait">Back to map</button>
 </div>

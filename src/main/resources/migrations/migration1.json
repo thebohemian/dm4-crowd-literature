@@ -23,7 +23,15 @@
             "value":            "Genre",
             "uri":              "crowd.work.genre",
             "data_type_uri":    "dm4.core.text",
-            "index_mode_uris": ["dm4.core.fulltext"]
+            "index_mode_uris": ["dm4.core.fulltext"],
+            "view_config_topics": [
+                {
+                    "type_uri": "dm4.webclient.view_config",
+                    "childs": {
+                        "dm4.webclient.multi_renderer_uri": "dm4.webclient.checkbox_renderer"
+                    }
+                }
+            ]
         },
         {
             "value":            "Notes",
@@ -93,7 +101,7 @@
                 },
                 {
                     "child_type_uri":         "crowd.work.genre",
-                    "child_cardinality_uri":  "dm4.core.one",
+                    "child_cardinality_uri":  "dm4.core.many",
                     "parent_cardinality_uri": "dm4.core.many",
                     "assoc_type_uri":         "dm4.core.aggregation_def"
                 },

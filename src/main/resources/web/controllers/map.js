@@ -39,14 +39,14 @@ angular.module("crowd").controller("mapController", function($scope, $location, 
     // startup code
 
     var mql = matchMedia("(orientation: landscape)");
-    updateOrientation(mql);
     mql.addListener(updateOrientation);
+    updateOrientation(mql);
 
     crowdService.loadBustourGeojson(function(response) {
         $scope.bustour = {
             data: response.data,
             style: {
-                color: "#f86767"
+                color: "#f55"
             }
         }
     })

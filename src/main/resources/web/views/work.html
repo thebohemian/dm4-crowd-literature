@@ -8,7 +8,11 @@
         </ul>
     </div>
     <div>{{work.childs["crowd.work.type"].value}}, {{work.childs["crowd.work.language"].value}}</div>
-    <div ng-show="work.childs['crowd.work.genre'].length">
+    <div>
+        {{work.childs["dm4.datetime.year#crowd.work.year_of_publication"].value}},
+        {{work.childs["dm4.contacts.city#crowd.work.place_of_publication"].value}}
+    </div>
+    <div class="genre" ng-show="work.childs['crowd.work.genre'].length">
         Genre:
         <span ng-repeat-start="genre in work.childs['crowd.work.genre']" ng-show="!$first">,</span>
         <span ng-repeat-end>{{genre.value}}</span>

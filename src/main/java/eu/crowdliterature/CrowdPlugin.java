@@ -66,7 +66,7 @@ public class CrowdPlugin extends PluginActivator implements CrowdService {
             "dm4.contacts.person");
     }
 
-    // --- Events ---
+    // --- Event Series ---
 
     @GET
     @Path("/event/{id}/event_series")

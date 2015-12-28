@@ -7,7 +7,7 @@
             </li>
         </ul>
     </div>
-    <div>{{work.childs["crowd.work.type"].value}}, {{work.childs["crowd.work.language"].value}}</div>
+    <div>{{work.childs["crowd.work.type"].value}}, {{work.childs["crowd.language"].value}}</div>
     <div>
         {{work.childs["dm4.datetime.year#crowd.work.year_of_publication"].value}},
         {{work.childs["dm4.contacts.city#crowd.work.place_of_publication"].value}}
@@ -35,7 +35,7 @@
                             <a ng-href="#/person/{{person.id}}">{{person.value}}</a> ({{person.assoc.value}})
                         </li>
                     </ul>
-                    <div>{{translation.childs["crowd.work.language"].value}}</div>
+                    <div>{{translation.childs["crowd.language"].value}}</div>
                     <div ng-show="translation.childs['crowd.work.isbn'].value">
                         ISBN/ISSN: {{translation.childs["crowd.work.isbn"].value}}
                     </div>

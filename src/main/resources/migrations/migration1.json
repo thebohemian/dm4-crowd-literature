@@ -15,6 +15,13 @@
     },
     {
         "topic_types": [
+            # Language (Work + Person)
+            {
+                "value":            "Language",
+                "uri":              "crowd.language",
+                "data_type_uri":    "dm4.core.text",
+                "index_mode_uris": ["dm4.core.fulltext"]
+            },
             # Base Types (Work)
             {
                 "value":            "Work Title",
@@ -25,12 +32,6 @@
             {
                 "value":            "Work Type",
                 "uri":              "crowd.work.type",
-                "data_type_uri":    "dm4.core.text",
-                "index_mode_uris": ["dm4.core.fulltext"]
-            },
-            {
-                "value":            "Language",
-                "uri":              "crowd.work.language",
                 "data_type_uri":    "dm4.core.text",
                 "index_mode_uris": ["dm4.core.fulltext"]
             },
@@ -63,7 +64,7 @@
                         "assoc_type_uri":         "dm4.core.composition_def"
                     },
                     {
-                        "child_type_uri":         "crowd.work.language",
+                        "child_type_uri":         "crowd.language",
                         "child_cardinality_uri":  "dm4.core.one",
                         "parent_cardinality_uri": "dm4.core.many",
                         "assoc_type_uri":         "dm4.core.aggregation_def"
@@ -101,7 +102,7 @@
                         "assoc_type_uri":         "dm4.core.aggregation_def"
                     },
                     {
-                        "child_type_uri":         "crowd.work.language",
+                        "child_type_uri":         "crowd.language",
                         "child_cardinality_uri":  "dm4.core.one",
                         "parent_cardinality_uri": "dm4.core.many",
                         "assoc_type_uri":         "dm4.core.aggregation_def"
@@ -218,62 +219,78 @@
                 "value": "Online Publication",
                 "type_uri": "crowd.work.type"
             },
-            # Languages
+            # Languages (see https://en.wikipedia.org/wiki/List_of_language_names)
             {
                 "value": "Croatian",
-                "type_uri": "crowd.work.language"
+                "type_uri": "crowd.language"
             },
             {
                 "value": "Czech",
-                "type_uri": "crowd.work.language"
+                "type_uri": "crowd.language"
             },
             {
                 "value": "Danish",
-                "type_uri": "crowd.work.language"
+                "type_uri": "crowd.language"
             },
             {
                 "value": "English",
-                "type_uri": "crowd.work.language"
+                "type_uri": "crowd.language"
             },
             {
                 "value": "Finnish",
-                "type_uri": "crowd.work.language"
+                "type_uri": "crowd.language"
+            },
+            {
+                "value": "French",
+                "type_uri": "crowd.language"
             },
             {
                 "value": "German",
-                "type_uri": "crowd.work.language"
+                "type_uri": "crowd.language"
             },
             {
                 "value": "Greek",
-                "type_uri": "crowd.work.language"
+                "type_uri": "crowd.language"
+            },
+            {
+                "value": "Hungarian",
+                "type_uri": "crowd.language"
+            },
+            {
+                "value": "Italian",
+                "type_uri": "crowd.language"
             },
             {
                 "value": "Norwegian",
-                "type_uri": "crowd.work.language"
+                "type_uri": "crowd.language"
             },
             {
                 "value": "Polish",
-                "type_uri": "crowd.work.language"
+                "type_uri": "crowd.language"
+            },
+            {
+                "value": "Romanian",
+                "type_uri": "crowd.language"
             },
             {
                 "value": "Serbian",
-                "type_uri": "crowd.work.language"
+                "type_uri": "crowd.language"
             },
             {
                 "value": "Slovene",
-                "type_uri": "crowd.work.language"
+                "type_uri": "crowd.language"
             },
             {
                 "value": "Spanish",
-                "type_uri": "crowd.work.language"
+                "type_uri": "crowd.language"
             },
             {
                 "value": "Swedish",
-                "type_uri": "crowd.work.language"
+                "type_uri": "crowd.language"
             },
             {
                 "value": "Turkish",
-                "type_uri": "crowd.work.language"
+                "type_uri": "crowd.language"
             },
             # Genres
             {

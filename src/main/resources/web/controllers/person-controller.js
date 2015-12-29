@@ -1,4 +1,4 @@
-angular.module("crowd").controller("personController", function($scope, $routeParams, crowdService) {
+angular.module("crowd").controller("PersonController", function($scope, $routeParams, crowdService) {
     var personId = $routeParams.personId;
     crowdService.getPerson(personId, function(response) {
         $scope.person = response.data;

@@ -1,4 +1,4 @@
-angular.module("crowd").controller("workController", function($scope, $routeParams, crowdService) {
+angular.module("crowd").controller("WorkController", function($scope, $routeParams, crowdService) {
     var workId = $routeParams.workId;
     crowdService.getWork(workId, function(response) {
         $scope.work = response.data;

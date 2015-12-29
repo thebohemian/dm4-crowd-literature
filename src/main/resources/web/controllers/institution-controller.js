@@ -1,4 +1,4 @@
-angular.module("crowd").controller("institutionController", function($scope, $routeParams, crowdService) {
+angular.module("crowd").controller("InstitutionController", function($scope, $routeParams, crowdService) {
     var instId = $routeParams.instId;
     crowdService.getInstitution(instId, function(response) {
         $scope.institution = response.data;

@@ -11,6 +11,9 @@
         <span ng-repeat-start="person in participants | orderBy:'value'" ng-show="!$first">,</span>
         <a ng-repeat-end ng-href="#/person/{{person.id}}">{{person.value}}</a>
     </div>
+    <div class="entrance-fee" ng-show="event.childs['crowd.event.entrance_fee'].value">
+        Entrance fee: {{event.childs["crowd.event.entrance_fee"].value}}
+    </div>
     <div class="url">
         <a ng-href="{{event.childs['dm4.webbrowser.url'].value}}">{{event.childs["dm4.webbrowser.url"].value}}</a>
     </div>

@@ -1,4 +1,4 @@
-angular.module("crowd").controller("eventSeriesController", function($scope, $routeParams, crowdService) {
+angular.module("crowd").controller("EventSeriesController", function($scope, $routeParams, crowdService) {
     var eventSeriesId = $routeParams.eventSeriesId;
     crowdService.getEventSeries(eventSeriesId, function(response) {
         $scope.eventSeries = response.data;

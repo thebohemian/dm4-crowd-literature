@@ -14,18 +14,18 @@
         <!-- CROWD -->
         <link rel="stylesheet" href="crowd.css" />
         <script src="crowd.js"></script>
-        <script src="controllers/welcome.js"></script>
-        <script src="controllers/map.js"></script>
-        <script src="controllers/event.js"></script>
-        <script src="controllers/eventSeries.js"></script>
-        <script src="controllers/person.js"></script>
-        <script src="controllers/institution.js"></script>
-        <script src="controllers/work.js"></script>
+        <script src="controllers/welcome-controller.js"></script>
+        <script src="controllers/map-controller.js"></script>
+        <script src="controllers/event-controller.js"></script>
+        <script src="controllers/event-series-controller.js"></script>
+        <script src="controllers/person-controller.js"></script>
+        <script src="controllers/institution-controller.js"></script>
+        <script src="controllers/work-controller.js"></script>
         <script src="services/crowd-service.js"></script>
         <script src="directives/dm4-address.js"></script>
         <script src="filters/trusted.js"></script>
     </head>
-    <body ng-controller="mapController">
+    <body ng-controller="MapController">
         <leaflet id="map" lf-center="center" defaults="defaults" tiles="tiles" geojson="bustour" markers="markers">
         </leaflet>
         <div id="details" ng-show="event || eventSeries || person || institution || work || landscape" ng-view>

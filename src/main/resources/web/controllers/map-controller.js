@@ -1,4 +1,4 @@
-angular.module("crowd").controller("mapController", function($scope, $location, $rootScope, crowdService) {
+angular.module("crowd").controller("MapController", function($scope, $location, $rootScope, crowdService) {
 
     // application scope
 

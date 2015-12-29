@@ -1,7 +1,9 @@
 package eu.crowdliterature;
 
+import eu.crowdliterature.model.Person;
 import eu.crowdliterature.model.WorkOfAPerson;
 
+import de.deepamehta.core.ChildTopics;
 import de.deepamehta.core.RelatedTopic;
 import de.deepamehta.core.Topic;
 import de.deepamehta.core.osgi.PluginActivator;
@@ -30,6 +32,26 @@ public class CrowdPlugin extends PluginActivator implements CrowdService {
     // ***********************************
 
 
+
+    // --- Person ---
+
+    @GET
+    @Path("/person/{id}")
+    @Override
+    public Person getPerson(@PathParam("id") long personId) {
+        Topic person = dms.getTopic(personId);
+        ChildTopics childs = person.getChildTopics();
+        return new Person(
+            person.getSimpleValue().toString(),
+            childs.getChildTopics("dm4.datetime.date#dm4.contacts.date_of_birth").getStringOrNull("dm4.datetime.year"),
+            childs.getStringOrNull("dm4.contacts.city#crowd.person.place_of_birth"),
+            childs.getString("dm4.contacts.notes"),
+            values(person, "dm4.webbrowser.url"),
+            values(person, "crowd.person.nationality"),
+            values(person, "crowd.language")
+        );
+        // ### TODO: institutions, works, events
+    }
 
     // --- Works ---
 
@@ -91,5 +113,18 @@ public class CrowdPlugin extends PluginActivator implements CrowdService {
     private Topic getWork(long translationId) {
         return dms.getTopic(translationId).getRelatedTopic("dm4.core.composition", "dm4.core.child", "dm4.core.parent",
             "crowd.work");
+    }
+
+    // ---
+
+    private List<String> values(Topic topic, String assocDefUri) {
+        List<String> values = new ArrayList();
+        List<RelatedTopic> topics = topic.getChildTopics().getTopicsOrNull(assocDefUri);
+        if (topics != null) {
+            for (Topic t : topics) {
+                values.add(t.getSimpleValue().toString());
+            }
+        }
+        return values;
     }
 }

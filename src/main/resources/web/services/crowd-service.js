@@ -7,7 +7,7 @@ angular.module("crowd").service("crowdService", function($http) {
     // Person
 
     this.getPerson = function(personId, callback) {
-        getTopic(personId, callback);
+        $http.get("/crowd/person/" + personId).then(callback);
     }
 
     // Events

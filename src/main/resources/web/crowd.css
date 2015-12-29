@@ -86,7 +86,8 @@ html[ng-app] > body {
     font-weight: bold;
 }
 
-#details .person .birth {
+#details .person .birth,
+#details .person .nationality {
     margin-top: 1em;
 }
 

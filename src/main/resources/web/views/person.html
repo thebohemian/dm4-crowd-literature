@@ -1,14 +1,26 @@
 <div class="person">
-    <div class="name">{{person.value}}</div>
-    <div class="birth"
-            ng-show="person.childs['dm4.datetime.date#dm4.contacts.date_of_birth'].childs['dm4.datetime.year'].value">
-        Born {{person.childs["dm4.datetime.date#dm4.contacts.date_of_birth"].childs["dm4.datetime.year"].value}}
+    <div class="name">{{person.name}}</div>
+    <div class="birth" ng-show="person.yearOfBirth || person.placeOfBirth">
+        Born {{person.yearOfBirth}}
+        <span ng-show="person.placeOfBirth">in {{person.placeOfBirth}}</span>
     </div>
-    <div class="notes" ng-bind-html="person.childs['dm4.contacts.notes'].value | trusted"></div>
+    <div class="nationality">
+        <div ng-show="person.nationalities.length">
+            Nationality:
+            <span ng-repeat-start="nationality in person.nationalities" ng-show="!$first">,</span>
+            <span ng-repeat-end>{{nationality}}</span>
+        </div>
+        <div ng-show="person.languages.length">
+            Languages:
+            <span ng-repeat-start="language in person.languages" ng-show="!$first">,</span>
+            <span ng-repeat-end>{{language}}</span>
+        </div>
+    </div>
+    <div class="notes" ng-bind-html="person.notes | trusted"></div>
     <div class="url">
         <ul>
-            <li ng-repeat="url in person.childs['dm4.webbrowser.url']">
-                <a ng-href="{{url.value}}">{{url.value}}</a>
+            <li ng-repeat="url in person.urls">
+                <a ng-href="{{url}}">{{url}}</a>
             </li>
         </ul>
     </div>

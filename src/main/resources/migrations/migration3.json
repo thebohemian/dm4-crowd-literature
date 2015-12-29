@@ -22,7 +22,7 @@
         }
     ],
     "topics": [
-        # Gernders
+        # Genders
         {
             "value": "male",
             "type_uri": "crowd.person.gender"

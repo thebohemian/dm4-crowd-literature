@@ -1,5 +1,6 @@
 package eu.crowdliterature;
 
+import eu.crowdliterature.model.Person;
 import eu.crowdliterature.model.WorkOfAPerson;
 
 import de.deepamehta.core.RelatedTopic;
@@ -10,6 +11,10 @@ import java.util.List;
 
 
 public interface CrowdService {
+
+    // --- Person ---
+
+    Person getPerson(long personId);
 
     // --- Works ---
 

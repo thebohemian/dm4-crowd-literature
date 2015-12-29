@@ -9,7 +9,7 @@
     <div class="participants" ng-show="participants.length">
         Participants:
         <span ng-repeat-start="person in participants | orderBy:'value'" ng-show="!$first">,</span>
-        <a ng-repeat-end ng-href="#/person/{{person.id}}">{{person.value}}</a>.
+        <a ng-repeat-end ng-href="#/person/{{person.id}}">{{person.value}}</a>
     </div>
     <div class="url">
         <a ng-href="{{event.childs['dm4.webbrowser.url'].value}}">{{event.childs["dm4.webbrowser.url"].value}}</a>

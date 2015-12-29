@@ -1,0 +1,10 @@
+{
+    # CROWD Event
+    "topic_types": [
+        {
+            "value": "Entrance Fee",
+            "uri": "crowd.event.entrance_fee",
+            "data_type_uri": "dm4.core.text"
+        }
+    ]
+}

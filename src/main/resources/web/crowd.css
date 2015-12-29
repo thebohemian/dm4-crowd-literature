@@ -79,6 +79,10 @@ html[ng-app] > body {
     font-weight: bold;
 }
 
+#details .event-series .events {
+    margin-top: 1em;
+}
+
 /* Person Details */
 
 #details .person .name {

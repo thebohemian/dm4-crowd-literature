@@ -1,7 +1,9 @@
 package eu.crowdliterature;
 
 import eu.crowdliterature.model.Person;
-import eu.crowdliterature.model.WorkOfAPerson;
+import eu.crowdliterature.model.PersonOfWork;
+import eu.crowdliterature.model.Work;
+import eu.crowdliterature.model.WorkOfPerson;
 
 import de.deepamehta.core.RelatedTopic;
 import de.deepamehta.core.service.ResultList;
@@ -18,12 +20,14 @@ public interface CrowdService {
 
     // --- Works ---
 
-    List<WorkOfAPerson> getWorks(long personId);
+    Work getWork(long workId);
+
+    List<WorkOfPerson> getWorks(long personId);
 
     /**
      * @param   workId      ID of a work or a translation
      */
-    ResultList<RelatedTopic> getPersons(long workId);
+    List<PersonOfWork> getPersonsOfWork(long workId);
 
     // --- Event Series ---
 

@@ -1,25 +1,30 @@
 package eu.crowdliterature.model;
 
 import de.deepamehta.core.JSONEnabled;
+import de.deepamehta.core.util.DeepaMehtaUtils;
 
 import org.codehaus.jettison.json.JSONObject;
 
+import java.util.List;
 
 
-public class WorkOfAPerson implements JSONEnabled {
+
+public class Translation implements JSONEnabled {
 
     // ---------------------------------------------------------------------------------------------- Instance Variables
 
-    private long workId;
-    private String workTitle;
-    private String role;
+    private String title;
+    private String language;
+    private String isbn;
+    private List<PersonOfWork> translators;
 
     // ---------------------------------------------------------------------------------------------------- Constructors
 
-    public WorkOfAPerson(long workId, String workTitle, String role) {
-        this.workId = workId;
-        this.workTitle = workTitle;
-        this.role = role;
+    public Translation(String title, String language, String isbn, List<PersonOfWork> translators) {
+        this.title = title;
+        this.language = language;
+        this.isbn = isbn;
+        this.translators = translators;
     }
 
     // -------------------------------------------------------------------------------------------------- Public Methods
@@ -28,9 +33,10 @@ public class WorkOfAPerson implements JSONEnabled {
     public JSONObject toJSON() {
         try {
             return new JSONObject()
-                .put("id",    workId)
-                .put("title", workTitle)
-                .put("role",  role);
+                .put("title", title)
+                .put("language", language)
+                .put("isbn", isbn)
+                .put("translators", DeepaMehtaUtils.toJSONArray(translators));
         } catch (Exception e) {
             throw new RuntimeException("Serialization failed (" + this + ")", e);
         }

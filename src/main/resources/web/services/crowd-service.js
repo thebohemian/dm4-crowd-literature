@@ -41,18 +41,11 @@ angular.module("crowd").service("crowdService", function($http) {
     // Work
 
     this.getWork = function(workId, callback) {
-        getTopic(workId, callback);
+        $http.get("/crowd/work/" + workId).then(callback);
     }
 
     this.getWorks = function(personId, callback) {
         $http.get("/crowd/person/" + personId + "/works").then(callback);
-    }
-
-    /**
-     * @param   workId      ID of a work or a translation
-     */
-    this.getWorkPersons = function(workId, callback) {
-        $http.get("/crowd/work/" + workId + "/persons").then(callback);
     }
 
     // Institution

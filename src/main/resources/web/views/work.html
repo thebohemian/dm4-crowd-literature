@@ -1,44 +1,38 @@
 <div class="work">
-    <div class="title">{{work.value}}</div>
+    <div class="title">{{work.title}}</div>
     <div class="persons">
         <ul>
-            <li ng-repeat="person in persons">
-                <a ng-href="#/person/{{person.id}}">{{person.value}}</a> ({{person.assoc.value}})
+            <li ng-repeat="person in work.persons">
+                <a ng-href="#/person/{{person.id}}">{{person.name}}</a> ({{person.role}})
             </li>
         </ul>
     </div>
-    <div>{{work.childs["crowd.work.type"].value}}, {{work.childs["crowd.language"].value}}</div>
+    <div>{{work.type}}, {{work.language}}</div>
     <div>
-        {{work.childs["dm4.datetime.year#crowd.work.year_of_publication"].value}},
-        {{work.childs["dm4.contacts.city#crowd.work.place_of_publication"].value}}
+        {{work.yearOfPublication}},
+        {{work.placeOfPublication}}
     </div>
-    <div class="genre" ng-show="work.childs['crowd.work.genre'].length">
+    <div class="genre" ng-show="work.genres.length">
         Genre:
-        <span ng-repeat-start="genre in work.childs['crowd.work.genre']" ng-show="!$first">,</span>
-        <span ng-repeat-end>{{genre.value}}</span>
+        <span ng-repeat-start="genre in work.genres" ng-show="!$first">,</span>
+        <span ng-repeat-end>{{genre}}</span>
     </div>
-    <div class="notes" ng-bind-html="work.childs['crowd.work.notes'].value | trusted"></div>
-    <div class="isbn" ng-show="work.childs['crowd.work.isbn'].value">
-        ISBN/ISSN: {{work.childs["crowd.work.isbn"].value}}
-    </div>
-    <div class="url">
-        <a ng-href="{{work.childs['dm4.webbrowser.url'].value}}">{{work.childs["dm4.webbrowser.url"].value}}</a>
-    </div>
+    <div class="notes" ng-bind-html="work.notes | trusted"></div>
+    <div class="isbn" ng-show="work.isbn">ISBN/ISSN: {{work.isbn}}</div>
+    <div class="url"><a ng-href="{{work.url}}">{{work.url}}</a></div>
     <div class="translations">
         Translations:
         <ul>
-            <li ng-repeat="translation in work.childs['crowd.work.translation']">
+            <li ng-repeat="translation in work.translations">
                 <div class="translation">
-                    <div>{{translation.childs["crowd.work.title"].value}}</div>
+                    <div>{{translation.title}}</div>
                     <ul>
-                        <li ng-repeat="person in translators[translation.id]">
-                            <a ng-href="#/person/{{person.id}}">{{person.value}}</a> ({{person.assoc.value}})
+                        <li ng-repeat="person in translation.translators">
+                            <a ng-href="#/person/{{person.id}}">{{person.name}}</a> ({{person.role}})
                         </li>
                     </ul>
-                    <div>{{translation.childs["crowd.language"].value}}</div>
-                    <div ng-show="translation.childs['crowd.work.isbn'].value">
-                        ISBN/ISSN: {{translation.childs["crowd.work.isbn"].value}}
-                    </div>
+                    <div>{{translation.language}}</div>
+                    <div ng-show="translation.isbn">ISBN/ISSN: {{translation.isbn}}</div>
                 </div>
             </li>
         </ul>

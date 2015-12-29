@@ -1,7 +1,10 @@
 package eu.crowdliterature;
 
 import eu.crowdliterature.model.Person;
-import eu.crowdliterature.model.WorkOfAPerson;
+import eu.crowdliterature.model.PersonOfWork;
+import eu.crowdliterature.model.Translation;
+import eu.crowdliterature.model.Work;
+import eu.crowdliterature.model.WorkOfPerson;
 
 import de.deepamehta.core.ChildTopics;
 import de.deepamehta.core.RelatedTopic;
@@ -56,25 +59,46 @@ public class CrowdPlugin extends PluginActivator implements CrowdService {
     // --- Works ---
 
     @GET
+    @Path("/work/{id}")
+    @Override
+    public Work getWork(@PathParam("id") long workId) {
+        Topic work = dms.getTopic(workId);
+        ChildTopics childs = work.getChildTopics();
+        return new Work(
+            work.getSimpleValue().toString(),
+            childs.getStringOrNull("crowd.work.type"),
+            childs.getStringOrNull("crowd.language"),
+            childs.getStringOrNull("dm4.datetime.year#crowd.work.year_of_publication"),
+            childs.getStringOrNull("dm4.contacts.city#crowd.work.place_of_publication"),
+            values(work, "crowd.work.genre"),
+            childs.getString("crowd.work.notes"),
+            childs.getStringOrNull("crowd.work.isbn"),
+            childs.getStringOrNull("dm4.webbrowser.url"),
+            translations(work),
+            getPersonsOfWork(workId)
+        );
+    }
+
+    @GET
     @Path("/person/{id}/works")
     @Override
-    public List<WorkOfAPerson> getWorks(@PathParam("id") long personId) {
-        List<WorkOfAPerson> works = new ArrayList();
+    public List<WorkOfPerson> getWorks(@PathParam("id") long personId) {
+        List<WorkOfPerson> works = new ArrayList();
         Topic person = dms.getTopic(personId);
         // works
         for (RelatedTopic work : person.getRelatedTopics("crowd.work.involvement", "dm4.core.default",
                                                          "dm4.core.default", "crowd.work")) {
             String workTitle = work.getSimpleValue().toString();
             String role = work.getRelatingAssociation().getSimpleValue().toString();
-            works.add(new WorkOfAPerson(work.getId(), workTitle, role));
+            works.add(new WorkOfPerson(work.getId(), workTitle, role));
         }
         // translations
         for (RelatedTopic translation : person.getRelatedTopics("crowd.work.involvement", "dm4.core.default",
                                                                 "dm4.core.default", "crowd.work.translation")) {
-            Topic work = getWork(translation.getId());
+            Topic work = getWorkOfTranslation(translation.getId());
             String workTitle = work.getSimpleValue().toString();
             String role = translation.getRelatingAssociation().getSimpleValue().toString();
-            works.add(new WorkOfAPerson(work.getId(), workTitle, role));
+            works.add(new WorkOfPerson(work.getId(), workTitle, role));
         }
         //
         return works;
@@ -83,9 +107,17 @@ public class CrowdPlugin extends PluginActivator implements CrowdService {
     @GET
     @Path("/work/{id}/persons")
     @Override
-    public ResultList<RelatedTopic> getPersons(@PathParam("id") long workId) {
-        return dms.getTopic(workId).getRelatedTopics("crowd.work.involvement", "dm4.core.default", "dm4.core.default",
-            "dm4.contacts.person");
+    public List<PersonOfWork> getPersonsOfWork(@PathParam("id") long workId) {
+        List<PersonOfWork> persons = new ArrayList();
+        for (RelatedTopic person : dms.getTopic(workId).getRelatedTopics("crowd.work.involvement", "dm4.core.default",
+                                                                         "dm4.core.default", "dm4.contacts.person")) {
+            persons.add(new PersonOfWork(
+                person.getId(),
+                person.getSimpleValue().toString(),
+                person.getRelatingAssociation().getSimpleValue().toString()
+            ));
+        }
+        return persons;
     }
 
     // --- Event Series ---
@@ -110,12 +142,26 @@ public class CrowdPlugin extends PluginActivator implements CrowdService {
 
     // ------------------------------------------------------------------------------------------------- Private Methods
 
-    private Topic getWork(long translationId) {
+    private Topic getWorkOfTranslation(long translationId) {
         return dms.getTopic(translationId).getRelatedTopic("dm4.core.composition", "dm4.core.child", "dm4.core.parent",
             "crowd.work");
     }
 
     // ---
+
+    private List<Translation> translations(Topic work) {
+        List<Translation> translations = new ArrayList();
+        for (Topic translation : work.getChildTopics().getTopics("crowd.work.translation")) {
+            ChildTopics childs = translation.getChildTopics();
+            translations.add(new Translation(
+                childs.getStringOrNull("crowd.work.title"),
+                childs.getStringOrNull("crowd.language"),
+                childs.getStringOrNull("crowd.work.isbn"),
+                getPersonsOfWork(translation.getId())
+            ));
+        }
+        return translations;
+    }
 
     private List<String> values(Topic topic, String assocDefUri) {
         List<String> values = new ArrayList();

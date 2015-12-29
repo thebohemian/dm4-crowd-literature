@@ -333,6 +333,10 @@
             {
                 "value": "Organizer",
                 "type_uri": "crowd.work.role"
+            },
+            {
+                "value": "Curator",
+                "type_uri": "crowd.work.role"
             }
         ]
     }

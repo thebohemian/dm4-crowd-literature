@@ -49,9 +49,9 @@ public class CrowdPlugin extends PluginActivator implements CrowdService {
             childs.getChildTopics("dm4.datetime.date#dm4.contacts.date_of_birth").getStringOrNull("dm4.datetime.year"),
             childs.getStringOrNull("dm4.contacts.city#crowd.person.place_of_birth"),
             childs.getString("dm4.contacts.notes"),
-            values(person, "dm4.webbrowser.url"),
-            values(person, "crowd.person.nationality"),
-            values(person, "crowd.language")
+            multiValues(person, "dm4.webbrowser.url"),
+            multiValues(person, "crowd.person.nationality"),
+            multiValues(person, "crowd.language")
         );
         // ### TODO: institutions, works, events
     }
@@ -70,7 +70,7 @@ public class CrowdPlugin extends PluginActivator implements CrowdService {
             childs.getStringOrNull("crowd.language"),
             childs.getStringOrNull("dm4.datetime.year#crowd.work.year_of_publication"),
             childs.getStringOrNull("dm4.contacts.city#crowd.work.place_of_publication"),
-            values(work, "crowd.work.genre"),
+            multiValues(work, "crowd.work.genre"),
             childs.getString("crowd.work.notes"),
             childs.getStringOrNull("crowd.work.isbn"),
             childs.getStringOrNull("dm4.webbrowser.url"),
@@ -153,24 +153,28 @@ public class CrowdPlugin extends PluginActivator implements CrowdService {
         List<Translation> translations = new ArrayList();
         for (Topic translation : work.getChildTopics().getTopics("crowd.work.translation")) {
             ChildTopics childs = translation.getChildTopics();
-            translations.add(new Translation(
-                childs.getStringOrNull("crowd.work.title"),
-                childs.getStringOrNull("crowd.language"),
-                childs.getStringOrNull("crowd.work.isbn"),
-                getPersonsOfWork(translation.getId())
-            ));
+            String title    = childs.getStringOrNull("crowd.work.title");
+            String language = childs.getStringOrNull("crowd.language");
+            String isbn     = childs.getStringOrNull("crowd.work.isbn");
+            List<PersonOfWork> persons = getPersonsOfWork(translation.getId());
+            // We don't want create empty Translation objects.
+            // Note: the webclients creates an empty *composite*, that is when no childs exist.
+            // (In contrast empty *simple* childs are never created.)
+            if (title != null || language != null || isbn != null || !persons.isEmpty()) {
+                translations.add(new Translation(title, language, isbn, persons));
+            }
         }
         return translations;
     }
 
-    private List<String> values(Topic topic, String assocDefUri) {
-        List<String> values = new ArrayList();
+    private List<String> multiValues(Topic topic, String assocDefUri) {
+        List<String> multiValues = new ArrayList();
         List<RelatedTopic> topics = topic.getChildTopics().getTopicsOrNull(assocDefUri);
         if (topics != null) {
             for (Topic t : topics) {
-                values.add(t.getSimpleValue().toString());
+                multiValues.add(t.getSimpleValue().toString());
             }
         }
-        return values;
+        return multiValues;
     }
 }

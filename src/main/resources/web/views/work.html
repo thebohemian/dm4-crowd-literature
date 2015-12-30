@@ -22,7 +22,7 @@
     <div class="notes" ng-bind-html="work.notes | trusted"></div>
     <div class="isbn" ng-show="work.isbn">ISBN/ISSN: {{work.isbn}}</div>
     <div class="url"><a ng-href="{{work.url}}">{{work.url}}</a></div>
-    <div class="translations">
+    <div class="translations" ng-show="work.translations.length">
         Translations:
         <div class="translation" ng-repeat="translation in work.translations">
             <div class="title">{{translation.title}}</div>

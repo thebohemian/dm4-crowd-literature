@@ -24,6 +24,8 @@ public class Translation implements JSONEnabled {
                 .put("language", language)
                 .put("isbn", isbn)
                 .put("persons", DeepaMehtaUtils.toJSONArray(persons));
+            // Note: when List/Map null is put Jettison serializes an empty array/object.
+            // In contrast when String/Object null is put Jettison removes the property.
         } catch (Exception e) {
             throw new RuntimeException("Serialization failed (" + this + ")", e);
         }

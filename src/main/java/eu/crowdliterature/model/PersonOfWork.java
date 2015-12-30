@@ -10,29 +10,25 @@ public class PersonOfWork implements JSONEnabled {
 
     // ---------------------------------------------------------------------------------------------- Instance Variables
 
-    private long id;
-    private String name;
-    private String role;
+    private JSONObject json;
 
     // ---------------------------------------------------------------------------------------------------- Constructors
 
     public PersonOfWork(long id, String name, String role) {
-        this.id = id;
-        this.name = name;
-        this.role = role;
-    }
-
-    // -------------------------------------------------------------------------------------------------- Public Methods
-
-    @Override
-    public JSONObject toJSON() {
         try {
-            return new JSONObject()
+            json = new JSONObject()
                 .put("id",   id)
                 .put("name", name)
                 .put("role", role);
         } catch (Exception e) {
             throw new RuntimeException("Serialization failed (" + this + ")", e);
         }
+    }
+
+    // -------------------------------------------------------------------------------------------------- Public Methods
+
+    @Override
+    public JSONObject toJSON() {
+        return json;
     }
 }

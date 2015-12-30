@@ -110,12 +110,16 @@ html[ng-app] > body {
 
 /* Work Details */
 
-#details .work .title {
+#details .work .title.main {
     font-size: 1.5em;
+}
+
+#details .work .title {
     font-weight: bold;
 }
 
 #details .work .persons,
+#details .work .type,
 #details .work .genre,
 #details .work .isbn,
 #details .work .translations,

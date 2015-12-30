@@ -13,42 +13,15 @@ public class Work implements JSONEnabled {
 
     // ---------------------------------------------------------------------------------------------- Instance Variables
 
-    private String title;
-    private String type;
-    private String language;
-    private String yearOfPublication;
-    private String placeOfPublication;
-    private List<String> genres;
-    private String notes;
-    private String isbn;
-    private String url;
-    private List<Translation> translations;
-    private List<PersonOfWork> persons;
+    private JSONObject json;
 
     // ---------------------------------------------------------------------------------------------------- Constructors
 
     public Work(String title, String type, String language, String yearOfPublication, String placeOfPublication,
                 List<String> genres, String notes, String isbn, String url, List<Translation> translations,
                 List<PersonOfWork> persons) {
-        this.title = title;
-        this.type = type;
-        this.language = language;
-        this.yearOfPublication = yearOfPublication;
-        this.placeOfPublication = placeOfPublication;
-        this.genres = genres;
-        this.notes = notes;
-        this.isbn = isbn;
-        this.url = url;
-        this.translations = translations;
-        this.persons = persons;
-    }
-
-    // -------------------------------------------------------------------------------------------------- Public Methods
-
-    @Override
-    public JSONObject toJSON() {
         try {
-            return new JSONObject()
+            json = new JSONObject()
                 .put("title", title)
                 .put("type", type)
                 .put("language", language)
@@ -63,5 +36,12 @@ public class Work implements JSONEnabled {
         } catch (Exception e) {
             throw new RuntimeException("Serialization failed (" + this + ")", e);
         }
+    }
+
+    // -------------------------------------------------------------------------------------------------- Public Methods
+
+    @Override
+    public JSONObject toJSON() {
+        return json;
     }
 }

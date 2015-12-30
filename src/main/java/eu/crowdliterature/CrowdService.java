@@ -24,11 +24,6 @@ public interface CrowdService {
 
     List<WorkOfPerson> getWorks(long personId);
 
-    /**
-     * @param   workId      ID of a work or a translation
-     */
-    List<PersonOfWork> getPersonsOfWork(long workId);
-
     // --- Event Series ---
 
     ResultList<RelatedTopic> getEventSeriesOfEvent(long eventId);

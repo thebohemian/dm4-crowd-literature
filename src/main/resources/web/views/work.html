@@ -1,16 +1,18 @@
 <div class="work">
-    <div class="title">{{work.title}}</div>
+    <div class="title main">{{work.title}}</div>
     <div class="persons">
-        <ul>
-            <li ng-repeat="person in work.persons">
-                <a ng-href="#/person/{{person.id}}">{{person.name}}</a> ({{person.role}})
-            </li>
-        </ul>
+        <span ng-repeat-start="person in work.persons" ng-show="!$first">,</span>
+        <span ng-repeat-end><a ng-href="#/person/{{person.id}}">{{person.name}}</a> ({{person.role}})</span>
     </div>
-    <div>{{work.type}}, {{work.language}}</div>
-    <div>
-        {{work.yearOfPublication}},
-        {{work.placeOfPublication}}
+    <div class="type">
+        <div>
+            {{work.type}}<span ng-show="work.type && work.language">,</span>
+            {{work.language}}
+        </div>
+        <div>
+            {{work.yearOfPublication}}<span ng-show="work.yearOfPublication && work.placeOfPublication">,</span>
+            {{work.placeOfPublication}}
+        </div>
     </div>
     <div class="genre" ng-show="work.genres.length">
         Genre:
@@ -22,20 +24,15 @@
     <div class="url"><a ng-href="{{work.url}}">{{work.url}}</a></div>
     <div class="translations">
         Translations:
-        <ul>
-            <li ng-repeat="translation in work.translations">
-                <div class="translation">
-                    <div>{{translation.title}}</div>
-                    <ul>
-                        <li ng-repeat="person in translation.translators">
-                            <a ng-href="#/person/{{person.id}}">{{person.name}}</a> ({{person.role}})
-                        </li>
-                    </ul>
-                    <div>{{translation.language}}</div>
-                    <div ng-show="translation.isbn">ISBN/ISSN: {{translation.isbn}}</div>
-                </div>
-            </li>
-        </ul>
+        <div class="translation" ng-repeat="translation in work.translations">
+            <div class="title">{{translation.title}}</div>
+            <div>
+                <span ng-repeat-start="person in translation.persons" ng-show="!$first">,</span>
+                <span ng-repeat-end><a ng-href="#/person/{{person.id}}">{{person.name}}</a> ({{person.role}})</span>
+            </div>
+            <div>{{translation.language}}</div>
+            <div ng-show="translation.isbn">ISBN/ISSN: {{translation.isbn}}</div>
+        </div>
     </div>
     <button ng-click="backToMap()" ng-if="portrait">Back to map</button>
 </div>

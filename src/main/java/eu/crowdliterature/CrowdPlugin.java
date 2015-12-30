@@ -104,22 +104,6 @@ public class CrowdPlugin extends PluginActivator implements CrowdService {
         return works;
     }
 
-    @GET
-    @Path("/work/{id}/persons")
-    @Override
-    public List<PersonOfWork> getPersonsOfWork(@PathParam("id") long workId) {
-        List<PersonOfWork> persons = new ArrayList();
-        for (RelatedTopic person : dms.getTopic(workId).getRelatedTopics("crowd.work.involvement", "dm4.core.default",
-                                                                         "dm4.core.default", "dm4.contacts.person")) {
-            persons.add(new PersonOfWork(
-                person.getId(),
-                person.getSimpleValue().toString(),
-                person.getRelatingAssociation().getSimpleValue().toString()
-            ));
-        }
-        return persons;
-    }
-
     // --- Event Series ---
 
     @GET
@@ -141,6 +125,22 @@ public class CrowdPlugin extends PluginActivator implements CrowdService {
 
 
     // ------------------------------------------------------------------------------------------------- Private Methods
+
+    /**
+     * @param   workId      ID of a work or a translation
+     */
+    private List<PersonOfWork> getPersonsOfWork(long workId) {
+        List<PersonOfWork> persons = new ArrayList();
+        for (RelatedTopic person : dms.getTopic(workId).getRelatedTopics("crowd.work.involvement", "dm4.core.default",
+                                                                         "dm4.core.default", "dm4.contacts.person")) {
+            persons.add(new PersonOfWork(
+                person.getId(),
+                person.getSimpleValue().toString(),
+                person.getRelatingAssociation().getSimpleValue().toString()
+            ));
+        }
+        return persons;
+    }
 
     private Topic getWorkOfTranslation(long translationId) {
         return dms.getTopic(translationId).getRelatedTopic("dm4.core.composition", "dm4.core.child", "dm4.core.parent",

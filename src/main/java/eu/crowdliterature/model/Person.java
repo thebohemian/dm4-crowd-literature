@@ -12,33 +12,14 @@ public class Person implements JSONEnabled {
 
     // ---------------------------------------------------------------------------------------------- Instance Variables
 
-    private String name;
-    private String yearOfBirth;
-    private String placeOfBirth;
-    private String notes;
-    private List<String> urls;
-    private List<String> nationalities;
-    private List<String> languages;
+    private JSONObject json;
 
     // ---------------------------------------------------------------------------------------------------- Constructors
 
     public Person(String name, String yearOfBirth, String placeOfBirth, String notes, List<String> urls,
                                                    List<String> nationalities, List<String> languages) {
-        this.name = name;
-        this.yearOfBirth = yearOfBirth;
-        this.placeOfBirth = placeOfBirth;
-        this.notes = notes;
-        this.urls = urls;
-        this.nationalities = nationalities;
-        this.languages = languages;
-    }
-
-    // -------------------------------------------------------------------------------------------------- Public Methods
-
-    @Override
-    public JSONObject toJSON() {
         try {
-            return new JSONObject()
+            json = new JSONObject()
                 .put("name", name)
                 .put("yearOfBirth", yearOfBirth)
                 .put("placeOfBirth", placeOfBirth)
@@ -49,5 +30,12 @@ public class Person implements JSONEnabled {
         } catch (Exception e) {
             throw new RuntimeException("Serialization failed (" + this + ")", e);
         }
+    }
+
+    // -------------------------------------------------------------------------------------------------- Public Methods
+
+    @Override
+    public JSONObject toJSON() {
+        return json;
     }
 }

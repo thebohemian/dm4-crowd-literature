@@ -13,32 +13,26 @@ public class Translation implements JSONEnabled {
 
     // ---------------------------------------------------------------------------------------------- Instance Variables
 
-    private String title;
-    private String language;
-    private String isbn;
-    private List<PersonOfWork> translators;
+    private JSONObject json;
 
     // ---------------------------------------------------------------------------------------------------- Constructors
 
-    public Translation(String title, String language, String isbn, List<PersonOfWork> translators) {
-        this.title = title;
-        this.language = language;
-        this.isbn = isbn;
-        this.translators = translators;
+    public Translation(String title, String language, String isbn, List<PersonOfWork> persons) {
+        try {
+            json = new JSONObject()
+                .put("title", title)
+                .put("language", language)
+                .put("isbn", isbn)
+                .put("persons", DeepaMehtaUtils.toJSONArray(persons));
+        } catch (Exception e) {
+            throw new RuntimeException("Serialization failed (" + this + ")", e);
+        }
     }
 
     // -------------------------------------------------------------------------------------------------- Public Methods
 
     @Override
     public JSONObject toJSON() {
-        try {
-            return new JSONObject()
-                .put("title", title)
-                .put("language", language)
-                .put("isbn", isbn)
-                .put("translators", DeepaMehtaUtils.toJSONArray(translators));
-        } catch (Exception e) {
-            throw new RuntimeException("Serialization failed (" + this + ")", e);
-        }
+        return json;
     }
 }

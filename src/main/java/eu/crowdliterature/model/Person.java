@@ -2,9 +2,8 @@ package eu.crowdliterature.model;
 
 import de.deepamehta.core.JSONEnabled;
 
+import org.codehaus.jettison.json.JSONArray;
 import org.codehaus.jettison.json.JSONObject;
-
-import java.util.List;
 
 
 
@@ -16,8 +15,8 @@ public class Person implements JSONEnabled {
 
     // ---------------------------------------------------------------------------------------------------- Constructors
 
-    public Person(String name, String yearOfBirth, String placeOfBirth, String notes, List<String> urls,
-                                                   List<String> nationalities, List<String> languages) {
+    public Person(String name, String yearOfBirth, String placeOfBirth, String notes, JSONArray urls,
+                                                   JSONArray nationalities, JSONArray languages) {
         try {
             json = new JSONObject()
                 .put("name", name)

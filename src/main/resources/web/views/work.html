@@ -14,7 +14,7 @@
             {{work.placeOfPublication}}
         </div>
     </div>
-    <div class="genre" ng-show="work.genres.length">
+    <div class="genre" ng-show="work.genres">
         Genre:
         <span ng-repeat-start="genre in work.genres" ng-show="!$first">,</span>
         <span ng-repeat-end>{{genre}}</span>
@@ -22,7 +22,7 @@
     <div class="notes" ng-bind-html="work.notes | trusted"></div>
     <div class="isbn" ng-show="work.isbn">ISBN/ISSN: {{work.isbn}}</div>
     <div class="url"><a ng-href="{{work.url}}">{{work.url}}</a></div>
-    <div class="translations" ng-show="work.translations.length">
+    <div class="translations" ng-show="work.translations">
         Translations:
         <div class="translation" ng-repeat="translation in work.translations">
             <div class="title">{{translation.title}}</div>

@@ -12,6 +12,8 @@ import de.deepamehta.core.Topic;
 import de.deepamehta.core.osgi.PluginActivator;
 import de.deepamehta.core.service.ResultList;
 
+import org.codehaus.jettison.json.JSONArray;
+
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -74,7 +76,7 @@ public class CrowdPlugin extends PluginActivator implements CrowdService {
             childs.getString("crowd.work.notes"),
             childs.getStringOrNull("crowd.work.isbn"),
             childs.getStringOrNull("dm4.webbrowser.url"),
-            translations(work),
+            getTranslations(work),
             getPersonsOfWork(workId)
         );
     }
@@ -126,18 +128,42 @@ public class CrowdPlugin extends PluginActivator implements CrowdService {
 
     // ------------------------------------------------------------------------------------------------- Private Methods
 
+    private JSONArray getTranslations(Topic work) {
+        JSONArray translations = null;
+        for (Topic translation : work.getChildTopics().getTopics("crowd.work.translation")) {
+            ChildTopics childs = translation.getChildTopics();
+            String title    = childs.getStringOrNull("crowd.work.title");
+            String language = childs.getStringOrNull("crowd.language");
+            String isbn     = childs.getStringOrNull("crowd.work.isbn");
+            JSONArray persons = getPersonsOfWork(translation.getId());
+            // We don't want create empty Translation objects.
+            // Note: the webclients creates an empty *composite*, that is when no childs exist.
+            // (In contrast empty *simple* childs are never created.)
+            if (title != null || language != null || isbn != null || persons != null) {
+                if (translations == null) {
+                    translations = new JSONArray();
+                }
+                translations.put(new Translation(title, language, isbn, persons).toJSON());
+            }
+        }
+        return translations;
+    }
+
     /**
      * @param   workId      ID of a work or a translation
      */
-    private List<PersonOfWork> getPersonsOfWork(long workId) {
-        List<PersonOfWork> persons = new ArrayList();
+    private JSONArray getPersonsOfWork(long workId) {
+        JSONArray persons = null;
         for (RelatedTopic person : dms.getTopic(workId).getRelatedTopics("crowd.work.involvement", "dm4.core.default",
                                                                          "dm4.core.default", "dm4.contacts.person")) {
-            persons.add(new PersonOfWork(
+            if (persons == null) {
+                persons = new JSONArray();
+            }
+            persons.put(new PersonOfWork(
                 person.getId(),
                 person.getSimpleValue().toString(),
                 person.getRelatingAssociation().getSimpleValue().toString()
-            ));
+            ).toJSON());
         }
         return persons;
     }
@@ -149,30 +175,13 @@ public class CrowdPlugin extends PluginActivator implements CrowdService {
 
     // ---
 
-    private List<Translation> translations(Topic work) {
-        List<Translation> translations = new ArrayList();
-        for (Topic translation : work.getChildTopics().getTopics("crowd.work.translation")) {
-            ChildTopics childs = translation.getChildTopics();
-            String title    = childs.getStringOrNull("crowd.work.title");
-            String language = childs.getStringOrNull("crowd.language");
-            String isbn     = childs.getStringOrNull("crowd.work.isbn");
-            List<PersonOfWork> persons = getPersonsOfWork(translation.getId());
-            // We don't want create empty Translation objects.
-            // Note: the webclients creates an empty *composite*, that is when no childs exist.
-            // (In contrast empty *simple* childs are never created.)
-            if (title != null || language != null || isbn != null || !persons.isEmpty()) {
-                translations.add(new Translation(title, language, isbn, persons));
-            }
-        }
-        return translations;
-    }
-
-    private List<String> multiValues(Topic topic, String assocDefUri) {
-        List<String> multiValues = new ArrayList();
+    private JSONArray multiValues(Topic topic, String assocDefUri) {
+        JSONArray multiValues = null;
         List<RelatedTopic> topics = topic.getChildTopics().getTopicsOrNull(assocDefUri);
         if (topics != null) {
+            multiValues = new JSONArray();
             for (Topic t : topics) {
-                multiValues.add(t.getSimpleValue().toString());
+                multiValues.put(t.getSimpleValue().toString());
             }
         }
         return multiValues;

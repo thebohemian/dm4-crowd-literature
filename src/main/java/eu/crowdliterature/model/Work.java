@@ -1,11 +1,9 @@
 package eu.crowdliterature.model;
 
 import de.deepamehta.core.JSONEnabled;
-import de.deepamehta.core.util.DeepaMehtaUtils;
 
+import org.codehaus.jettison.json.JSONArray;
 import org.codehaus.jettison.json.JSONObject;
-
-import java.util.List;
 
 
 
@@ -18,8 +16,7 @@ public class Work implements JSONEnabled {
     // ---------------------------------------------------------------------------------------------------- Constructors
 
     public Work(String title, String type, String language, String yearOfPublication, String placeOfPublication,
-                List<String> genres, String notes, String isbn, String url, List<Translation> translations,
-                List<PersonOfWork> persons) {
+                JSONArray genres, String notes, String isbn, String url, JSONArray translations, JSONArray persons) {
         try {
             json = new JSONObject()
                 .put("title", title)
@@ -31,8 +28,8 @@ public class Work implements JSONEnabled {
                 .put("notes", notes)
                 .put("isbn", isbn)
                 .put("url", url)
-                .put("translations", DeepaMehtaUtils.toJSONArray(translations))
-                .put("persons", DeepaMehtaUtils.toJSONArray(persons));
+                .put("translations", translations)
+                .put("persons", persons);
         } catch (Exception e) {
             throw new RuntimeException("Serialization failed (" + this + ")", e);
         }

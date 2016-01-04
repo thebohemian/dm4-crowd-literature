@@ -2,12 +2,11 @@ package eu.crowdliterature.model;
 
 import de.deepamehta.core.JSONEnabled;
 
-import org.codehaus.jettison.json.JSONArray;
 import org.codehaus.jettison.json.JSONObject;
 
 
 
-public class Person implements JSONEnabled {
+public class EventOfPerson implements JSONEnabled {
 
     // ---------------------------------------------------------------------------------------------- Instance Variables
 
@@ -15,21 +14,11 @@ public class Person implements JSONEnabled {
 
     // ---------------------------------------------------------------------------------------------------- Constructors
 
-    public Person(String name, String yearOfBirth, String placeOfBirth, String notes, JSONArray urls,
-                  JSONArray nationalities, JSONArray languages, JSONArray institutions, JSONArray works,
-                  JSONArray events) {
+    public EventOfPerson(long id, String title) {
         try {
             json = new JSONObject()
-                .put("name", name)
-                .put("yearOfBirth", yearOfBirth)
-                .put("placeOfBirth", placeOfBirth)
-                .put("notes", notes)
-                .put("urls", urls)
-                .put("nationalities", nationalities)
-                .put("languages", languages)
-                .put("institutions", institutions)
-                .put("works", works)
-                .put("events", events);
+                .put("id",    id)
+                .put("title", title);
         } catch (Exception e) {
             throw new RuntimeException("Serialization failed (" + this + ")", e);
         }

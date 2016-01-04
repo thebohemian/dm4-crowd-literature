@@ -24,27 +24,27 @@
             </li>
         </ul>
     </div>
-    <div class="institutions" ng-show="institutions.length">
+    <div class="institutions" ng-show="person.institutions">
         Associations:
         <ul>
-            <li ng-repeat="institution in institutions">
-                <a ng-href="#/institution/{{institution.id}}">{{institution.value}}</a> ({{institution.assoc.value}})
+            <li ng-repeat="institution in person.institutions">
+                <a ng-href="#/institution/{{institution.id}}">{{institution.name}}</a> ({{institution.role}})
             </li>
         </ul>
     </div>
-    <div class="works" ng-show="works.length">
+    <div class="works" ng-show="person.works">
         Works:
         <ul>
-            <li ng-repeat="work in works">
+            <li ng-repeat="work in person.works">
                 <a ng-href="#/work/{{work.id}}">{{work.title}}</a> ({{work.role}})
             </li>
         </ul>
     </div>
-    <div class="events" ng-show="events.length">
+    <div class="events" ng-show="person.events">
         Events:
         <ul>
-            <li ng-repeat="event in events">
-                <a ng-href="#/event/{{event.id}}">{{event.value}}</a>
+            <li ng-repeat="event in person.events">
+                <a ng-href="#/event/{{event.id}}">{{event.title}}</a>
             </li>
         </ul>
     </div>

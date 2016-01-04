@@ -18,11 +18,9 @@ public interface CrowdService {
 
     Person getPerson(long personId);
 
-    // --- Works ---
+    // --- Work ---
 
     Work getWork(long workId);
-
-    List<WorkOfPerson> getWorks(long personId);
 
     // --- Event Series ---
 

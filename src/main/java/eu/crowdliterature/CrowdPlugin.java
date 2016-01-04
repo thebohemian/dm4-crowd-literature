@@ -1,5 +1,7 @@
 package eu.crowdliterature;
 
+import eu.crowdliterature.model.EventOfPerson;
+import eu.crowdliterature.model.InstitutionOfPerson;
 import eu.crowdliterature.model.Person;
 import eu.crowdliterature.model.PersonOfWork;
 import eu.crowdliterature.model.Translation;
@@ -10,7 +12,10 @@ import de.deepamehta.core.ChildTopics;
 import de.deepamehta.core.RelatedTopic;
 import de.deepamehta.core.Topic;
 import de.deepamehta.core.osgi.PluginActivator;
+import de.deepamehta.core.service.Inject;
 import de.deepamehta.core.service.ResultList;
+import de.deepamehta.plugins.contacts.ContactsService;
+import de.deepamehta.plugins.events.EventsService;
 
 import org.codehaus.jettison.json.JSONArray;
 
@@ -27,6 +32,14 @@ import java.util.List;
 @Path("/crowd")
 @Produces("application/json")
 public class CrowdPlugin extends PluginActivator implements CrowdService {
+
+    // ---------------------------------------------------------------------------------------------- Instance Variables
+
+    @Inject
+    private ContactsService contactsService;
+
+    @Inject
+    private EventsService eventsService;
 
     // -------------------------------------------------------------------------------------------------- Public Methods
 
@@ -53,12 +66,14 @@ public class CrowdPlugin extends PluginActivator implements CrowdService {
             childs.getString("dm4.contacts.notes"),
             multiValues(person, "dm4.webbrowser.url"),
             multiValues(person, "crowd.person.nationality"),
-            multiValues(person, "crowd.language")
+            multiValues(person, "crowd.language"),
+            getInstitutionsOfPerson(personId),
+            getWorksOfPerson(person),
+            getEventsOfPerson(personId)
         );
-        // ### TODO: institutions, works, events
     }
 
-    // --- Works ---
+    // --- Work ---
 
     @GET
     @Path("/work/{id}")
@@ -79,31 +94,6 @@ public class CrowdPlugin extends PluginActivator implements CrowdService {
             getTranslations(work),
             getPersonsOfWork(workId)
         );
-    }
-
-    @GET
-    @Path("/person/{id}/works")
-    @Override
-    public List<WorkOfPerson> getWorks(@PathParam("id") long personId) {
-        List<WorkOfPerson> works = new ArrayList();
-        Topic person = dms.getTopic(personId);
-        // works
-        for (RelatedTopic work : person.getRelatedTopics("crowd.work.involvement", "dm4.core.default",
-                                                         "dm4.core.default", "crowd.work")) {
-            String workTitle = work.getSimpleValue().toString();
-            String role = work.getRelatingAssociation().getSimpleValue().toString();
-            works.add(new WorkOfPerson(work.getId(), workTitle, role));
-        }
-        // translations
-        for (RelatedTopic translation : person.getRelatedTopics("crowd.work.involvement", "dm4.core.default",
-                                                                "dm4.core.default", "crowd.work.translation")) {
-            Topic work = getWorkOfTranslation(translation.getId());
-            String workTitle = work.getSimpleValue().toString();
-            String role = translation.getRelatingAssociation().getSimpleValue().toString();
-            works.add(new WorkOfPerson(work.getId(), workTitle, role));
-        }
-        //
-        return works;
     }
 
     // --- Event Series ---
@@ -168,9 +158,69 @@ public class CrowdPlugin extends PluginActivator implements CrowdService {
         return persons;
     }
 
+    private JSONArray getInstitutionsOfPerson(long personId) {
+        JSONArray institutions = null;
+        for (RelatedTopic inst : contactsService.getInstitutions(personId)) {
+            if (institutions == null) {
+                institutions = new JSONArray();
+            }
+            institutions.put(new InstitutionOfPerson(
+                inst.getId(),
+                inst.getSimpleValue().toString(),
+                inst.getRelatingAssociation().getSimpleValue().toString()
+            ).toJSON());
+        }
+        return institutions;
+    }
+
+    private JSONArray getWorksOfPerson(Topic person) {
+        JSONArray works = null;
+        // works
+        for (RelatedTopic work : person.getRelatedTopics("crowd.work.involvement", "dm4.core.default",
+                                                         "dm4.core.default", "crowd.work")) {
+            if (works == null) {
+                works = new JSONArray();
+            }
+            works.put(new WorkOfPerson(
+                work.getId(),
+                work.getSimpleValue().toString(),
+                work.getRelatingAssociation().getSimpleValue().toString()
+            ).toJSON());
+        }
+        // translations
+        for (RelatedTopic translation : person.getRelatedTopics("crowd.work.involvement", "dm4.core.default",
+                                                                "dm4.core.default", "crowd.work.translation")) {
+            if (works == null) {
+                works = new JSONArray();
+            }
+            Topic work = getWorkOfTranslation(translation.getId());
+            works.put(new WorkOfPerson(
+                work.getId(),
+                work.getSimpleValue().toString(),
+                translation.getRelatingAssociation().getSimpleValue().toString()
+            ).toJSON());
+        }
+        //
+        return works;
+    }
+
     private Topic getWorkOfTranslation(long translationId) {
         return dms.getTopic(translationId).getRelatedTopic("dm4.core.composition", "dm4.core.child", "dm4.core.parent",
             "crowd.work");
+    }
+
+    private JSONArray getEventsOfPerson(long personId) {
+        JSONArray events = null;
+        for (RelatedTopic event : eventsService.getEventsOfParticipant(personId)) {
+            if (events == null) {
+                events = new JSONArray();
+            }
+            events.put(new EventOfPerson(
+                event.getId(),
+                event.getSimpleValue().toString()
+            ).toJSON());
+        }
+        return events;
     }
 
     // ---

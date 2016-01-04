@@ -16,10 +16,6 @@ angular.module("crowd").service("crowdService", function($http) {
         return $http.get("/core/topic/by_type/dm4.events.event?include_childs=true");
     }
 
-    this.getEventsOfParticipant = function(personId, callback) {
-        $http.get("/event/participant/" + personId).then(callback);
-    }
-
     this.getParticipantsOfEvent = function(eventId, callback) {
         $http.get("/event/" + eventId + "/participants").then(callback);
     }
@@ -44,18 +40,10 @@ angular.module("crowd").service("crowdService", function($http) {
         $http.get("/crowd/work/" + workId).then(callback);
     }
 
-    this.getWorks = function(personId, callback) {
-        $http.get("/crowd/person/" + personId + "/works").then(callback);
-    }
-
     // Institution
 
     this.getInstitution = function(instId, callback) {
         getTopic(instId, callback);
-    }
-
-    this.getInstitutions = function(personId, callback) {
-        $http.get("/contact/" + personId + "/institutions").then(callback);
     }
 
     this.getInstitutionPersons = function(instId, callback) {

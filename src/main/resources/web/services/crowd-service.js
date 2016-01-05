@@ -12,22 +12,18 @@ angular.module("crowd").service("crowdService", function($http) {
 
     // Events
 
-    this.getAllEvents = function() {
-        return $http.get("/core/topic/by_type/dm4.events.event?include_childs=true");
+    this.getEvent = function(eventId, callback) {
+        $http.get("/crowd/event/" + eventId).then(callback);
     }
 
-    this.getParticipantsOfEvent = function(eventId, callback) {
-        $http.get("/event/" + eventId + "/participants").then(callback);
+    this.getAllEvents = function() {
+        return $http.get("/core/topic/by_type/dm4.events.event?include_childs=true");
     }
 
 	// Event Series
 
     this.getEventSeries = function(eventSeriesId, callback) {
         getTopic(eventSeriesId, callback);
-    }
-
-    this.getEventSeriesOfEvent = function(eventId, callback) {
-        $http.get("/crowd/event/" + eventId + "/event_series").then(callback);
     }
 
     this.getEventsOfEventSeries = function(eventSeriesId, callback) {

@@ -1,8 +1,11 @@
 package eu.crowdliterature;
 
+import eu.crowdliterature.model.Event;
 import eu.crowdliterature.model.EventOfPerson;
+import eu.crowdliterature.model.EventSeriesOfEvent;
 import eu.crowdliterature.model.InstitutionOfPerson;
 import eu.crowdliterature.model.Person;
+import eu.crowdliterature.model.PersonOfEvent;
 import eu.crowdliterature.model.PersonOfWork;
 import eu.crowdliterature.model.Translation;
 import eu.crowdliterature.model.Work;
@@ -18,6 +21,7 @@ import de.deepamehta.plugins.contacts.ContactsService;
 import de.deepamehta.plugins.events.EventsService;
 
 import org.codehaus.jettison.json.JSONArray;
+import org.codehaus.jettison.json.JSONObject;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -96,15 +100,28 @@ public class CrowdPlugin extends PluginActivator implements CrowdService {
         );
     }
 
-    // --- Event Series ---
+    // --- Event ---
 
     @GET
-    @Path("/event/{id}/event_series")
+    @Path("/event/{id}")
     @Override
-    public ResultList<RelatedTopic> getEventSeriesOfEvent(@PathParam("id") long eventId) {
-        return dms.getTopic(eventId).getRelatedTopics("dm4.core.association", "dm4.core.default", "dm4.core.default",
-            "crowd.event_series");
+    public Event getEvent(@PathParam("id") long eventId) {
+        Topic event = dms.getTopic(eventId);
+        ChildTopics childs = event.getChildTopics();
+        return new Event(
+            event.getSimpleValue().toString(),
+            childs.getString("dm4.datetime#dm4.events.from"),
+            childs.getString("dm4.datetime#dm4.events.to"),
+            getAddress(event),
+            childs.getString("dm4.events.notes"),
+            getParticipants(eventId),
+            childs.getStringOrNull("crowd.event.entrance_fee"),
+            childs.getStringOrNull("dm4.webbrowser.url"),
+            getEventSeries(event)
+        );
     }
+
+    // --- Event Series ---
 
     @GET
     @Path("/event_series/{id}/events")
@@ -117,6 +134,8 @@ public class CrowdPlugin extends PluginActivator implements CrowdService {
 
 
     // ------------------------------------------------------------------------------------------------- Private Methods
+
+    // --- Work ---
 
     private JSONArray getTranslations(Topic work) {
         JSONArray translations = null;
@@ -157,6 +176,8 @@ public class CrowdPlugin extends PluginActivator implements CrowdService {
         }
         return persons;
     }
+
+    // --- Person ---
 
     private JSONArray getInstitutionsOfPerson(long personId) {
         JSONArray institutions = null;
@@ -211,7 +232,7 @@ public class CrowdPlugin extends PluginActivator implements CrowdService {
 
     private JSONArray getEventsOfPerson(long personId) {
         JSONArray events = null;
-        for (RelatedTopic event : eventsService.getEventsOfParticipant(personId)) {
+        for (RelatedTopic event : eventsService.getEvents(personId)) {
             if (events == null) {
                 events = new JSONArray();
             }
@@ -223,7 +244,53 @@ public class CrowdPlugin extends PluginActivator implements CrowdService {
         return events;
     }
 
+    // --- Event ---
+
+    private JSONArray getParticipants(long eventId) {
+        JSONArray participants = null;
+        for (RelatedTopic person : eventsService.getParticipants(eventId)) {
+            if (participants == null) {
+                participants = new JSONArray();
+            }
+            participants.put(new PersonOfEvent(
+                person.getId(),
+                person.getSimpleValue().toString()
+            ).toJSON());
+        }
+        return participants;
+    }
+
+    private JSONArray getEventSeries(Topic event) {
+        JSONArray eventSeries = null;
+        for (RelatedTopic eventSeriesTopic : event.getRelatedTopics("dm4.core.association", "dm4.core.default",
+                                                                    "dm4.core.default", "crowd.event_series")) {
+            if (eventSeries == null) {
+                eventSeries = new JSONArray();
+            }
+            eventSeries.put(new EventSeriesOfEvent(
+                eventSeriesTopic.getId(),
+                eventSeriesTopic.getSimpleValue().toString()
+            ).toJSON());
+        }
+        return eventSeries;
+    }
+
     // ---
+
+    private JSONObject getAddress(Topic topic) {
+        try {
+            RelatedTopic address = topic.getChildTopics().getTopic("dm4.contacts.address");
+            ChildTopics childs = address.getChildTopics();
+            return new JSONObject()
+                .put("label", address.getRelatingAssociation().getSimpleValue().toString())
+                .put("street",     childs.getStringOrNull("dm4.contacts.street"))
+                .put("postalCode", childs.getStringOrNull("dm4.contacts.postal_code"))
+                .put("city",       childs.getStringOrNull("dm4.contacts.city"))
+                .put("country",    childs.getStringOrNull("dm4.contacts.country"));
+        } catch (Exception e) {
+            throw new RuntimeException("Serializing an Address failed (" + this + ")", e);
+        }
+    }
 
     private JSONArray multiValues(Topic topic, String assocDefUri) {
         JSONArray multiValues = null;

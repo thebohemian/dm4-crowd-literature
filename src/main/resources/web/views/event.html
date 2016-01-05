@@ -1,26 +1,26 @@
 <div class="event">
-    <div class="title">{{event.value}}</div>
+    <div class="title">{{event.title}}</div>
     <div class="date">
-        <div class="from">From: {{event.childs["dm4.datetime#dm4.events.from"].value}}</div>
-        <div class="to">To: {{event.childs["dm4.datetime#dm4.events.to"].value}}</div>
+        <div class="from">From: {{event.from}}</div>
+        <div class="to">To: {{event.to}}</div>
     </div>
-    <div dm4-address="event.childs['dm4.contacts.address']"></div>
-    <div class="notes" ng-bind-html="event.childs['dm4.events.notes'].value | trusted"></div>
-    <div class="participants" ng-show="participants.length">
+    <div address="event.address"></div>
+    <div class="notes" ng-bind-html="event.notes | trusted"></div>
+    <div class="participants" ng-show="event.participants">
         Participants:
-        <span ng-repeat-start="person in participants | orderBy:'value'" ng-show="!$first">,</span>
-        <a ng-repeat-end ng-href="#/person/{{person.id}}">{{person.value}}</a>
+        <span ng-repeat-start="person in event.participants | orderBy:'value'" ng-show="!$first">,</span>
+        <a ng-repeat-end ng-href="#/person/{{person.id}}">{{person.name}}</a>
     </div>
-    <div class="entrance-fee" ng-show="event.childs['crowd.event.entrance_fee'].value">
-        Entrance fee: {{event.childs["crowd.event.entrance_fee"].value}}
+    <div class="entrance-fee" ng-show="event.entranceFee">
+        Entrance fee: {{event.entranceFee}}
     </div>
     <div class="url">
-        <a ng-href="{{event.childs['dm4.webbrowser.url'].value}}">{{event.childs["dm4.webbrowser.url"].value}}</a>
+        <a ng-href="{{event.url}}">{{event.url}}</a>
     </div>
-    <div class="event-series" ng-show="eventSeries.length">
+    <div class="event-series" ng-show="event.eventSeries">
         This event is part of series
-        <span ng-repeat-start="series in eventSeries" ng-show="!$first"> and</span>
-        <a ng-repeat-end ng-href="#/event_series/{{series.id}}">{{series.value}}</a>.
+        <span ng-repeat-start="series in event.eventSeries" ng-show="!$first"> and</span>
+        <a ng-repeat-end ng-href="#/event_series/{{series.id}}">{{series.title}}</a>.
     </div>
     <button ng-click="backToMap()" ng-if="portrait">Back to map</button>
 </div>

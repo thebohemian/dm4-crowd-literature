@@ -1,6 +1,7 @@
 package eu.crowdliterature;
 
 import eu.crowdliterature.model.Event;
+import eu.crowdliterature.model.Institution;
 import eu.crowdliterature.model.Person;
 import eu.crowdliterature.model.Work;
 
@@ -28,4 +29,8 @@ public interface CrowdService {
     // --- Event Series ---
 
     ResultList<RelatedTopic> getEventsOfEventSeries(long eventSeriesId);
+
+    // --- Institution ---
+
+    Institution getInstitution(long instId);
 }

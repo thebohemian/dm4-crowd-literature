@@ -4,7 +4,7 @@
         <div class="from">From: {{event.from}}</div>
         <div class="to">To: {{event.to}}</div>
     </div>
-    <div address="event.address"></div>
+    <div dm4-address="event.address"></div>
     <div class="notes" ng-bind-html="event.notes | trusted"></div>
     <div class="participants" ng-show="event.participants">
         Participants:

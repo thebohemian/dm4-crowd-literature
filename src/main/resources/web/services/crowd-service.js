@@ -39,11 +39,7 @@ angular.module("crowd").service("crowdService", function($http) {
     // Institution
 
     this.getInstitution = function(instId, callback) {
-        getTopic(instId, callback);
-    }
-
-    this.getInstitutionPersons = function(instId, callback) {
-        $http.get("/contact/" + instId + "/persons").then(callback);
+        $http.get("/crowd/institution/" + instId).then(callback);
     }
 
     // ------------------------------------------------------------------------------------------------- Private Methods

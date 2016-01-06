@@ -3,10 +3,13 @@ package eu.crowdliterature;
 import eu.crowdliterature.model.Event;
 import eu.crowdliterature.model.EventOfPerson;
 import eu.crowdliterature.model.EventSeriesOfEvent;
+import eu.crowdliterature.model.Institution;
 import eu.crowdliterature.model.InstitutionOfPerson;
 import eu.crowdliterature.model.Person;
 import eu.crowdliterature.model.PersonOfEvent;
+import eu.crowdliterature.model.PersonOfInstitution;
 import eu.crowdliterature.model.PersonOfWork;
+import eu.crowdliterature.model.Phone;
 import eu.crowdliterature.model.Translation;
 import eu.crowdliterature.model.Work;
 import eu.crowdliterature.model.WorkOfPerson;
@@ -68,9 +71,9 @@ public class CrowdPlugin extends PluginActivator implements CrowdService {
             childs.getChildTopics("dm4.datetime.date#dm4.contacts.date_of_birth").getStringOrNull("dm4.datetime.year"),
             childs.getStringOrNull("dm4.contacts.city#crowd.person.place_of_birth"),
             childs.getString("dm4.contacts.notes"),
-            multiValues(person, "dm4.webbrowser.url"),
-            multiValues(person, "crowd.person.nationality"),
-            multiValues(person, "crowd.language"),
+            getStrings(person, "dm4.webbrowser.url"),
+            getStrings(person, "crowd.person.nationality"),
+            getStrings(person, "crowd.language"),
             getInstitutionsOfPerson(personId),
             getWorksOfPerson(person),
             getEventsOfPerson(personId)
@@ -91,7 +94,7 @@ public class CrowdPlugin extends PluginActivator implements CrowdService {
             childs.getStringOrNull("crowd.language"),
             childs.getStringOrNull("dm4.datetime.year#crowd.work.year_of_publication"),
             childs.getStringOrNull("dm4.contacts.city#crowd.work.place_of_publication"),
-            multiValues(work, "crowd.work.genre"),
+            getStrings(work, "crowd.work.genre"),
             childs.getString("crowd.work.notes"),
             childs.getStringOrNull("crowd.work.isbn"),
             childs.getStringOrNull("dm4.webbrowser.url"),
@@ -131,51 +134,28 @@ public class CrowdPlugin extends PluginActivator implements CrowdService {
             "dm4.core.default", "dm4.events.event");
     }
 
+    // --- Institution ---
+
+    @GET
+    @Path("/institution/{id}")
+    @Override
+    public Institution getInstitution(@PathParam("id") long instId) {
+        Topic inst = dms.getTopic(instId);
+        ChildTopics childs = inst.getChildTopics();
+        return new Institution(
+            inst.getSimpleValue().toString(),
+            getStrings(inst, "dm4.webbrowser.url"),
+            getAddresses(inst),
+            getPhoneNumbers(inst),
+            getStrings(inst, "dm4.contacts.email_address"),
+            childs.getString("dm4.contacts.notes"),
+            getPersonsOfInstitution(instId)
+        );
+    }
+
 
 
     // ------------------------------------------------------------------------------------------------- Private Methods
-
-    // --- Work ---
-
-    private JSONArray getTranslations(Topic work) {
-        JSONArray translations = null;
-        for (Topic translation : work.getChildTopics().getTopics("crowd.work.translation")) {
-            ChildTopics childs = translation.getChildTopics();
-            String title    = childs.getStringOrNull("crowd.work.title");
-            String language = childs.getStringOrNull("crowd.language");
-            String isbn     = childs.getStringOrNull("crowd.work.isbn");
-            JSONArray persons = getPersonsOfWork(translation.getId());
-            // We don't want create empty Translation objects.
-            // Note: the webclients creates an empty *composite*, that is when no childs exist.
-            // (In contrast empty *simple* childs are never created.)
-            if (title != null || language != null || isbn != null || persons != null) {
-                if (translations == null) {
-                    translations = new JSONArray();
-                }
-                translations.put(new Translation(title, language, isbn, persons).toJSON());
-            }
-        }
-        return translations;
-    }
-
-    /**
-     * @param   workId      ID of a work or a translation
-     */
-    private JSONArray getPersonsOfWork(long workId) {
-        JSONArray persons = null;
-        for (RelatedTopic person : dms.getTopic(workId).getRelatedTopics("crowd.work.involvement", "dm4.core.default",
-                                                                         "dm4.core.default", "dm4.contacts.person")) {
-            if (persons == null) {
-                persons = new JSONArray();
-            }
-            persons.put(new PersonOfWork(
-                person.getId(),
-                person.getSimpleValue().toString(),
-                person.getRelatingAssociation().getSimpleValue().toString()
-            ).toJSON());
-        }
-        return persons;
-    }
 
     // --- Person ---
 
@@ -244,6 +224,48 @@ public class CrowdPlugin extends PluginActivator implements CrowdService {
         return events;
     }
 
+    // --- Work ---
+
+    private JSONArray getTranslations(Topic work) {
+        JSONArray translations = null;
+        for (Topic translation : work.getChildTopics().getTopics("crowd.work.translation")) {
+            ChildTopics childs = translation.getChildTopics();
+            String title    = childs.getStringOrNull("crowd.work.title");
+            String language = childs.getStringOrNull("crowd.language");
+            String isbn     = childs.getStringOrNull("crowd.work.isbn");
+            JSONArray persons = getPersonsOfWork(translation.getId());
+            // We don't want create empty Translation objects.
+            // Note: the webclients creates an empty *composite*, that is when no childs exist.
+            // (In contrast empty *simple* childs are never created.)
+            if (title != null || language != null || isbn != null || persons != null) {
+                if (translations == null) {
+                    translations = new JSONArray();
+                }
+                translations.put(new Translation(title, language, isbn, persons).toJSON());
+            }
+        }
+        return translations;
+    }
+
+    /**
+     * @param   workId      ID of a work or a translation
+     */
+    private JSONArray getPersonsOfWork(long workId) {
+        JSONArray persons = null;
+        for (RelatedTopic person : dms.getTopic(workId).getRelatedTopics("crowd.work.involvement", "dm4.core.default",
+                                                                         "dm4.core.default", "dm4.contacts.person")) {
+            if (persons == null) {
+                persons = new JSONArray();
+            }
+            persons.put(new PersonOfWork(
+                person.getId(),
+                person.getSimpleValue().toString(),
+                person.getRelatingAssociation().getSimpleValue().toString()
+            ).toJSON());
+        }
+        return persons;
+    }
+
     // --- Event ---
 
     private JSONArray getParticipants(long eventId) {
@@ -278,8 +300,59 @@ public class CrowdPlugin extends PluginActivator implements CrowdService {
     // ---
 
     private JSONObject getAddress(Topic topic) {
+        return address(topic.getChildTopics().getTopic("dm4.contacts.address"));
+    }
+
+    // --- Institution ---
+
+    private JSONArray getAddresses(Topic topic) {
+        JSONArray addresses = null;
+        List<RelatedTopic> addressTopics = topic.getChildTopics().getTopics("dm4.contacts.address#" +
+            "dm4.contacts.address_entry");
+        if (!addressTopics.isEmpty()) {
+            addresses = new JSONArray();
+            for (RelatedTopic address : addressTopics) {
+                addresses.put(address(address));
+            }
+        }
+        return addresses;
+    }
+
+    private JSONArray getPhoneNumbers(Topic topic) {
+        JSONArray phoneNumbers = null;
+        List<RelatedTopic> phoneTopics = topic.getChildTopics().getTopicsOrNull("dm4.contacts.phone_number#" +
+            "dm4.contacts.phone_entry");
+        if (phoneTopics != null) {
+            phoneNumbers = new JSONArray();
+            for (RelatedTopic phone : phoneTopics) {
+                phoneNumbers.put(new Phone(
+                    phone.getRelatingAssociation().getSimpleValue().toString(),
+                    phone.getSimpleValue().toString()
+                ).toJSON());
+            }
+        }
+        return phoneNumbers;
+    }
+
+    private JSONArray getPersonsOfInstitution(long instId) {
+        JSONArray persons = null;
+        for (RelatedTopic person : contactsService.getPersons(instId)) {
+            if (persons == null) {
+                persons = new JSONArray();
+            }
+            persons.put(new PersonOfInstitution(
+                person.getId(),
+                person.getSimpleValue().toString(),
+                person.getRelatingAssociation().getSimpleValue().toString()
+            ).toJSON());
+        }
+        return persons;
+    }
+
+    // --- Helper ---
+
+    private JSONObject address(RelatedTopic address) {
         try {
-            RelatedTopic address = topic.getChildTopics().getTopic("dm4.contacts.address");
             ChildTopics childs = address.getChildTopics();
             return new JSONObject()
                 .put("label", address.getRelatingAssociation().getSimpleValue().toString())
@@ -292,15 +365,15 @@ public class CrowdPlugin extends PluginActivator implements CrowdService {
         }
     }
 
-    private JSONArray multiValues(Topic topic, String assocDefUri) {
-        JSONArray multiValues = null;
+    private JSONArray getStrings(Topic topic, String assocDefUri) {
+        JSONArray strings = null;
         List<RelatedTopic> topics = topic.getChildTopics().getTopicsOrNull(assocDefUri);
         if (topics != null) {
-            multiValues = new JSONArray();
+            strings = new JSONArray();
             for (Topic t : topics) {
-                multiValues.put(t.getSimpleValue().toString());
+                strings.put(t.getSimpleValue().toString());
             }
         }
-        return multiValues;
+        return strings;
     }
 }

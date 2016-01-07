@@ -56,6 +56,38 @@ html[ng-app] > body {
     margin-top: 2em;
 }
 
+/* Person Details */
+
+#details .person .name {
+    font-size: 1.5em;
+    font-weight: bold;
+}
+
+#details .person .birth,
+#details .person .nationality {
+    margin-top: 1em;
+}
+
+/* Work Details */
+
+#details .work .title.main {
+    font-size: 1.5em;
+}
+
+#details .work .title {
+    font-weight: bold;
+}
+
+#details .work .persons,
+#details .work .type,
+#details .work .genre,
+#details .work .isbn,
+#details .work .translations,
+#details .work .translation,
+#details .work .url {
+    margin-top: 1em;
+}
+
 /* Event Details */
 
 #details .event .title {
@@ -80,19 +112,8 @@ html[ng-app] > body {
     font-weight: bold;
 }
 
+#details .event-series .url,
 #details .event-series .events {
-    margin-top: 1em;
-}
-
-/* Person Details */
-
-#details .person .name {
-    font-size: 1.5em;
-    font-weight: bold;
-}
-
-#details .person .birth,
-#details .person .nationality {
     margin-top: 1em;
 }
 
@@ -105,25 +126,5 @@ html[ng-app] > body {
 
 #details .institution .url,
 #details .institution .address {
-    margin-top: 1em;
-}
-
-/* Work Details */
-
-#details .work .title.main {
-    font-size: 1.5em;
-}
-
-#details .work .title {
-    font-weight: bold;
-}
-
-#details .work .persons,
-#details .work .type,
-#details .work .genre,
-#details .work .isbn,
-#details .work .translations,
-#details .work .translation,
-#details .work .url {
     margin-top: 1em;
 }

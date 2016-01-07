@@ -1,18 +1,16 @@
 <div class="event-series">
-    <div class="title">{{eventSeries.value}}</div>
-    <div class="notes" ng-bind-html="eventSeries.childs['crowd.event_series.notes'].value | trusted"></div>
-    <div class="events" ng-show="events.length">
+    <div class="title">{{eventSeries.title}}</div>
+    <div class="url">
+        <a ng-href="{{eventSeries.url}}">{{eventSeries.url}}</a>
+    </div>
+    <div class="notes" ng-bind-html="eventSeries.notes | trusted"></div>
+    <div class="events" ng-show="eventSeries.events">
         Events:
         <ul>
-            <li ng-repeat="event in events">
-                <a ng-href="#/event/{{event.id}}">{{event.value}}</a>
+            <li ng-repeat="event in eventSeries.events">
+                <a ng-href="#/event/{{event.id}}">{{event.title}}</a>
             </li>
         </ul>
-    </div>
-    <div class="url">
-        <a ng-href="{{eventSeries.childs['dm4.webbrowser.url'].value}}">
-            {{eventSeries.childs["dm4.webbrowser.url"].value}}
-        </a>
     </div>
     <button ng-click="backToMap()" ng-if="portrait">Back to map</button>
 </div>

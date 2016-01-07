@@ -1,7 +1,10 @@
 package eu.crowdliterature;
 
+import eu.crowdliterature.model.Address;
 import eu.crowdliterature.model.Event;
+import eu.crowdliterature.model.EventOfEventSeries;
 import eu.crowdliterature.model.EventOfPerson;
+import eu.crowdliterature.model.EventSeries;
 import eu.crowdliterature.model.EventSeriesOfEvent;
 import eu.crowdliterature.model.Institution;
 import eu.crowdliterature.model.InstitutionOfPerson;
@@ -9,7 +12,7 @@ import eu.crowdliterature.model.Person;
 import eu.crowdliterature.model.PersonOfEvent;
 import eu.crowdliterature.model.PersonOfInstitution;
 import eu.crowdliterature.model.PersonOfWork;
-import eu.crowdliterature.model.Phone;
+import eu.crowdliterature.model.PhoneNumber;
 import eu.crowdliterature.model.Translation;
 import eu.crowdliterature.model.Work;
 import eu.crowdliterature.model.WorkOfPerson;
@@ -31,7 +34,6 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 
-import java.util.ArrayList;
 import java.util.List;
 
 
@@ -127,11 +129,17 @@ public class CrowdPlugin extends PluginActivator implements CrowdService {
     // --- Event Series ---
 
     @GET
-    @Path("/event_series/{id}/events")
+    @Path("/event_series/{id}")
     @Override
-    public ResultList<RelatedTopic> getEventsOfEventSeries(@PathParam("id") long eventSeriesId) {
-        return dms.getTopic(eventSeriesId).getRelatedTopics("dm4.core.association", "dm4.core.default",
-            "dm4.core.default", "dm4.events.event");
+    public EventSeries getEventSeries(@PathParam("id") long eventSeriesId) {
+        Topic eventSeries = dms.getTopic(eventSeriesId);
+        ChildTopics childs = eventSeries.getChildTopics();
+        return new EventSeries(
+            eventSeries.getSimpleValue().toString(),
+            childs.getString("crowd.event_series.notes"),
+            childs.getStringOrNull("dm4.webbrowser.url"),
+            getEventsOfEventSeries(eventSeries)
+        );
     }
 
     // --- Institution ---
@@ -161,39 +169,42 @@ public class CrowdPlugin extends PluginActivator implements CrowdService {
 
     private JSONArray getInstitutionsOfPerson(long personId) {
         JSONArray institutions = null;
-        for (RelatedTopic inst : contactsService.getInstitutions(personId)) {
-            if (institutions == null) {
-                institutions = new JSONArray();
+        ResultList<RelatedTopic> instTopics = contactsService.getInstitutions(personId);
+        if (!instTopics.isEmpty()) {
+            institutions = new JSONArray();
+            for (RelatedTopic inst : instTopics) {
+                institutions.put(new InstitutionOfPerson(
+                    inst.getId(),
+                    inst.getSimpleValue().toString(),
+                    inst.getRelatingAssociation().getSimpleValue().toString()
+                ).toJSON());
             }
-            institutions.put(new InstitutionOfPerson(
-                inst.getId(),
-                inst.getSimpleValue().toString(),
-                inst.getRelatingAssociation().getSimpleValue().toString()
-            ).toJSON());
         }
         return institutions;
     }
 
     private JSONArray getWorksOfPerson(Topic person) {
         JSONArray works = null;
-        // works
-        for (RelatedTopic work : person.getRelatedTopics("crowd.work.involvement", "dm4.core.default",
-                                                         "dm4.core.default", "crowd.work")) {
-            if (works == null) {
-                works = new JSONArray();
+        // 1) works
+        ResultList<RelatedTopic> workTopics = person.getRelatedTopics("crowd.work.involvement", "dm4.core.default",
+                                                                      "dm4.core.default", "crowd.work");
+        if (!workTopics.isEmpty()) {
+            works = new JSONArray();
+            for (RelatedTopic work : workTopics) {
+                works.put(new WorkOfPerson(
+                    work.getId(),
+                    work.getSimpleValue().toString(),
+                    work.getRelatingAssociation().getSimpleValue().toString()
+                ).toJSON());
             }
-            works.put(new WorkOfPerson(
-                work.getId(),
-                work.getSimpleValue().toString(),
-                work.getRelatingAssociation().getSimpleValue().toString()
-            ).toJSON());
         }
-        // translations
-        for (RelatedTopic translation : person.getRelatedTopics("crowd.work.involvement", "dm4.core.default",
-                                                                "dm4.core.default", "crowd.work.translation")) {
-            if (works == null) {
-                works = new JSONArray();
-            }
+        // 2) translations
+        ResultList<RelatedTopic> translations = person.getRelatedTopics("crowd.work.involvement", "dm4.core.default",
+                                                                        "dm4.core.default", "crowd.work.translation");
+        if (works == null && !translations.isEmpty()) {
+            works = new JSONArray();
+        }
+        for (RelatedTopic translation : translations) {
             Topic work = getWorkOfTranslation(translation.getId());
             works.put(new WorkOfPerson(
                 work.getId(),
@@ -212,14 +223,15 @@ public class CrowdPlugin extends PluginActivator implements CrowdService {
 
     private JSONArray getEventsOfPerson(long personId) {
         JSONArray events = null;
-        for (RelatedTopic event : eventsService.getEvents(personId)) {
-            if (events == null) {
-                events = new JSONArray();
+        ResultList<RelatedTopic> eventTopics = eventsService.getEvents(personId);
+        if (!eventTopics.isEmpty()) {
+            events = new JSONArray();
+            for (RelatedTopic event : eventTopics) {
+                events.put(new EventOfPerson(
+                    event.getId(),
+                    event.getSimpleValue().toString()
+                ).toJSON());
             }
-            events.put(new EventOfPerson(
-                event.getId(),
-                event.getSimpleValue().toString()
-            ).toJSON());
         }
         return events;
     }
@@ -252,16 +264,17 @@ public class CrowdPlugin extends PluginActivator implements CrowdService {
      */
     private JSONArray getPersonsOfWork(long workId) {
         JSONArray persons = null;
-        for (RelatedTopic person : dms.getTopic(workId).getRelatedTopics("crowd.work.involvement", "dm4.core.default",
-                                                                         "dm4.core.default", "dm4.contacts.person")) {
-            if (persons == null) {
-                persons = new JSONArray();
+        ResultList<RelatedTopic> personTopics = dms.getTopic(workId).getRelatedTopics("crowd.work.involvement",
+                                                         "dm4.core.default", "dm4.core.default", "dm4.contacts.person");
+        if (!personTopics.isEmpty()) {
+            persons = new JSONArray();
+            for (RelatedTopic person : personTopics) {
+                persons.put(new PersonOfWork(
+                    person.getId(),
+                    person.getSimpleValue().toString(),
+                    person.getRelatingAssociation().getSimpleValue().toString()
+                ).toJSON());
             }
-            persons.put(new PersonOfWork(
-                person.getId(),
-                person.getSimpleValue().toString(),
-                person.getRelatingAssociation().getSimpleValue().toString()
-            ).toJSON());
         }
         return persons;
     }
@@ -270,44 +283,62 @@ public class CrowdPlugin extends PluginActivator implements CrowdService {
 
     private JSONArray getParticipants(long eventId) {
         JSONArray participants = null;
-        for (RelatedTopic person : eventsService.getParticipants(eventId)) {
-            if (participants == null) {
-                participants = new JSONArray();
+        ResultList<RelatedTopic> personTopics = eventsService.getParticipants(eventId);
+        if (!personTopics.isEmpty()) {
+            participants = new JSONArray();
+            for (RelatedTopic person : personTopics) {
+                participants.put(new PersonOfEvent(
+                    person.getId(),
+                    person.getSimpleValue().toString()
+                ).toJSON());
             }
-            participants.put(new PersonOfEvent(
-                person.getId(),
-                person.getSimpleValue().toString()
-            ).toJSON());
         }
         return participants;
     }
 
     private JSONArray getEventSeries(Topic event) {
         JSONArray eventSeries = null;
-        for (RelatedTopic eventSeriesTopic : event.getRelatedTopics("dm4.core.association", "dm4.core.default",
-                                                                    "dm4.core.default", "crowd.event_series")) {
-            if (eventSeries == null) {
-                eventSeries = new JSONArray();
+        ResultList<RelatedTopic> eventSeriesTopics = event.getRelatedTopics("dm4.core.association", "dm4.core.default",
+                                                                            "dm4.core.default", "crowd.event_series");
+        if (!eventSeriesTopics.isEmpty())  {
+            eventSeries = new JSONArray();
+            for (RelatedTopic eventSeriesTopic : eventSeriesTopics) {
+                eventSeries.put(new EventSeriesOfEvent(
+                    eventSeriesTopic.getId(),
+                    eventSeriesTopic.getSimpleValue().toString()
+                ).toJSON());
             }
-            eventSeries.put(new EventSeriesOfEvent(
-                eventSeriesTopic.getId(),
-                eventSeriesTopic.getSimpleValue().toString()
-            ).toJSON());
         }
         return eventSeries;
     }
 
-    // ---
+    private JSONObject getAddress(Topic event) {
+        return address(event.getChildTopics().getTopic("dm4.contacts.address"));
+    }
 
-    private JSONObject getAddress(Topic topic) {
-        return address(topic.getChildTopics().getTopic("dm4.contacts.address"));
+    // --- Event Series ---
+
+    private JSONArray getEventsOfEventSeries(Topic eventSeries) {
+        JSONArray events = null;
+        ResultList<RelatedTopic> eventTopics = eventSeries.getRelatedTopics("dm4.core.association", "dm4.core.default",
+                                                                            "dm4.core.default", "dm4.events.event");
+        if (!eventTopics.isEmpty())  {
+            events = new JSONArray();
+            for (RelatedTopic event : eventTopics) {
+                events.put(new EventOfEventSeries(
+                    event.getId(),
+                    event.getSimpleValue().toString()
+                ).toJSON());
+            }
+        }
+        return events;
     }
 
     // --- Institution ---
 
-    private JSONArray getAddresses(Topic topic) {
+    private JSONArray getAddresses(Topic institution) {
         JSONArray addresses = null;
-        List<RelatedTopic> addressTopics = topic.getChildTopics().getTopics("dm4.contacts.address#" +
+        List<RelatedTopic> addressTopics = institution.getChildTopics().getTopics("dm4.contacts.address#" +
             "dm4.contacts.address_entry");
         if (!addressTopics.isEmpty()) {
             addresses = new JSONArray();
@@ -318,14 +349,14 @@ public class CrowdPlugin extends PluginActivator implements CrowdService {
         return addresses;
     }
 
-    private JSONArray getPhoneNumbers(Topic topic) {
+    private JSONArray getPhoneNumbers(Topic institution) {
         JSONArray phoneNumbers = null;
-        List<RelatedTopic> phoneTopics = topic.getChildTopics().getTopicsOrNull("dm4.contacts.phone_number#" +
+        List<RelatedTopic> phoneTopics = institution.getChildTopics().getTopicsOrNull("dm4.contacts.phone_number#" +
             "dm4.contacts.phone_entry");
         if (phoneTopics != null) {
             phoneNumbers = new JSONArray();
             for (RelatedTopic phone : phoneTopics) {
-                phoneNumbers.put(new Phone(
+                phoneNumbers.put(new PhoneNumber(
                     phone.getRelatingAssociation().getSimpleValue().toString(),
                     phone.getSimpleValue().toString()
                 ).toJSON());
@@ -336,15 +367,16 @@ public class CrowdPlugin extends PluginActivator implements CrowdService {
 
     private JSONArray getPersonsOfInstitution(long instId) {
         JSONArray persons = null;
-        for (RelatedTopic person : contactsService.getPersons(instId)) {
-            if (persons == null) {
-                persons = new JSONArray();
+        ResultList<RelatedTopic> personTopics = contactsService.getPersons(instId);
+        if (!personTopics.isEmpty()) {
+            persons = new JSONArray();
+            for (RelatedTopic person : personTopics) {
+                persons.put(new PersonOfInstitution(
+                    person.getId(),
+                    person.getSimpleValue().toString(),
+                    person.getRelatingAssociation().getSimpleValue().toString()
+                ).toJSON());
             }
-            persons.put(new PersonOfInstitution(
-                person.getId(),
-                person.getSimpleValue().toString(),
-                person.getRelatingAssociation().getSimpleValue().toString()
-            ).toJSON());
         }
         return persons;
     }
@@ -352,17 +384,14 @@ public class CrowdPlugin extends PluginActivator implements CrowdService {
     // --- Helper ---
 
     private JSONObject address(RelatedTopic address) {
-        try {
-            ChildTopics childs = address.getChildTopics();
-            return new JSONObject()
-                .put("label", address.getRelatingAssociation().getSimpleValue().toString())
-                .put("street",     childs.getStringOrNull("dm4.contacts.street"))
-                .put("postalCode", childs.getStringOrNull("dm4.contacts.postal_code"))
-                .put("city",       childs.getStringOrNull("dm4.contacts.city"))
-                .put("country",    childs.getStringOrNull("dm4.contacts.country"));
-        } catch (Exception e) {
-            throw new RuntimeException("Serializing an Address failed (" + this + ")", e);
-        }
+        ChildTopics childs = address.getChildTopics();
+        return new Address(
+            address.getRelatingAssociation().getSimpleValue().toString(),
+            childs.getStringOrNull("dm4.contacts.street"),
+            childs.getStringOrNull("dm4.contacts.postal_code"),
+            childs.getStringOrNull("dm4.contacts.city"),
+            childs.getStringOrNull("dm4.contacts.country")
+        ).toJSON();
     }
 
     private JSONArray getStrings(Topic topic, String assocDefUri) {

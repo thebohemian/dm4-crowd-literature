@@ -7,7 +7,7 @@ import org.codehaus.jettison.json.JSONObject;
 
 
 
-public class Institution implements JSONEnabled {
+public class EventSeries implements JSONEnabled {
 
     // ---------------------------------------------------------------------------------------------- Instance Variables
 
@@ -15,17 +15,13 @@ public class Institution implements JSONEnabled {
 
     // ---------------------------------------------------------------------------------------------------- Constructors
 
-    public Institution(String name, JSONArray urls, JSONArray addresses, JSONArray phoneNumbers, JSONArray emails,
-                       String notes, JSONArray persons) {
+    public EventSeries(String title, String notes, String url, JSONArray events) {
         try {
             json = new JSONObject()
-                .put("name",         name)
-                .put("urls",         urls)
-                .put("addresses",    addresses)
-                .put("phoneNumbers", phoneNumbers)
-                .put("emails",       emails)
-                .put("notes",        notes)
-                .put("persons",      persons);
+                .put("title",  title)
+                .put("notes",  notes)
+                .put("url",    url)
+                .put("events", events);
         } catch (Exception e) {
             throw new RuntimeException("Serialization failed (" + this + ")", e);
         }

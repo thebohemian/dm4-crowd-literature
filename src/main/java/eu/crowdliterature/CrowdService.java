@@ -1,14 +1,10 @@
 package eu.crowdliterature;
 
 import eu.crowdliterature.model.Event;
+import eu.crowdliterature.model.EventSeries;
 import eu.crowdliterature.model.Institution;
 import eu.crowdliterature.model.Person;
 import eu.crowdliterature.model.Work;
-
-import de.deepamehta.core.RelatedTopic;
-import de.deepamehta.core.service.ResultList;
-
-import java.util.List;
 
 
 
@@ -28,7 +24,7 @@ public interface CrowdService {
 
     // --- Event Series ---
 
-    ResultList<RelatedTopic> getEventsOfEventSeries(long eventSeriesId);
+    EventSeries getEventSeries(long eventSeriesId);
 
     // --- Institution ---
 

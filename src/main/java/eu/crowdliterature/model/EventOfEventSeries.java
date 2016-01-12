@@ -14,11 +14,12 @@ public class EventOfEventSeries implements JSONEnabled {
 
     // ---------------------------------------------------------------------------------------------------- Constructors
 
-    public EventOfEventSeries(long id, String title) {
+    public EventOfEventSeries(long id, String title, String from) {
         try {
             json = new JSONObject()
                 .put("id",    id)
-                .put("title", title);
+                .put("title", title)
+                .put("from",  from);
         } catch (Exception e) {
             throw new RuntimeException("Serialization failed (" + this + ")", e);
         }

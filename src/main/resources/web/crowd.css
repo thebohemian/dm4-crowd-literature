@@ -115,8 +115,13 @@ html[ng-app] > body {
 }
 
 #details .event-series .url,
-#details .event-series .events {
+#details .event-series .events,
+#details .event-series .event {
     margin-top: 1em;
+}
+
+#details .event-series .event .from {
+    font-size: 0.75em;
 }
 
 /* Institution Details */

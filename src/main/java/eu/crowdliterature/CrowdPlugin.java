@@ -349,7 +349,8 @@ public class CrowdPlugin extends PluginActivator implements CrowdService {
             for (RelatedTopic event : eventTopics) {
                 events.put(new EventOfEventSeries(
                     event.getId(),
-                    event.getSimpleValue().toString()
+                    event.getSimpleValue().toString(),
+                    event.getChildTopics().getString("dm4.datetime#dm4.events.from")
                 ).toJSON());
             }
         }

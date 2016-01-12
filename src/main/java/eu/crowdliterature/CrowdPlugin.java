@@ -8,6 +8,7 @@ import eu.crowdliterature.model.EventSeries;
 import eu.crowdliterature.model.EventSeriesOfEvent;
 import eu.crowdliterature.model.Institution;
 import eu.crowdliterature.model.InstitutionOfPerson;
+import eu.crowdliterature.model.InstitutionOfWork;
 import eu.crowdliterature.model.Person;
 import eu.crowdliterature.model.PersonOfEvent;
 import eu.crowdliterature.model.PersonOfInstitution;
@@ -101,7 +102,8 @@ public class CrowdPlugin extends PluginActivator implements CrowdService {
             childs.getStringOrNull("crowd.work.isbn"),
             childs.getStringOrNull("dm4.webbrowser.url"),
             getTranslations(work),
-            getPersonsOfWork(workId)
+            getPersonsOfWork(workId),
+            getInstitutionsOfWork(workId)
         );
     }
 
@@ -277,6 +279,26 @@ public class CrowdPlugin extends PluginActivator implements CrowdService {
             }
         }
         return persons;
+    }
+
+    /**
+     * @param   workId      ID of a work or a translation
+     */
+    private JSONArray getInstitutionsOfWork(long workId) {
+        JSONArray institutions = null;
+        ResultList<RelatedTopic> instTopics = dms.getTopic(workId).getRelatedTopics("crowd.work.involvement",
+            "dm4.core.default", "dm4.core.default", "dm4.contacts.institution");
+        if (!instTopics.isEmpty()) {
+            institutions = new JSONArray();
+            for (RelatedTopic inst : instTopics) {
+                institutions.put(new InstitutionOfWork(
+                    inst.getId(),
+                    inst.getSimpleValue().toString(),
+                    inst.getRelatingAssociation().getSimpleValue().toString()
+                ).toJSON());
+            }
+        }
+        return institutions;
     }
 
     // --- Event ---

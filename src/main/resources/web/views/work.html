@@ -1,8 +1,15 @@
 <div class="work">
     <div class="title main">{{work.title}}</div>
     <div class="persons">
-        <span ng-repeat-start="person in work.persons" ng-show="!$first">,</span>
-        <span ng-repeat-end><a ng-href="#/person/{{person.id}}">{{person.name}}</a> ({{person.role}})</span>
+        <div>
+            <span ng-repeat-start="person in work.persons" ng-show="!$first">,</span>
+            <span ng-repeat-end><a ng-href="#/person/{{person.id}}">{{person.name}}</a> ({{person.role}})</span>
+        </div>
+        <div>
+            <span ng-repeat-start="institution in work.institutions" ng-show="!$first">,</span>
+            <span ng-repeat-end>
+                <a ng-href="#/institution/{{institution.id}}">{{institution.name}}</a> ({{institution.role}})</span>
+        </div>
     </div>
     <div class="type">
         <div>

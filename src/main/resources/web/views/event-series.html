@@ -1,9 +1,9 @@
 <div class="event-series">
     <div class="title">{{eventSeries.title}}</div>
+    <div class="notes" ng-bind-html="eventSeries.notes | trusted"></div>
     <div class="url">
         <a ng-href="{{eventSeries.url}}">{{eventSeries.url}}</a>
     </div>
-    <div class="notes" ng-bind-html="eventSeries.notes | trusted"></div>
     <div class="events" ng-show="eventSeries.events">
         Events:
         <ul>

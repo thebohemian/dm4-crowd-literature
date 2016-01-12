@@ -16,7 +16,8 @@ public class Work implements JSONEnabled {
     // ---------------------------------------------------------------------------------------------------- Constructors
 
     public Work(String title, String type, String language, String yearOfPublication, String placeOfPublication,
-                JSONArray genres, String notes, String isbn, String url, JSONArray translations, JSONArray persons) {
+                JSONArray genres, String notes, String isbn, String url, JSONArray translations, JSONArray persons,
+                JSONArray institutions) {
         try {
             json = new JSONObject()
                 .put("title", title)
@@ -29,7 +30,8 @@ public class Work implements JSONEnabled {
                 .put("isbn", isbn)
                 .put("url", url)
                 .put("translations", translations)
-                .put("persons", persons);
+                .put("persons", persons)
+                .put("institutions", institutions);
         } catch (Exception e) {
             throw new RuntimeException("Serialization failed (" + this + ")", e);
         }

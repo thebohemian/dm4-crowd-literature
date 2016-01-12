@@ -65,7 +65,8 @@ html[ng-app] > body {
 
 #details .person .birth,
 #details .person .nationality,
-#details .person .institutions {
+#details .person .institutions,
+#details .person .works {
     margin-top: 1em;
 }
 

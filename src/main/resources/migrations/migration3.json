@@ -1,43 +1,48 @@
 {
-    # CROWD Person
     "topic_types": [
+        # Event Series
         {
-            "value": "Gender",
-            "uri": "crowd.person.gender",
-            "data_type_uri": "dm4.core.text",
-            "index_mode_uris": ["dm4.core.fulltext"]
-        },
-        {
-            "value":            "Nationality",
-            "uri":              "crowd.person.nationality",
+            "value":            "Event Series Title",
+            "uri":              "crowd.event_series.title",
             "data_type_uri":    "dm4.core.text",
             "index_mode_uris": ["dm4.core.fulltext"]
-        }
-    ],
-    "assoc_types": [
-        {
-            "value": "Place of birth",
-            "uri": "crowd.person.place_of_birth",
-            "data_type_uri": "dm4.core.text"
-        }
-    ],
-    "topics": [
-        # Genders
-        {
-            "value": "male",
-            "type_uri": "crowd.person.gender"
         },
         {
-            "value": "female",
-            "type_uri": "crowd.person.gender"
+            "value":            "Notes",
+            "uri":              "crowd.event_series.notes",
+            "data_type_uri":    "dm4.core.html",
+            "index_mode_uris": ["dm4.core.fulltext"]
         },
         {
-            "value": "other",
-            "type_uri": "crowd.person.gender"
+            "value":            "Event Series",
+            "uri":              "crowd.event_series",
+            "data_type_uri":    "dm4.core.composite",
+            "assoc_defs": [
+                {
+                    "child_type_uri":         "crowd.event_series.title",
+                    "child_cardinality_uri":  "dm4.core.one",
+                    "assoc_type_uri":         "dm4.core.composition_def"
+                },
+                {
+                    "child_type_uri":         "crowd.event_series.notes",
+                    "child_cardinality_uri":  "dm4.core.one",
+                    "assoc_type_uri":         "dm4.core.composition_def"
+                },
+                {
+                    "child_type_uri":         "dm4.webbrowser.url",
+                    "child_cardinality_uri":  "dm4.core.one",
+                    "assoc_type_uri":         "dm4.core.composition_def"
+                }
+            ],
+            "view_config_topics": [
+                {
+                    "type_uri": "dm4.webclient.view_config",
+                    "childs": {
+                        "dm4.webclient.icon": "/eu.crowd-literature/images/calendar-blue.png",
+                        "dm4.webclient.show_in_create_menu": true
+                    }
+                }
+            ]
         }
-        # Nationalities (see adjectivals in
-        # https://en.wikipedia.org/wiki/List_of_adjectival_and_demonymic_forms_for_countries_and_nations)
-        #
-        # TBD
     ]
 }

@@ -1,48 +1,343 @@
-{
-    "topic_types": [
-        # Event Series
-        {
-            "value":            "Event Series Title",
-            "uri":              "crowd.event_series.title",
-            "data_type_uri":    "dm4.core.text",
-            "index_mode_uris": ["dm4.core.fulltext"]
-        },
-        {
-            "value":            "Notes",
-            "uri":              "crowd.event_series.notes",
-            "data_type_uri":    "dm4.core.html",
-            "index_mode_uris": ["dm4.core.fulltext"]
-        },
-        {
-            "value":            "Event Series",
-            "uri":              "crowd.event_series",
-            "data_type_uri":    "dm4.core.composite",
-            "assoc_defs": [
-                {
-                    "child_type_uri":         "crowd.event_series.title",
-                    "child_cardinality_uri":  "dm4.core.one",
-                    "assoc_type_uri":         "dm4.core.composition_def"
-                },
-                {
-                    "child_type_uri":         "crowd.event_series.notes",
-                    "child_cardinality_uri":  "dm4.core.one",
-                    "assoc_type_uri":         "dm4.core.composition_def"
-                },
-                {
-                    "child_type_uri":         "dm4.webbrowser.url",
-                    "child_cardinality_uri":  "dm4.core.one",
-                    "assoc_type_uri":         "dm4.core.composition_def"
-                }
-            ],
-            "view_config_topics": [
-                {
-                    "type_uri": "dm4.webclient.view_config",
-                    "childs": {
-                        "dm4.webclient.icon": "/eu.crowd-literature/images/calendar-blue.png",
-                        "dm4.webclient.show_in_create_menu": true
+[
+    {
+        "assoc_types": [
+            {
+                "value": "Year of publication",
+                "uri": "crowd.work.year_of_publication",
+                "data_type_uri": "dm4.core.text"
+            },
+            {
+                "value": "Place of publication",
+                "uri": "crowd.work.place_of_publication",
+                "data_type_uri": "dm4.core.text"
+            }
+        ]
+    },
+    {
+        "topic_types": [
+            # Language (Work + Person)
+            {
+                "value":            "Language",
+                "uri":              "crowd.language",
+                "data_type_uri":    "dm4.core.text",
+                "index_mode_uris": ["dm4.core.fulltext"]
+            },
+            # Base Types (Work)
+            {
+                "value":            "Work Title",
+                "uri":              "crowd.work.title",
+                "data_type_uri":    "dm4.core.text",
+                "index_mode_uris": ["dm4.core.fulltext"]
+            },
+            {
+                "value":            "Work Type",
+                "uri":              "crowd.work.type",
+                "data_type_uri":    "dm4.core.text",
+                "index_mode_uris": ["dm4.core.fulltext"]
+            },
+            {
+                "value":            "Genre",
+                "uri":              "crowd.work.genre",
+                "data_type_uri":    "dm4.core.text",
+                "index_mode_uris": ["dm4.core.fulltext"]
+            },
+            {
+                "value":            "Notes",
+                "uri":              "crowd.work.notes",
+                "data_type_uri":    "dm4.core.html",
+                "index_mode_uris": ["dm4.core.fulltext"]
+            },
+            {
+                "value":            "ISBN/ISSN",
+                "uri":              "crowd.work.isbn",
+                "data_type_uri":    "dm4.core.text"
+            },
+            # Translation
+            {
+                "value":            "Translation",
+                "uri":              "crowd.work.translation",
+                "data_type_uri":    "dm4.core.composite",
+                "assoc_defs": [
+                    {
+                        "child_type_uri":         "crowd.work.title",
+                        "child_cardinality_uri":  "dm4.core.one",
+                        "assoc_type_uri":         "dm4.core.composition_def"
+                    },
+                    {
+                        "child_type_uri":         "crowd.language",
+                        "child_cardinality_uri":  "dm4.core.one",
+                        "parent_cardinality_uri": "dm4.core.many",
+                        "assoc_type_uri":         "dm4.core.aggregation_def"
+                    },
+                    {
+                        "child_type_uri":         "crowd.work.isbn",
+                        "child_cardinality_uri":  "dm4.core.one",
+                        "assoc_type_uri":         "dm4.core.composition_def"
                     }
-                }
-            ]
-        }
-    ]
-}
+                ],
+                "view_config_topics": [
+                    {
+                        "type_uri": "dm4.webclient.view_config",
+                        "childs": {
+                            "dm4.webclient.icon": "/eu.crowd-literature/images/book-alt.png"
+                        }
+                    }
+                ]
+            },
+            # Work
+            {
+                "value":            "Work",
+                "uri":              "crowd.work",
+                "data_type_uri":    "dm4.core.composite",
+                "assoc_defs": [
+                    {
+                        "child_type_uri":         "crowd.work.title",
+                        "child_cardinality_uri":  "dm4.core.one",
+                        "assoc_type_uri":         "dm4.core.composition_def"
+                    },
+                    {
+                        "child_type_uri":         "crowd.work.type",
+                        "child_cardinality_uri":  "dm4.core.one",
+                        "parent_cardinality_uri": "dm4.core.many",
+                        "assoc_type_uri":         "dm4.core.aggregation_def"
+                    },
+                    {
+                        "child_type_uri":         "crowd.language",
+                        "child_cardinality_uri":  "dm4.core.one",
+                        "parent_cardinality_uri": "dm4.core.many",
+                        "assoc_type_uri":         "dm4.core.aggregation_def"
+                    },
+                    {
+                        "child_type_uri":         "dm4.datetime.year",
+                        "child_cardinality_uri":  "dm4.core.one",
+                        "parent_cardinality_uri": "dm4.core.many",
+                        "assoc_type_uri":         "dm4.core.aggregation_def",
+                        "custom_assoc_type_uri":  "crowd.work.year_of_publication"
+                    },
+                    {
+                        "child_type_uri":         "dm4.contacts.city",
+                        "child_cardinality_uri":  "dm4.core.one",
+                        "parent_cardinality_uri": "dm4.core.many",
+                        "assoc_type_uri":         "dm4.core.aggregation_def",
+                        "custom_assoc_type_uri":  "crowd.work.place_of_publication"
+                    },
+                    {
+                        "child_type_uri":         "crowd.work.genre",
+                        "child_cardinality_uri":  "dm4.core.many",
+                        "parent_cardinality_uri": "dm4.core.many",
+                        "assoc_type_uri":         "dm4.core.aggregation_def",
+                        "view_config_topics": [
+                            {
+                                "type_uri": "dm4.webclient.view_config",
+                                "childs": {
+                                    "dm4.webclient.multi_renderer_uri": "dm4.webclient.checkbox_renderer"
+                                }
+                            }
+                        ]
+                    },
+                    {
+                        "child_type_uri":         "crowd.work.notes",
+                        "child_cardinality_uri":  "dm4.core.one",
+                        "assoc_type_uri":         "dm4.core.composition_def"
+                    },
+                    {
+                        "child_type_uri":         "crowd.work.isbn",
+                        "child_cardinality_uri":  "dm4.core.one",
+                        "assoc_type_uri":         "dm4.core.composition_def"
+                    },
+                    {
+                        "child_type_uri":         "dm4.webbrowser.url",
+                        "child_cardinality_uri":  "dm4.core.one",
+                        "assoc_type_uri":         "dm4.core.composition_def"
+                    },
+                    {
+                        "child_type_uri":         "crowd.work.translation",
+                        "child_cardinality_uri":  "dm4.core.many",
+                        "assoc_type_uri":         "dm4.core.composition_def"
+                    }
+                ],
+                "view_config_topics": [
+                    {
+                        "type_uri": "dm4.webclient.view_config",
+                        "childs": {
+                            "dm4.webclient.icon": "/eu.crowd-literature/images/book.png",
+                            "dm4.webclient.show_in_create_menu": true
+                        }
+                    }
+                ]
+            },
+            # Role (Work Involvement)
+            {
+                "value":            "Role",
+                "uri":              "crowd.work.role",
+                "data_type_uri":    "dm4.core.text"
+            }
+        ],
+        "assoc_types": [
+            # Work Involvement
+            {
+                "value": "Work Involvement",
+                "uri": "crowd.work.involvement",
+                "data_type_uri": "dm4.core.composite",
+                "assoc_defs": [
+                    {
+                        "child_type_uri":         "crowd.work.role",
+                        "child_cardinality_uri":  "dm4.core.one",
+                        "parent_cardinality_uri": "dm4.core.many",
+                        "assoc_type_uri":         "dm4.core.aggregation_def"
+                    }
+                ],
+                "view_config_topics": [
+                    {
+                        "type_uri": "dm4.webclient.view_config",
+                        "childs": {
+                            "dm4.webclient.color": "hsl(68, 62%, 48%)"
+                        }
+                    }
+                ]
+            }
+        ],
+        "topics": [
+            # Work Types
+            {
+                "value": "Book / eBook",
+                "type_uri": "crowd.work.type"
+            },
+            {
+                "value": "Magazine Publication",
+                "type_uri": "crowd.work.type"
+            },
+            {
+                "value": "Anthology Contribution",
+                "type_uri": "crowd.work.type"
+            },
+            {
+                "value": "Reading / Performance",
+                "type_uri": "crowd.work.type"
+            },
+            {
+                "value": "Online Publication",
+                "type_uri": "crowd.work.type"
+            },
+            # Languages (see https://en.wikipedia.org/wiki/List_of_language_names)
+            {
+                "value": "Croatian",
+                "type_uri": "crowd.language"
+            },
+            {
+                "value": "Czech",
+                "type_uri": "crowd.language"
+            },
+            {
+                "value": "Danish",
+                "type_uri": "crowd.language"
+            },
+            {
+                "value": "English",
+                "type_uri": "crowd.language"
+            },
+            {
+                "value": "Finnish",
+                "type_uri": "crowd.language"
+            },
+            {
+                "value": "French",
+                "type_uri": "crowd.language"
+            },
+            {
+                "value": "German",
+                "type_uri": "crowd.language"
+            },
+            {
+                "value": "Greek",
+                "type_uri": "crowd.language"
+            },
+            {
+                "value": "Hungarian",
+                "type_uri": "crowd.language"
+            },
+            {
+                "value": "Italian",
+                "type_uri": "crowd.language"
+            },
+            {
+                "value": "Norwegian",
+                "type_uri": "crowd.language"
+            },
+            {
+                "value": "Polish",
+                "type_uri": "crowd.language"
+            },
+            {
+                "value": "Romanian",
+                "type_uri": "crowd.language"
+            },
+            {
+                "value": "Serbian",
+                "type_uri": "crowd.language"
+            },
+            {
+                "value": "Slovene",
+                "type_uri": "crowd.language"
+            },
+            {
+                "value": "Spanish",
+                "type_uri": "crowd.language"
+            },
+            {
+                "value": "Swedish",
+                "type_uri": "crowd.language"
+            },
+            {
+                "value": "Turkish",
+                "type_uri": "crowd.language"
+            },
+            # Genres
+            {
+                "value": "Prose",
+                "type_uri": "crowd.work.genre"
+            },
+            {
+                "value": "Poetry",
+                "type_uri": "crowd.work.genre"
+            },
+            {
+                "value": "Drama",
+                "type_uri": "crowd.work.genre"
+            },
+            {
+                "value": "Scientific",
+                "type_uri": "crowd.work.genre"
+            },
+            {
+                "value": "interdisciplinary",
+                "type_uri": "crowd.work.genre"
+            },
+            # Roles
+            {
+                "value": "Author",
+                "type_uri": "crowd.work.role"
+            },
+            {
+                "value": "Editor",
+                "type_uri": "crowd.work.role"
+            },
+            {
+                "value": "Publisher",
+                "type_uri": "crowd.work.role"
+            },
+            {
+                "value": "Translator",
+                "type_uri": "crowd.work.role"
+            },
+            {
+                "value": "Organizer",
+                "type_uri": "crowd.work.role"
+            },
+            {
+                "value": "Curator",
+                "type_uri": "crowd.work.role"
+            }
+        ]
+    }
+]

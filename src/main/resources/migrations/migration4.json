@@ -1,10 +1,43 @@
 {
-    # CROWD Event
+    # CROWD Person
     "topic_types": [
         {
-            "value": "Entrance Fee",
-            "uri": "crowd.event.entrance_fee",
+            "value": "Gender",
+            "uri": "crowd.person.gender",
+            "data_type_uri": "dm4.core.text",
+            "index_mode_uris": ["dm4.core.fulltext"]
+        },
+        {
+            "value":            "Nationality",
+            "uri":              "crowd.person.nationality",
+            "data_type_uri":    "dm4.core.text",
+            "index_mode_uris": ["dm4.core.fulltext"]
+        }
+    ],
+    "assoc_types": [
+        {
+            "value": "Place of birth",
+            "uri": "crowd.person.place_of_birth",
             "data_type_uri": "dm4.core.text"
         }
+    ],
+    "topics": [
+        # Genders
+        {
+            "value": "male",
+            "type_uri": "crowd.person.gender"
+        },
+        {
+            "value": "female",
+            "type_uri": "crowd.person.gender"
+        },
+        {
+            "value": "other",
+            "type_uri": "crowd.person.gender"
+        }
+        # Nationalities (see adjectivals in
+        # https://en.wikipedia.org/wiki/List_of_adjectival_and_demonymic_forms_for_countries_and_nations)
+        #
+        # TBD
     ]
 }

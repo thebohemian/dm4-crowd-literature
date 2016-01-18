@@ -27,8 +27,10 @@ import de.deepamehta.core.service.Inject;
 import de.deepamehta.core.service.ResultList;
 import de.deepamehta.core.service.event.PreCreateAssociationListener;
 import de.deepamehta.core.util.DeepaMehtaUtils;
+import de.deepamehta.plugins.accesscontrol.AccessControlService;
 import de.deepamehta.plugins.contacts.ContactsService;
 import de.deepamehta.plugins.events.EventsService;
+import de.deepamehta.plugins.workspaces.WorkspacesService;
 
 import org.codehaus.jettison.json.JSONArray;
 import org.codehaus.jettison.json.JSONObject;
@@ -53,6 +55,12 @@ public class CrowdPlugin extends PluginActivator implements CrowdService, PreCre
 
     @Inject
     private EventsService eventsService;
+
+    @Inject
+    private WorkspacesService wsService;        // needed by migration 1
+
+    @Inject
+    private AccessControlService acService;     // needed by migration 1
 
     // -------------------------------------------------------------------------------------------------- Public Methods
 

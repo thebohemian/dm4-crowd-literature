@@ -12,7 +12,7 @@ import de.deepamehta.core.service.Migration;
  * Runs ALWAYS.
  * Part of CROWD Literature 0.3
  */
-public class Migration5 extends Migration {
+public class Migration6 extends Migration {
 
     @Override
     public void run() {

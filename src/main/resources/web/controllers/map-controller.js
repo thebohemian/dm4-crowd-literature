@@ -61,10 +61,14 @@ angular.module("crowd").controller("MapController", function($scope, $location, 
     // private
 
     function addMarker(event) {
-        var geoCoordinate = event.childs["dm4.contacts.address"].childs["dm4.geomaps.geo_coordinate"].childs;
-        $scope.markers[event.id] = {
-            lat: geoCoordinate["dm4.geomaps.latitude"].value,
-            lng: geoCoordinate["dm4.geomaps.longitude"].value
+        try {
+            var geoCoordinate = event.childs["dm4.contacts.address"].childs["dm4.geomaps.geo_coordinate"].childs;
+            $scope.markers[event.id] = {
+                lat: geoCoordinate["dm4.geomaps.latitude"].value,
+                lng: geoCoordinate["dm4.geomaps.longitude"].value
+            }
+        } catch (e) {
+            console.log("Event \"" + event.value + "\" (" + event.id + ") has a problem", e, event)
         }
     }
 

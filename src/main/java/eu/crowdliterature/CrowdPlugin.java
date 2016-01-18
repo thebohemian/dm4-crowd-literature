@@ -21,9 +21,12 @@ import eu.crowdliterature.model.WorkOfPerson;
 import de.deepamehta.core.ChildTopics;
 import de.deepamehta.core.RelatedTopic;
 import de.deepamehta.core.Topic;
+import de.deepamehta.core.model.AssociationModel;
 import de.deepamehta.core.osgi.PluginActivator;
 import de.deepamehta.core.service.Inject;
 import de.deepamehta.core.service.ResultList;
+import de.deepamehta.core.service.event.PreCreateAssociationListener;
+import de.deepamehta.core.util.DeepaMehtaUtils;
 import de.deepamehta.plugins.contacts.ContactsService;
 import de.deepamehta.plugins.events.EventsService;
 
@@ -41,7 +44,7 @@ import java.util.List;
 
 @Path("/crowd")
 @Produces("application/json")
-public class CrowdPlugin extends PluginActivator implements CrowdService {
+public class CrowdPlugin extends PluginActivator implements CrowdService, PreCreateAssociationListener {
 
     // ---------------------------------------------------------------------------------------------- Instance Variables
 
@@ -162,6 +165,29 @@ public class CrowdPlugin extends PluginActivator implements CrowdService {
             getPersonsOfInstitution(instId)
         );
     }
+
+
+
+    // ********************************
+    // *** Listener Implementations ***
+    // ********************************
+
+
+
+    @Override
+    public void preCreateAssociation(AssociationModel assoc) {
+        // Work <-> Person
+        DeepaMehtaUtils.associationAutoTyping(assoc, "crowd.work", "dm4.contacts.person",
+            "crowd.work.involvement", "dm4.core.default", "dm4.core.default", dms);
+        //
+        // Work <-> Institution
+        DeepaMehtaUtils.associationAutoTyping(assoc, "crowd.work", "dm4.contacts.institution",
+            "crowd.work.involvement", "dm4.core.default", "dm4.core.default", dms);
+        //
+        // Translation <-> Person
+        DeepaMehtaUtils.associationAutoTyping(assoc, "crowd.work.translation", "dm4.contacts.person",
+            "crowd.work.involvement", "dm4.core.default", "dm4.core.default", dms);
+    }    
 
 
 

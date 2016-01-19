@@ -14,6 +14,17 @@ After installing open this page:
 Version History
 ---------------
 
+**0.4** -- Jan 19, 2016
+
+* First production version, updatable
+* Work Involvement associations are typed automatically
+* Pages:
+    * Work page: show institutions (publishers)
+    * Event Series page: show events with dates
+* Own public "CROWD" workspace
+* Technical: uses DTOs for less requests and smaller transfer sizes
+* Compatible with DeepaMehta 4.8-SNAPSHOT
+
 **0.3** -- Dec 30, 2015
 
 * Views: Work details page, Institution details page, Event Series details page
@@ -34,8 +45,8 @@ Version History
 * Clickable Event markers
 * Event details page, Person details page, linked to each other
 * Deep links
-* Functional browser back/formard buttons
-* Makes use of Angular-Leaflet directive
+* Functional browser back/forward buttons
+* Technical: Makes use of Angular-Leaflet directive
 * Compatible with DeepaMehta 4.8-SNAPSHOT
 
 **0.1** -- Dec 15, 2015
@@ -47,4 +58,4 @@ Version History
 
 ------------
 Jörg Richter  
-Dec 30, 2015
+Jan 19, 2016

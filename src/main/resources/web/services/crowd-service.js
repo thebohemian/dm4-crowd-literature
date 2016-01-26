@@ -26,7 +26,7 @@ angular.module("crowd").service("crowdService", function($http) {
         return $http.get("/core/topic/by_type/dm4.events.event?include_childs=true");
     }
 
-	// --- Event Series ---
+    // --- Event Series ---
 
     this.getEventSeries = function(eventSeriesId, callback) {
         $http.get("/crowd/event_series/" + eventSeriesId).then(callback);

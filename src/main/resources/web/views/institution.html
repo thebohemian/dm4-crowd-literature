@@ -1,9 +1,9 @@
 <div class="institution">
     <div class="name">{{institution.name}}</div>
-    <div class="url">
+    <div class="url" ng-show="institution.urls">
         <ul>
             <li ng-repeat="url in institution.urls">
-                <a ng-href="{{url}}">{{url}}</a>
+                <a ng-href="{{url | weblink}}">{{url}}</a>
             </li>
         </ul>
     </div>

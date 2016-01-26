@@ -20,7 +20,7 @@
     <div class="url" ng-show="person.urls">
         <ul>
             <li ng-repeat="url in person.urls">
-                <a ng-href="{{url}}">{{url}}</a>
+                <a ng-href="{{url | weblink}}">{{url}}</a>
             </li>
         </ul>
     </div>

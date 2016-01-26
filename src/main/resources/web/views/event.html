@@ -14,8 +14,8 @@
     <div class="entrance-fee" ng-show="event.entranceFee">
         Entrance fee: {{event.entranceFee}}
     </div>
-    <div class="url">
-        <a ng-href="{{event.url}}">{{event.url}}</a>
+    <div class="url" ng-if="event.url">
+        <a ng-href="{{event.url | weblink}}">{{event.url}}</a>
     </div>
     <div class="event-series" ng-show="event.eventSeries">
         This event is part of series

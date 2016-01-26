@@ -76,4 +76,4 @@ angular.module("crowd").controller("MapController", function($scope, $location, 
         $scope.landscape = mql.matches;
         $scope.portrait = !$scope.landscape;
     }
-})    
+})

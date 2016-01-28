@@ -99,7 +99,7 @@ html[ng-app] > body {
 }
 
 #details .event .date,
-#details .event .address,
+#details .event > .address,
 #details .event .notes,
 #details .event .participants,
 #details .event .entrance-fee,

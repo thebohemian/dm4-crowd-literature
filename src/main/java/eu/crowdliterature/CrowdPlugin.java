@@ -8,6 +8,7 @@ import eu.crowdliterature.model.EventOfPerson;
 import eu.crowdliterature.model.EventSeries;
 import eu.crowdliterature.model.EventSeriesOfEvent;
 import eu.crowdliterature.model.Institution;
+import eu.crowdliterature.model.InstitutionOfAddress;
 import eu.crowdliterature.model.InstitutionOfPerson;
 import eu.crowdliterature.model.InstitutionOfWork;
 import eu.crowdliterature.model.Person;
@@ -383,7 +384,7 @@ public class CrowdPlugin extends PluginActivator implements CrowdService, PreCre
     }
 
     private JSONObject getAddress(Topic event) {
-        return address(event.getChildTopics().getTopic("dm4.contacts.address"));
+        return address(event.getChildTopics().getTopic("dm4.contacts.address"), true);  // includeInstitution=true
     }
 
     // --- Event Series ---
@@ -414,7 +415,7 @@ public class CrowdPlugin extends PluginActivator implements CrowdService, PreCre
         if (!addressTopics.isEmpty()) {
             addresses = new JSONArray();
             for (RelatedTopic address : addressTopics) {
-                addresses.put(address(address));
+                addresses.put(address(address, false));     // includeInstitution=false
             }
         }
         return addresses;
@@ -454,15 +455,32 @@ public class CrowdPlugin extends PluginActivator implements CrowdService, PreCre
 
     // --- Helper ---
 
-    private JSONObject address(RelatedTopic address) {
+    private JSONObject address(RelatedTopic address, boolean includeInstitution) {
+        JSONObject institution = null;
+        if (includeInstitution) {
+            Topic inst = getInstitution(address);
+            if (inst != null) {
+                institution = new InstitutionOfAddress(
+                    inst.getId(),
+                    inst.getSimpleValue().toString()
+                ).toJSON();
+            }
+        }
+        //
         ChildTopics childs = address.getChildTopics();
         return new Address(
             address.getRelatingAssociation().getSimpleValue().toString(),
             childs.getStringOrNull("dm4.contacts.street"),
             childs.getStringOrNull("dm4.contacts.postal_code"),
             childs.getStringOrNull("dm4.contacts.city"),
-            childs.getStringOrNull("dm4.contacts.country")
+            childs.getStringOrNull("dm4.contacts.country"),
+            institution
         ).toJSON();
+    }
+
+    private Topic getInstitution(Topic address) {
+        return address.getRelatedTopic("dm4.contacts.address_entry", "dm4.core.child", "dm4.core.parent",
+            "dm4.contacts.institution");
     }
 
     private JSONArray getStrings(Topic topic, String assocDefUri) {

@@ -1,7 +1,10 @@
 <div class="event">
     <div class="title">{{event.title}}</div>
     <div class="date" ng-bind-html="event.from | datetime:event.to | trusted" ng-if="event.from"></div>
-    <div dm4-address="event.address"></div>
+    <div class="address">
+        <a ng-href="#/institution/{{event.address.institution.id}}">{{event.address.institution.name}}</a>
+        <div dm4-address="event.address"></div>
+    </div>
     <div class="notes" ng-bind-html="event.notes | trusted"></div>
     <div class="participants" ng-show="event.participants">
         Participants:

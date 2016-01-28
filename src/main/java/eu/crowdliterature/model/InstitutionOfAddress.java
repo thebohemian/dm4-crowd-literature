@@ -6,7 +6,7 @@ import org.codehaus.jettison.json.JSONObject;
 
 
 
-public class Address implements JSONEnabled {
+public class InstitutionOfAddress implements JSONEnabled {
 
     // ---------------------------------------------------------------------------------------------- Instance Variables
 
@@ -14,16 +14,11 @@ public class Address implements JSONEnabled {
 
     // ---------------------------------------------------------------------------------------------------- Constructors
 
-    public Address(String label, String street, String postalCode, String city, String country,
-                                                                                JSONObject institution) {
+    public InstitutionOfAddress(long id, String name) {
         try {
             json = new JSONObject()
-                .put("label",       label)
-                .put("street",      street)
-                .put("postalCode",  postalCode)
-                .put("city",        city)
-                .put("country",     country)
-                .put("institution", institution);
+                .put("id",   id)
+                .put("name", name);
         } catch (Exception e) {
             throw new RuntimeException("Serialization failed (" + this + ")", e);
         }

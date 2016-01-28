@@ -1,6 +1,7 @@
 package eu.crowdliterature;
 
 import eu.crowdliterature.model.Address;
+import eu.crowdliterature.model.DateTime;
 import eu.crowdliterature.model.Event;
 import eu.crowdliterature.model.EventOfEventSeries;
 import eu.crowdliterature.model.EventOfPerson;
@@ -128,8 +129,8 @@ public class CrowdPlugin extends PluginActivator implements CrowdService, PreCre
         ChildTopics childs = event.getChildTopics();
         return new Event(
             event.getSimpleValue().toString(),
-            childs.getString("dm4.datetime#dm4.events.from"),
-            childs.getString("dm4.datetime#dm4.events.to"),
+            getDateTime(event, "dm4.datetime#dm4.events.from"),
+            getDateTime(event, "dm4.datetime#dm4.events.to"),
             getAddress(event),
             childs.getString("dm4.events.notes"),
             getParticipants(eventId),
@@ -366,6 +367,19 @@ public class CrowdPlugin extends PluginActivator implements CrowdService, PreCre
             }
         }
         return eventSeries;
+    }
+
+    private JSONObject getDateTime(Topic event, String assocDefUri) {
+        ChildTopics dateTime = event.getChildTopics().getChildTopics(assocDefUri);
+        ChildTopics date = dateTime.getChildTopics("dm4.datetime.date");
+        ChildTopics time = dateTime.getChildTopics("dm4.datetime.time");
+        return new DateTime(
+            date.getIntOrNull("dm4.datetime.month"),
+            date.getIntOrNull("dm4.datetime.day"),
+            date.getIntOrNull("dm4.datetime.year"),
+            time.getIntOrNull("dm4.datetime.hour"),
+            time.getIntOrNull("dm4.datetime.minute")
+        ).toJSON();
     }
 
     private JSONObject getAddress(Topic event) {

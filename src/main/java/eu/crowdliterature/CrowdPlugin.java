@@ -399,7 +399,8 @@ public class CrowdPlugin extends PluginActivator implements CrowdService, PreCre
                 events.put(new EventOfEventSeries(
                     event.getId(),
                     event.getSimpleValue().toString(),
-                    event.getChildTopics().getString("dm4.datetime#dm4.events.from")
+                    getDateTime(event, "dm4.datetime#dm4.events.from"),
+                    getDateTime(event, "dm4.datetime#dm4.events.to")
                 ).toJSON());
             }
         }
@@ -456,17 +457,6 @@ public class CrowdPlugin extends PluginActivator implements CrowdService, PreCre
     // --- Helper ---
 
     private JSONObject address(RelatedTopic address, boolean includeInstitution) {
-        JSONObject institution = null;
-        if (includeInstitution) {
-            Topic inst = getInstitution(address);
-            if (inst != null) {
-                institution = new InstitutionOfAddress(
-                    inst.getId(),
-                    inst.getSimpleValue().toString()
-                ).toJSON();
-            }
-        }
-        //
         ChildTopics childs = address.getChildTopics();
         return new Address(
             address.getRelatingAssociation().getSimpleValue().toString(),
@@ -474,8 +464,16 @@ public class CrowdPlugin extends PluginActivator implements CrowdService, PreCre
             childs.getStringOrNull("dm4.contacts.postal_code"),
             childs.getStringOrNull("dm4.contacts.city"),
             childs.getStringOrNull("dm4.contacts.country"),
-            institution
+            includeInstitution ? addressInstitution(address) : null
         ).toJSON();
+    }
+
+    private JSONObject addressInstitution(Topic address) {
+        Topic inst = getInstitution(address);
+        return inst != null ? new InstitutionOfAddress(
+            inst.getId(),
+            inst.getSimpleValue().toString()
+        ).toJSON() : null;
     }
 
     private Topic getInstitution(Topic address) {

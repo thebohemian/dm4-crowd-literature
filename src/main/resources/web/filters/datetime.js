@@ -2,11 +2,11 @@ angular.module("crowd").filter("datetime", function(js) {
 
     var monthNames = [undefined, "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 
-    return function(from, to) {
+    return function(from, to, includeTime) {
         if (!isDateSet(from.date)) {
             return "";
         }
-        return dateRange(from.date, to.date) + timeRange(from.time, to.time);
+        return dateRange(from.date, to.date) + (includeTime ? timeRange(from.time, to.time) : "");
     }
 
     // ---

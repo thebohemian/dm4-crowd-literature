@@ -8,7 +8,7 @@
         Events:
         <ul>
             <li class="event" ng-repeat="event in eventSeries.events">
-                <div class="from">{{event.from}}</div>
+                <div class="date">{{event.from | datetime:event.to}}</div>
                 <a ng-href="#/event/{{event.id}}">{{event.title}}</a>
             </li>
         </ul>

@@ -98,13 +98,13 @@ html[ng-app] > body {
     font-weight: bold;
 }
 
-#details .event .date,
-#details .event > .address,
-#details .event .notes,
-#details .event .participants,
-#details .event .entrance-fee,
-#details .event .url,
-#details .event .event-series {
+#details > .event .date,
+#details > .event > .address,
+#details > .event .notes,
+#details > .event .participants,
+#details > .event .entrance-fee,
+#details > .event .url,
+#details > .event .event-series {
     margin-top: 1em;
 }
 
@@ -121,8 +121,9 @@ html[ng-app] > body {
     margin-top: 1em;
 }
 
-#details .event-series .event .from {
+#details .event-series .event .date {
     font-size: 0.75em;
+    margin-bottom: -0.3em;
 }
 
 /* Institution Details */

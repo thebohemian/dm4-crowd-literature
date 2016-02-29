@@ -65,7 +65,8 @@ angular.module("crowd").controller("MapController", function($scope, $location, 
             var geoCoordinate = event.childs["dm4.contacts.address"].childs["dm4.geomaps.geo_coordinate"].childs;
             $scope.markers[event.id] = {
                 lat: geoCoordinate["dm4.geomaps.latitude"].value,
-                lng: geoCoordinate["dm4.geomaps.longitude"].value
+                lng: geoCoordinate["dm4.geomaps.longitude"].value,
+                group: "markers"    // markers added to the same group are clustered by Leaflet MarkerCluster plugin
             }
         } catch (e) {
             console.log("Event \"" + event.value + "\" (" + event.id + ") has a problem", e, event)

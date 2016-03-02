@@ -28,6 +28,19 @@ angular.module("crowd").controller("MapController", function($scope, $location, 
                     'Imagery &copy; <a href="http://mapbox.com">Mapbox</a>'
             }
         },
+        layers: {
+            overlays: {
+                currentEvents: {
+                    name: "Current Events",
+                    type: "markercluster",
+                    visible: true,
+                    layerParams: {
+                        maxClusterRadius: 40,
+                        showOnSelector: false
+                    }
+                }
+            }
+        },
         markers: {}
     });
 
@@ -66,7 +79,7 @@ angular.module("crowd").controller("MapController", function($scope, $location, 
             $scope.markers[event.id] = {
                 lat: geoCoordinate["dm4.geomaps.latitude"].value,
                 lng: geoCoordinate["dm4.geomaps.longitude"].value,
-                group: "markers"    // markers added to the same group are clustered by Leaflet MarkerCluster plugin
+                layer: "currentEvents"
             }
         } catch (e) {
             console.log("Event \"" + event.value + "\" (" + event.id + ") has a problem", e, event)

@@ -33,7 +33,8 @@
         <script src="filters/weblink.js"></script>
     </head>
     <body ng-controller="MapController">
-        <leaflet id="map" lf-center="center" defaults="defaults" tiles="tiles" geojson="bustour" markers="markers">
+        <leaflet id="map" lf-center="center" defaults="defaults" tiles="tiles" layers="layers" geojson="bustour"
+            markers="markers">
         </leaflet>
         <div id="details" ng-show="event || eventSeries || person || institution || work || landscape" ng-view>
         </div>

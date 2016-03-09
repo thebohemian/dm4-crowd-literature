@@ -38,6 +38,7 @@ angular.module("crowd").controller("MapController", function($scope, $location, 
                     visible: true,
                     layerParams: {
                         maxClusterRadius: 40,
+                        spiderfyDistanceMultiplier: 1.5,
                         showOnSelector: false
                     }
                 }

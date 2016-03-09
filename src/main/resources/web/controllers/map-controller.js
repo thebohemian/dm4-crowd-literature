@@ -1,5 +1,7 @@
 angular.module("crowd").controller("MapController", function($scope, $location, $rootScope, crowdService) {
 
+    var SHOW_BUSTOUR = false;
+
     // application scope
 
     $scope.events = {};
@@ -55,14 +57,16 @@ angular.module("crowd").controller("MapController", function($scope, $location, 
     mql.addListener(updateOrientation);
     updateOrientation(mql);
 
-    crowdService.loadBustourGeojson(function(response) {
-        $scope.bustour = {
-            data: response.data,
-            style: {
-                color: "#f55"
+    if (SHOW_BUSTOUR) {
+        crowdService.loadBustourGeojson(function(response) {
+            $scope.bustour = {
+                data: response.data,
+                style: {
+                    color: "#f55"
+                }
             }
-        }
-    })
+        })
+    }
 
     $rootScope.eventsModel = crowdService.getAllEvents().then(function(response) {     // store promise in root scope
         response.data.items.forEach(function(event) {

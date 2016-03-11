@@ -2,6 +2,35 @@ angular.module("crowd").controller("MapController", function($scope, $location, 
 
     var SHOW_BUSTOUR = false;
 
+    // geometry
+
+    $scope.retina = L.Browser.retina;
+    if (!$scope.retina) {
+        var markerIcon = {
+            iconUrl: "lib/leaflet/images/marker-icon.png",
+            iconSize: [25, 41],
+            iconAnchor: [12, 41],
+            shadowUrl: "lib/leaflet/images/marker-shadow.png",
+            shadowSize: [41, 41],
+            shadowAnchor: [12, 41]
+        }
+        var clusterSize = 40;
+        var maxClusterRadius = 40;
+        var spiderfyDistanceMultiplier = 1.5;
+    } else {
+        var markerIcon = {
+            iconUrl: "lib/leaflet/images/marker-icon-1.3x.png",
+            iconSize: [32, 53],
+            iconAnchor: [16, 53],
+            shadowUrl: "lib/leaflet/images/marker-shadow.png",
+            shadowSize: [41, 41],
+            shadowAnchor: [12, 41]
+        }
+        var clusterSize = 52;
+        var maxClusterRadius = 52;
+        var spiderfyDistanceMultiplier = 2;
+    }
+
     // application scope
 
     $scope.events = {};
@@ -37,9 +66,10 @@ angular.module("crowd").controller("MapController", function($scope, $location, 
                     type: "markercluster",
                     visible: true,
                     layerParams: {
-                        maxClusterRadius: 40,
-                        spiderfyDistanceMultiplier: !L.Browser.retina ? 1.5 : 2,
-                        showOnSelector: false
+                        showOnSelector: false,
+                        maxClusterRadius: maxClusterRadius,
+                        spiderfyDistanceMultiplier: spiderfyDistanceMultiplier,
+                        iconCreateFunction: iconCreateFunction
                     }
                 }
             }
@@ -53,8 +83,6 @@ angular.module("crowd").controller("MapController", function($scope, $location, 
     })
 
     // startup code
-
-    $scope.retina = L.Browser.retina;
 
     var mql = matchMedia("(orientation: landscape)");
     mql.addListener(updateOrientation);
@@ -78,23 +106,7 @@ angular.module("crowd").controller("MapController", function($scope, $location, 
         });
     })
 
-    // private
-
-    var markerIcon = !L.Browser.retina ? {
-        iconUrl: "lib/leaflet/images/marker-icon.png",
-        iconSize: [25, 41],
-        iconAnchor: [12, 41],
-        shadowUrl: "lib/leaflet/images/marker-shadow.png",
-        shadowSize: [41, 41],
-        shadowAnchor: [12, 41]
-    } : {
-        iconUrl: "lib/leaflet/images/marker-icon-1.3x.png",
-        iconSize: [32, 53],
-        iconAnchor: [16, 53],
-        shadowUrl: "lib/leaflet/images/marker-shadow.png",
-        shadowSize: [41, 41],
-        shadowAnchor: [12, 41]
-    }
+    // markers
 
     function addMarker(event) {
         try {
@@ -109,6 +121,29 @@ angular.module("crowd").controller("MapController", function($scope, $location, 
             console.log("Event \"" + event.value + "\" (" + event.id + ") has a problem", e, event)
         }
     }
+
+    // clusters
+
+    function iconCreateFunction(cluster) {
+        var childCount = cluster.getChildCount();
+        //
+        var c = ' marker-cluster-';
+        if (childCount < 10) {
+            c += 'small';
+        } else if (childCount < 100) {
+            c += 'medium';
+        } else {
+            c += 'large';
+        }
+        //
+        return new L.DivIcon({
+            html: "<div><span>" + childCount + "</span></div>",
+            className: "marker-cluster" + c,
+            iconSize: new L.Point(clusterSize, clusterSize)
+        });
+    }
+
+    // ---
 
     function updateOrientation(mql) {
         $scope.landscape = mql.matches;

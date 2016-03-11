@@ -12,7 +12,7 @@
         <script src="lib/leaflet/leaflet.js"></script>
         <!-- Leaflet MarkerCluster plugin -->
         <link rel="stylesheet" href="lib/leaflet.markercluster/MarkerCluster.css" />
-        <link rel="stylesheet" href="lib/leaflet.markercluster/MarkerCluster.Default.css" />
+        <link rel="stylesheet" href="lib/leaflet.markercluster/MarkerCluster.CROWD.css" />
         <script src="lib/leaflet.markercluster/leaflet.markercluster.js"></script>
         <!-- Angular-Leaflet -->
         <script src="lib/angular-leaflet/angular-leaflet-directive.min.js"></script>
@@ -39,6 +39,6 @@
         </leaflet>
         <div id="details" ng-show="event || eventSeries || person || institution || work || landscape" ng-view>
         </div>
-        <div style="position: absolute; right: 3px; bottom: -5px; font-size: 9px; color: lightgrey">retina={{retina}}</div>
+        <div style="position: absolute; right: 3px; bottom: 0px; font-size: 9px; color: lightgrey">retina={{retina}}</div>
     </body>
 </html>

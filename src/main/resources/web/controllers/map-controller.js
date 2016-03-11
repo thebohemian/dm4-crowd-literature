@@ -38,7 +38,7 @@ angular.module("crowd").controller("MapController", function($scope, $location, 
                     visible: true,
                     layerParams: {
                         maxClusterRadius: 40,
-                        spiderfyDistanceMultiplier: 1.5,
+                        spiderfyDistanceMultiplier: !L.Browser.retina ? 1.5 : 2,
                         showOnSelector: false
                     }
                 }
@@ -53,6 +53,8 @@ angular.module("crowd").controller("MapController", function($scope, $location, 
     })
 
     // startup code
+
+    $scope.retina = L.Browser.retina;
 
     var mql = matchMedia("(orientation: landscape)");
     mql.addListener(updateOrientation);
@@ -78,13 +80,30 @@ angular.module("crowd").controller("MapController", function($scope, $location, 
 
     // private
 
+    var markerIcon = !L.Browser.retina ? {
+        iconUrl: "lib/leaflet/images/marker-icon.png",
+        iconSize: [25, 41],
+        iconAnchor: [12, 41],
+        shadowUrl: "lib/leaflet/images/marker-shadow.png",
+        shadowSize: [41, 41],
+        shadowAnchor: [12, 41]
+    } : {
+        iconUrl: "lib/leaflet/images/marker-icon-1.3x.png",
+        iconSize: [32, 53],
+        iconAnchor: [16, 53],
+        shadowUrl: "lib/leaflet/images/marker-shadow.png",
+        shadowSize: [41, 41],
+        shadowAnchor: [12, 41]
+    }
+
     function addMarker(event) {
         try {
             var geoCoordinate = event.childs["dm4.contacts.address"].childs["dm4.geomaps.geo_coordinate"].childs;
             $scope.markers[event.id] = {
                 lat: geoCoordinate["dm4.geomaps.latitude"].value,
                 lng: geoCoordinate["dm4.geomaps.longitude"].value,
-                layer: "currentEvents"
+                layer: "currentEvents",
+                icon: markerIcon
             }
         } catch (e) {
             console.log("Event \"" + event.value + "\" (" + event.id + ") has a problem", e, event)

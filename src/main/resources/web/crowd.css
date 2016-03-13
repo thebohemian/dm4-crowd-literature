@@ -1,10 +1,13 @@
-/* Keep in mind this CSS is loaded into the DM4 Webclient as well */
+/*
+    Note: this CSS must not leak into the DM webclient.
+    Putting it outside "/web/style/" avoids auto-pickup.
+*/
 
-html[ng-app] {
+html {
     height: 100%;
 }
 
-html[ng-app] > body {
+body {
     font-family: "Lucida Grande", "Trebuchet MS", sans-serif;
     line-height: 1.5em;
     margin: 0;
@@ -13,6 +16,13 @@ html[ng-app] > body {
 
 a {
     color: rgb(151, 167, 0);
+}
+
+strong {
+    color: rgb(235, 110, 8);
+    font-weight: normal;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
 }
 
 #map {
@@ -46,7 +56,7 @@ a {
 
 /* Details */
 
-#details .title {
+#details .page-title {
     display: inline-block;
     margin-top: -1em;
     margin-bottom: 0.5em;
@@ -57,6 +67,15 @@ a {
     font-style: italic;
     text-transform: uppercase;
     letter-spacing: 0.2em;
+}
+
+#details .heading {
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+}
+
+#details .date {
+    color: rgb(235, 110, 8);
 }
 
 #details ul {
@@ -85,7 +104,7 @@ a {
 
 /* Work Details */
 
-#details .work .subtitle {
+#details .work .title {
     font-weight: bold;
 }
 

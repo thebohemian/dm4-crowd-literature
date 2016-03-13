@@ -1,5 +1,5 @@
 <div class="work">
-    <div class="title">{{work.title}}</div>
+    <div class="page-title">{{work.title}}</div>
     <div class="persons">
         <div>
             <span ng-repeat-start="person in work.persons" ng-show="!$first">,</span>
@@ -32,9 +32,9 @@
         <a ng-href="{{work.url | weblink}}">{{work.url}}</a>
     </div>
     <div class="translations" ng-show="work.translations">
-        Translations:
+        <div class="heading">Translations</div>
         <div class="translation" ng-repeat="translation in work.translations">
-            <div class="subtitle">{{translation.title}}</div>
+            <div class="title">{{translation.title}}</div>
             <div>
                 <span ng-repeat-start="person in translation.persons" ng-show="!$first">,</span>
                 <span ng-repeat-end><a ng-href="#/person/{{person.id}}">{{person.name}}</a> ({{person.role}})</span>

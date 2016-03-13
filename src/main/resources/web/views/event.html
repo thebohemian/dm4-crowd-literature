@@ -1,5 +1,5 @@
 <div class="event">
-    <div class="title">{{event.title}}</div>
+    <div class="page-title">{{event.title}}</div>
     <div class="date" ng-bind-html="event.from | datetime:event.to:true | trusted" ng-if="event.from"></div>
     <div class="address">
         <a ng-href="#/institution/{{event.address.institution.id}}">{{event.address.institution.name}}</a>

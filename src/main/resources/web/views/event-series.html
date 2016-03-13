@@ -1,11 +1,11 @@
 <div class="event-series">
-    <div class="title">{{eventSeries.title}}</div>
+    <div class="page-title">{{eventSeries.title}}</div>
     <div class="notes" ng-bind-html="eventSeries.notes | trusted"></div>
     <div class="url" ng-if="eventSeries.url">
         <a ng-href="{{eventSeries.url | weblink}}">{{eventSeries.url}}</a>
     </div>
     <div class="events" ng-show="eventSeries.events">
-        Events:
+        <div class="heading">Events</div>
         <ul>
             <li class="event" ng-repeat="event in eventSeries.events">
                 <div class="date">{{event.from | datetime:event.to}}</div>

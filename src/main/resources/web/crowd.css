@@ -24,6 +24,7 @@ a {
     overflow: auto;
     padding: 1em;
     box-sizing: border-box;
+    background-color: white;
 }
 
 @media (orientation: landscape) {
@@ -48,6 +49,7 @@ a {
 #details .title {
     display: inline-block;
     margin-top: -1em;
+    margin-bottom: 0.5em;
     padding: 2.5em 0.5em 0.5em 0.5em;
     background-color: rgb(235, 110, 8);
     color: white;

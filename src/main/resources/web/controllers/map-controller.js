@@ -7,9 +7,9 @@ angular.module("crowd").controller("MapController", function($scope, $location, 
     $scope.retina = L.Browser.retina;
     if (!$scope.retina) {
         var markerIcon = {
-            iconUrl: "lib/leaflet/images/marker-icon.png",
-            iconSize: [25, 41],
-            iconAnchor: [12, 41],
+            iconUrl: "lib/leaflet/images/event-marker.png",
+            iconSize: [28, 41],
+            iconAnchor: [14, 41],
             shadowUrl: "lib/leaflet/images/marker-shadow.png",
             shadowSize: [41, 41],
             shadowAnchor: [12, 41]
@@ -19,9 +19,9 @@ angular.module("crowd").controller("MapController", function($scope, $location, 
         var spiderfyDistanceMultiplier = 1.5;
     } else {
         var markerIcon = {
-            iconUrl: "lib/leaflet/images/marker-icon-1.3x.png",
-            iconSize: [32, 53],
-            iconAnchor: [16, 53],
+            iconUrl: "lib/leaflet/images/event-marker-1.3x.png",
+            iconSize: [35, 53],
+            iconAnchor: [17, 53],
             shadowUrl: "lib/leaflet/images/marker-shadow.png",
             shadowSize: [41, 41],
             shadowAnchor: [12, 41]

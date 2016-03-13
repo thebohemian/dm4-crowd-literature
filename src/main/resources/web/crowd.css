@@ -11,6 +11,10 @@ html[ng-app] > body {
     height: 100%;
 }
 
+a {
+    color: rgb(151, 167, 0);
+}
+
 #map {
     height: 100%;
 }
@@ -20,7 +24,6 @@ html[ng-app] > body {
     overflow: auto;
     padding: 1em;
     box-sizing: border-box;
-    background-color: beige;
 }
 
 @media (orientation: landscape) {
@@ -42,6 +45,18 @@ html[ng-app] > body {
 
 /* Details */
 
+#details .title {
+    display: inline-block;
+    margin-top: -1em;
+    padding: 2.5em 0.5em 0.5em 0.5em;
+    background-color: rgb(235, 110, 8);
+    color: white;
+    font-size: 1.2em;
+    font-style: italic;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+}
+
 #details ul {
     margin-top: 0.5em;      /* browser default is 1em */
     padding-left: 0;        /* browser default is 40px */
@@ -58,11 +73,6 @@ html[ng-app] > body {
 
 /* Person Details */
 
-#details .person .name {
-    font-size: 1.5em;
-    font-weight: bold;
-}
-
 #details .person .birth,
 #details .person .nationality,
 #details .person .institutions,
@@ -73,11 +83,7 @@ html[ng-app] > body {
 
 /* Work Details */
 
-#details .work .title.main {
-    font-size: 1.5em;
-}
-
-#details .work .title {
+#details .work .subtitle {
     font-weight: bold;
 }
 
@@ -93,11 +99,6 @@ html[ng-app] > body {
 
 /* Event Details */
 
-#details .event .title {
-    font-size: 1.5em;
-    font-weight: bold;
-}
-
 #details > .event .date,
 #details > .event > .address,
 #details > .event .notes,
@@ -109,11 +110,6 @@ html[ng-app] > body {
 }
 
 /* Event Series Details */
-
-#details .event-series .title {
-    font-size: 1.5em;
-    font-weight: bold;
-}
 
 #details .event-series .url,
 #details .event-series .events,
@@ -127,11 +123,6 @@ html[ng-app] > body {
 }
 
 /* Institution Details */
-
-#details .institution .name {
-    font-size: 1.5em;
-    font-weight: bold;
-}
 
 #details .institution .url,
 #details .institution .address {

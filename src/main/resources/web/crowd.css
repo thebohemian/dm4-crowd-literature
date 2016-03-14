@@ -61,9 +61,8 @@ strong {
     margin-top: -1em;
     margin-bottom: 0.5em;
     padding: 2.5em 0.5em 0.5em 0.5em;
-    background-color: rgb(235, 110, 8);
-    color: white;
     font-size: 1.2em;
+    font-weight: bold;
     font-style: italic;
     text-transform: uppercase;
     letter-spacing: 0.2em;
@@ -94,6 +93,11 @@ strong {
 
 /* Person Details */
 
+#details .person .page-title {
+    background-color: rgb(130, 131, 133);
+    color: white;
+}
+
 #details .person .birth,
 #details .person .nationality,
 #details .person .institutions,
@@ -104,7 +108,12 @@ strong {
 
 /* Work Details */
 
-#details .work .title {
+#details .work .page-title {
+    background-color: rgb(255, 201, 0);
+    color: white;
+}
+
+#details .work .translation .title {
     font-weight: bold;
 }
 
@@ -120,6 +129,11 @@ strong {
 
 /* Event Details */
 
+#details .event .page-title {
+    background-color: rgb(235, 110, 8);
+    color: white;
+}
+
 #details > .event .date,
 #details > .event > .address,
 #details > .event .notes,
@@ -131,6 +145,11 @@ strong {
 }
 
 /* Event Series Details */
+
+#details .event-series .page-title {
+    background-color: rgb(255, 237, 0);
+    color: rgb(235, 110, 8);
+}
 
 #details .event-series .url,
 #details .event-series .events,
@@ -144,6 +163,11 @@ strong {
 }
 
 /* Institution Details */
+
+#details .institution .page-title {
+    background-color: rgb(187, 204, 0);
+    color: white;
+}
 
 #details .institution .url,
 #details .institution .address {

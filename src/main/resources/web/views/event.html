@@ -7,9 +7,12 @@
     </div>
     <div class="notes" ng-bind-html="event.notes | trusted"></div>
     <div class="participants" ng-show="event.participants">
-        Participants:
-        <span ng-repeat-start="person in event.participants | orderBy:'value'" ng-show="!$first">,</span>
-        <a ng-repeat-end ng-href="#/person/{{person.id}}">{{person.name}}</a>
+        <div class="heading">Participants</div>
+        <ul>
+            <li ng-repeat="person in event.participants | orderBy:'value'">
+                <a ng-href="#/person/{{person.id}}">{{person.name}}</a>
+            </li>
+        </ul>
     </div>
     <div class="entrance-fee" ng-show="event.entranceFee">
         Entrance fee: {{event.entranceFee}}

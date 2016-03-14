@@ -1,4 +1,4 @@
-angular.module("crowd").controller("MapController", function($scope, $location, $rootScope, crowdService) {
+angular.module("crowd").controller("MapController", function($scope, $location, crowdService) {
 
     var SHOW_BUSTOUR = false;
 
@@ -32,8 +32,6 @@ angular.module("crowd").controller("MapController", function($scope, $location, 
     }
 
     // application scope
-
-    $scope.events = {};
 
     $scope.backToMap = function() {
         $location.path("/welcome");
@@ -99,10 +97,9 @@ angular.module("crowd").controller("MapController", function($scope, $location, 
         })
     }
 
-    $rootScope.eventsModel = crowdService.getAllEvents().then(function(response) {     // store promise in root scope
+    crowdService.getAllEvents().then(function(response) {
         response.data.forEach(function(event) {
-            $scope.events[event.id] = event;    // put in model
-            addMarker(event);                   // add to map
+            addMarker(event);
         });
     })
 

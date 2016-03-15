@@ -2,7 +2,7 @@ angular.module("crowd").controller("MapController", function($scope, $location, 
 
     var SHOW_BUSTOUR = false;
 
-    // cluster config
+    // leaflet config (marker + cluster)
 
     $scope.retina = L.Browser.retina;
     if (!$scope.retina) {
@@ -20,8 +20,8 @@ angular.module("crowd").controller("MapController", function($scope, $location, 
     } else {
         var markerIcon = {
             iconUrl: "lib/leaflet/images/event-marker-1.3x.png",
-            iconSize: [35, 53],
-            iconAnchor: [17, 53],
+            iconSize: [36, 53],
+            iconAnchor: [18, 53],
             shadowUrl: "lib/leaflet/images/marker-shadow.png",
             shadowSize: [41, 41],
             shadowAnchor: [12, 41]
@@ -31,7 +31,7 @@ angular.module("crowd").controller("MapController", function($scope, $location, 
         var spiderfyDistanceMultiplier = 2;
     }
 
-    // leaflet config
+    // leaflet config (map)
 
     angular.extend($scope, {
         center: {

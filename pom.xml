@@ -29,6 +29,11 @@
         </dependency>
         <dependency>
             <groupId>de.deepamehta</groupId>
+            <artifactId>deepamehta-geomaps</artifactId>
+            <version>4.8-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>de.deepamehta</groupId>
             <artifactId>deepamehta-workspaces</artifactId>
             <version>4.8-SNAPSHOT</version>
         </dependency>
@@ -47,9 +52,7 @@
                 <configuration>
                     <instructions>
                         <Bundle-SymbolicName>eu.crowd-literature</Bundle-SymbolicName>
-                        <Bundle-Activator>
-                            eu.crowdliterature.CrowdPlugin
-                        </Bundle-Activator>
+                        <Bundle-Activator>eu.crowdliterature.CrowdPlugin</Bundle-Activator>
                     </instructions>
                 </configuration>
             </plugin>

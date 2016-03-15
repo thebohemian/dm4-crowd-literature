@@ -2,7 +2,7 @@ angular.module("crowd").controller("MapController", function($scope, $location, 
 
     var SHOW_BUSTOUR = false;
 
-    // geometry
+    // cluster config
 
     $scope.retina = L.Browser.retina;
     if (!$scope.retina) {
@@ -31,13 +31,7 @@ angular.module("crowd").controller("MapController", function($scope, $location, 
         var spiderfyDistanceMultiplier = 2;
     }
 
-    // application scope
-
-    $scope.backToMap = function() {
-        $location.path("/welcome");
-    }
-
-    // map scope
+    // leaflet config
 
     angular.extend($scope, {
         center: {
@@ -67,7 +61,7 @@ angular.module("crowd").controller("MapController", function($scope, $location, 
                         showOnSelector: false,
                         maxClusterRadius: maxClusterRadius,
                         spiderfyDistanceMultiplier: spiderfyDistanceMultiplier,
-                        iconCreateFunction: iconCreateFunction
+                        iconCreateFunction: createClusterIcon
                     }
                 }
             }
@@ -75,16 +69,20 @@ angular.module("crowd").controller("MapController", function($scope, $location, 
         markers: {}
     });
 
-    $scope.$on("leafletDirectiveMarker.map.click", function(event, args) {
-        var eventId = args.modelName
-        $location.path("/event/" + eventId);
-    })
-
     // startup code
 
     var mql = matchMedia("(orientation: landscape)");
     mql.addListener(updateOrientation);
     updateOrientation(mql);
+
+    $scope.$on("leafletDirectiveMarker.map.click", function(event, args) {
+        var eventId = args.modelName
+        $location.path("/event/" + eventId);
+    })
+
+    $scope.backToMap = function() {
+        $location.path("/welcome");
+    }
 
     if (SHOW_BUSTOUR) {
         crowdService.loadBustourGeojson(function(response) {
@@ -97,31 +95,29 @@ angular.module("crowd").controller("MapController", function($scope, $location, 
         })
     }
 
-    crowdService.getAllEvents().then(function(response) {
+    crowdService.getAllEvents(function(response) {
         response.data.forEach(function(event) {
             addMarker(event);
-        });
+        })
     })
 
-    // markers
+    // ------------------------------------------------------------------------------------------------- Private Methods
 
     function addMarker(event) {
-        try {
-            var geoCoordinate = event.childs["dm4.contacts.address"].childs["dm4.geomaps.geo_coordinate"].childs;
+        if (event.lat != undefined && event.lng != undefined) {
             $scope.markers[event.id] = {
-                lat: geoCoordinate["dm4.geomaps.latitude"].value,
-                lng: geoCoordinate["dm4.geomaps.longitude"].value,
+                lat: event.lat,
+                lng: event.lng,
                 layer: "currentEvents",
                 icon: markerIcon
             }
-        } catch (e) {
-            console.log("Event \"" + event.value + "\" (" + event.id + ") has a problem", e, event)
+        } else {
+            console.log("WARNING: event \"" + event.title + "\" (" + event.id +
+                ") can't appear on map -- its geo coordinate is unknown")
         }
     }
 
-    // clusters
-
-    function iconCreateFunction(cluster) {
+    function createClusterIcon(cluster) {
         var childCount = cluster.getChildCount();
         //
         var c = ' marker-cluster-';
@@ -139,8 +135,6 @@ angular.module("crowd").controller("MapController", function($scope, $location, 
             iconSize: new L.Point(clusterSize, clusterSize)
         });
     }
-
-    // ---
 
     function updateOrientation(mql) {
         $scope.landscape = mql.matches;

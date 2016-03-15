@@ -4,6 +4,7 @@ import eu.crowdliterature.model.Address;
 import eu.crowdliterature.model.DateTime;
 import eu.crowdliterature.model.Event;
 import eu.crowdliterature.model.EventOfEventSeries;
+import eu.crowdliterature.model.EventOfMap;
 import eu.crowdliterature.model.EventOfPerson;
 import eu.crowdliterature.model.EventSeries;
 import eu.crowdliterature.model.EventSeriesOfEvent;
@@ -32,6 +33,8 @@ import de.deepamehta.core.util.DeepaMehtaUtils;
 import de.deepamehta.plugins.accesscontrol.AccessControlService;
 import de.deepamehta.plugins.contacts.ContactsService;
 import de.deepamehta.plugins.events.EventsService;
+import de.deepamehta.plugins.geomaps.GeomapsService;
+import de.deepamehta.plugins.geomaps.model.GeoCoordinate;
 import de.deepamehta.plugins.workspaces.WorkspacesService;
 
 import org.codehaus.jettison.json.JSONArray;
@@ -42,6 +45,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -52,17 +56,15 @@ public class CrowdPlugin extends PluginActivator implements CrowdService, PreCre
 
     // ---------------------------------------------------------------------------------------------- Instance Variables
 
-    @Inject
-    private ContactsService contactsService;
+    @Inject private ContactsService contactsService;
 
-    @Inject
-    private EventsService eventsService;
+    @Inject private EventsService eventsService;
 
-    @Inject
-    private WorkspacesService wsService;        // needed by migration 1
+    @Inject private GeomapsService geomapsService;
 
-    @Inject
-    private AccessControlService acService;     // needed by migration 1
+    @Inject private WorkspacesService wsService;        // needed by migration 1
+
+    @Inject private AccessControlService acService;     // needed by migration 1
 
     // -------------------------------------------------------------------------------------------------- Public Methods
 
@@ -139,6 +141,23 @@ public class CrowdPlugin extends PluginActivator implements CrowdService, PreCre
             childs.getStringOrNull("dm4.webbrowser.url"),
             getEventSeries(event)
         );
+    }
+
+    @GET
+    @Path("/events")
+    @Override
+    public List<EventOfMap> getAllEvents() {
+        List<EventOfMap> events = new ArrayList();
+        for (Topic event : dms.getTopics("dm4.events.event")) {
+            Topic address = event.getChildTopics().getTopicOrNull("dm4.contacts.address");
+            GeoCoordinate geoCoord = address != null ? geomapsService.getGeoCoordinate(address) : null;
+            events.add(new EventOfMap(
+                event.getId(),
+                event.getSimpleValue().toString(),
+                geoCoord
+            ));
+        }
+        return events;
     }
 
     // --- Event Series ---

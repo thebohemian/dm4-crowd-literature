@@ -118,20 +118,9 @@ angular.module("crowd").controller("MapController", function($scope, $location, 
     }
 
     function createClusterIcon(cluster) {
-        var childCount = cluster.getChildCount();
-        //
-        var c = ' marker-cluster-';
-        if (childCount < 10) {
-            c += 'small';
-        } else if (childCount < 100) {
-            c += 'medium';
-        } else {
-            c += 'large';
-        }
-        //
         return new L.DivIcon({
-            html: "<div><span>" + childCount + "</span></div>",
-            className: "marker-cluster" + c,
+            html: "<div><span>" + cluster.getChildCount() + "</span></div>",
+            className: "marker-cluster",
             iconSize: new L.Point(clusterSize, clusterSize)
         });
     }

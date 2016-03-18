@@ -5,20 +5,26 @@
         <meta name="viewport" content="width=device-width">
         <title>CROWD Omnibus Reading Tour 2016</title>
         <link rel="icon" href="crowd-favicon.png">
-        <!-- Angular -->
-        <script src="lib/angular/angular.min.js"></script>
-        <script src="lib/angular/angular-route.min.js"></script>
-        <!-- Leaflet -->
         <link rel="stylesheet" href="lib/leaflet/leaflet.css" />
-        <script src="lib/leaflet/leaflet.js"></script>
-        <!-- Leaflet MarkerCluster plugin -->
         <link rel="stylesheet" href="lib/leaflet.markercluster/MarkerCluster.css" />
         <link rel="stylesheet" href="lib/leaflet.markercluster/MarkerCluster.CROWD.css" />
-        <script src="lib/leaflet.markercluster/leaflet.markercluster.js"></script>
-        <!-- Angular-Leaflet -->
-        <script src="lib/angular-leaflet/angular-leaflet-directive.min.js"></script>
-        <!-- CROWD -->
         <link rel="stylesheet" href="crowd.css" />
+    </head>
+    <body ng-controller="MapController">
+        <div id="spinner"></div>
+        <leaflet id="map" lf-center="center" defaults="defaults" tiles="tiles" layers="layers" geojson="bustour"
+            markers="markers">
+        </leaflet>
+        <div id="details" ng-show="event || eventSeries || person || institution || work || landscape" ng-view>
+        </div>
+        <div style="position: absolute; right: 3px; bottom: 0px; font-size: 9px; color: lightgrey">
+            retina={{retina}}
+        </div>
+        <script src="lib/angular/angular.min.js"></script>
+        <script src="lib/angular/angular-route.min.js"></script>
+        <script src="lib/leaflet/leaflet.js"></script>
+        <script src="lib/leaflet.markercluster/leaflet.markercluster.js"></script>
+        <script src="lib/angular-leaflet/angular-leaflet-directive.min.js"></script>
         <script src="crowd.js"></script>
         <script src="controllers/map-controller.js"></script>
         <script src="controllers/event-controller.js"></script>
@@ -32,14 +38,5 @@
         <script src="filters/datetime.js"></script>
         <script src="filters/trusted.js"></script>
         <script src="filters/weblink.js"></script>
-    </head>
-    <body ng-controller="MapController">
-        <div id="spinner"></div>
-        <leaflet id="map" lf-center="center" defaults="defaults" tiles="tiles" layers="layers" geojson="bustour"
-            markers="markers">
-        </leaflet>
-        <div id="details" ng-show="event || eventSeries || person || institution || work || landscape" ng-view>
-        </div>
-        <div style="position: absolute; right: 3px; bottom: 0px; font-size: 9px; color: lightgrey">retina={{retina}}</div>
     </body>
 </html>

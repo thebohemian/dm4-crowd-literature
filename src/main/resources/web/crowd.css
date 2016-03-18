@@ -93,6 +93,15 @@ strong {
     margin-top: 0;
 }
 
+#details img {
+    max-width: 100%;
+    height: auto;
+}
+
+#details .embeddedContent > iframe {
+    max-width: 100%;
+}
+
 #details button {
     margin-top: 2em;
 }

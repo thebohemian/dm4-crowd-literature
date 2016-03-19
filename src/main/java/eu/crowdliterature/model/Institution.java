@@ -16,7 +16,7 @@ public class Institution implements JSONEnabled {
     // ---------------------------------------------------------------------------------------------------- Constructors
 
     public Institution(String name, JSONArray urls, JSONArray addresses, JSONArray phoneNumbers, JSONArray emails,
-                       String notes, JSONArray persons) {
+                       String notes, JSONArray persons, JSONArray events) {
         try {
             json = new JSONObject()
                 .put("name",         name)
@@ -25,7 +25,8 @@ public class Institution implements JSONEnabled {
                 .put("phoneNumbers", phoneNumbers)
                 .put("emails",       emails)
                 .put("notes",        notes)
-                .put("persons",      persons);
+                .put("persons",      persons)
+                .put("events",       events);
         } catch (Exception e) {
             throw new RuntimeException("Serialization failed (" + this + ")", e);
         }

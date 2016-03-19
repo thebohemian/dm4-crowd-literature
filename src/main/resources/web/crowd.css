@@ -106,8 +106,7 @@ strong {
 #details .person .birth,
 #details .person .nationality,
 #details .person .institutions,
-#details .person .works,
-#details .person .events {
+#details .person .works {
     margin-top: 1em;
 }
 
@@ -156,15 +155,8 @@ strong {
     color: rgb(235, 110, 8);
 }
 
-#details .event-series .url,
-#details .event-series .events,
-#details .event-series .event {
+#details .event-series .url {
     margin-top: 1em;
-}
-
-#details .event-series .event .date {
-    font-size: 0.75em;
-    margin-bottom: -0.3em;
 }
 
 /* Institution Details */
@@ -177,6 +169,18 @@ strong {
 #details .institution .url,
 #details .institution .address {
     margin-top: 1em;
+}
+
+/* Event List (used for Event Series and Institution) */
+
+#details .events,
+#details .events .event {
+    margin-top: 1em;
+}
+
+#details .events .event .date {
+    font-size: 0.75em;
+    margin-bottom: -0.3em;
 }
 
 /* Spinner */

@@ -6,7 +6,7 @@ import org.codehaus.jettison.json.JSONObject;
 
 
 
-public class EventOfEventSeries implements JSONEnabled {
+public class EventBasics implements JSONEnabled {
 
     // ---------------------------------------------------------------------------------------------- Instance Variables
 
@@ -14,7 +14,7 @@ public class EventOfEventSeries implements JSONEnabled {
 
     // ---------------------------------------------------------------------------------------------------- Constructors
 
-    public EventOfEventSeries(long id, String title, JSONObject from, JSONObject to) {
+    public EventBasics(long id, String title, JSONObject from, JSONObject to) {
         try {
             json = new JSONObject()
                 .put("id",    id)

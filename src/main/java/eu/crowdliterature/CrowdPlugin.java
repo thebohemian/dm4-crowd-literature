@@ -3,7 +3,7 @@ package eu.crowdliterature;
 import eu.crowdliterature.model.Address;
 import eu.crowdliterature.model.DateTime;
 import eu.crowdliterature.model.Event;
-import eu.crowdliterature.model.EventOfEventSeries;
+import eu.crowdliterature.model.EventBasics;
 import eu.crowdliterature.model.EventOfMap;
 import eu.crowdliterature.model.EventOfPerson;
 import eu.crowdliterature.model.EventSeries;
@@ -184,14 +184,16 @@ public class CrowdPlugin extends PluginActivator implements CrowdService, PreCre
     public Institution getInstitution(@PathParam("id") long instId) {
         Topic inst = dms.getTopic(instId);
         ChildTopics childs = inst.getChildTopics();
+        List<RelatedTopic> addressTopics = getAddresses(inst);
         return new Institution(
             inst.getSimpleValue().toString(),
             getStrings(inst, "dm4.webbrowser.url"),
-            getAddresses(inst),
+            getAddresses(addressTopics),
             getPhoneNumbers(inst),
             getStrings(inst, "dm4.contacts.email_address"),
             childs.getString("dm4.contacts.notes"),
-            getPersonsOfInstitution(instId)
+            getPersonsOfInstitution(instId),
+            getEventsOfInstitution(addressTopics)
         );
     }
 
@@ -411,16 +413,11 @@ public class CrowdPlugin extends PluginActivator implements CrowdService, PreCre
     private JSONArray getEventsOfEventSeries(Topic eventSeries) {
         JSONArray events = null;
         ResultList<RelatedTopic> eventTopics = eventSeries.getRelatedTopics("dm4.core.association", "dm4.core.default",
-                                                                            "dm4.core.default", "dm4.events.event");
-        if (!eventTopics.isEmpty())  {
+            "dm4.core.default", "dm4.events.event");
+        if (!eventTopics.isEmpty()) {
             events = new JSONArray();
             for (RelatedTopic event : eventTopics) {
-                events.put(new EventOfEventSeries(
-                    event.getId(),
-                    event.getSimpleValue().toString(),
-                    getDateTime(event, "dm4.datetime#dm4.events.from"),
-                    getDateTime(event, "dm4.datetime#dm4.events.to")
-                ).toJSON());
+                events.put(eventBasics(event));
             }
         }
         return events;
@@ -428,10 +425,12 @@ public class CrowdPlugin extends PluginActivator implements CrowdService, PreCre
 
     // --- Institution ---
 
-    private JSONArray getAddresses(Topic institution) {
+    private List<RelatedTopic> getAddresses(Topic institution) {
+        return institution.getChildTopics().getTopics("dm4.contacts.address#dm4.contacts.address_entry");
+    }
+
+    private JSONArray getAddresses(List<RelatedTopic> addressTopics) {
         JSONArray addresses = null;
-        List<RelatedTopic> addressTopics = institution.getChildTopics().getTopics("dm4.contacts.address#" +
-            "dm4.contacts.address_entry");
         if (!addressTopics.isEmpty()) {
             addresses = new JSONArray();
             for (RelatedTopic address : addressTopics) {
@@ -473,7 +472,33 @@ public class CrowdPlugin extends PluginActivator implements CrowdService, PreCre
         return persons;
     }
 
+    private JSONArray getEventsOfInstitution(List<RelatedTopic> addressTopics) {
+        JSONArray events = null;
+        for (Topic address : addressTopics) {
+            ResultList<RelatedTopic> eventTopics = address.getRelatedTopics("dm4.core.aggregation", "dm4.core.child",
+                "dm4.core.parent", "dm4.events.event");
+            if (!eventTopics.isEmpty()) {
+                if (events == null) {
+                    events = new JSONArray();
+                }
+                for (RelatedTopic event : eventTopics) {
+                    events.put(eventBasics(event));
+                }
+            }
+        }
+        return events;
+    }
+
     // --- Helper ---
+
+    private JSONObject eventBasics(Topic event) {
+        return new EventBasics(
+            event.getId(),
+            event.getSimpleValue().toString(),
+            getDateTime(event, "dm4.datetime#dm4.events.from"),
+            getDateTime(event, "dm4.datetime#dm4.events.to")
+        ).toJSON();
+    }
 
     private JSONObject address(RelatedTopic address, boolean includeInstitution) {
         ChildTopics childs = address.getChildTopics();

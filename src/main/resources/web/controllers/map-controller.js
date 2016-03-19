@@ -80,6 +80,10 @@ angular.module("crowd").controller("MapController", function($scope, $location, 
         $location.path("/event/" + eventId);
     })
 
+    $scope.setMapVisibility = function(mapVisibility) {
+        $scope.mapVisibility = mapVisibility;
+    }
+
     $scope.backToMap = function() {
         $location.path("/welcome");
     }

@@ -44,16 +44,6 @@ strong {
     }
 }
 
-@media (orientation: portrait) {
-    #details {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        z-index: 1001;      /* Leaflet controls are at 1000 */
-    }
-}
-
 /* Details */
 
 #details .welcome img {

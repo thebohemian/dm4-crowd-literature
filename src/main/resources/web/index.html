@@ -13,11 +13,11 @@
     <body ng-controller="MapController">
         <div id="spinner"></div>
         <leaflet id="map" lf-center="center" defaults="defaults" tiles="tiles" layers="layers" geojson="bustour"
-            markers="markers">
+            markers="markers" ng-show="landscape || mapVisibility">
         </leaflet>
-        <div id="details" ng-show="event || eventSeries || person || institution || work || landscape" ng-view>
+        <div id="details" ng-show="landscape || !mapVisibility" ng-view>
         </div>
-        <div style="position: absolute; right: 3px; bottom: 0px; font-size: 9px; color: lightgrey">
+        <div style="position: absolute; right: 3px; bottom: 0px; font-size: 9px; color: lightgrey;">
             retina={{retina}}
         </div>
         <script src="lib/angular/angular.min.js"></script>
@@ -27,6 +27,7 @@
         <script src="lib/angular-leaflet/angular-leaflet-directive.min.js"></script>
         <script src="crowd.js"></script>
         <script src="controllers/map-controller.js"></script>
+        <script src="controllers/welcome-controller.js"></script>
         <script src="controllers/event-controller.js"></script>
         <script src="controllers/event-series-controller.js"></script>
         <script src="controllers/person-controller.js"></script>

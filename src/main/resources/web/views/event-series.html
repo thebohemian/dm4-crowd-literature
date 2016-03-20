@@ -4,14 +4,6 @@
     <div class="url" ng-if="eventSeries.url">
         <a ng-href="{{eventSeries.url | weblink}}">{{eventSeries.url}}</a>
     </div>
-    <div class="events" ng-show="eventSeries.events">
-        <div class="heading">Events</div>
-        <ul>
-            <li class="event" ng-repeat="event in eventSeries.events">
-                <div class="date">{{event.from | datetime:event.to}}</div>
-                <a ng-href="#/event/{{event.id}}">{{event.title}}</a>
-            </li>
-        </ul>
-    </div>
+    <event-list events="eventSeries.events"></event-list>
     <button ng-click="backToMap()" ng-if="portrait">Back to map</button>
 </div>

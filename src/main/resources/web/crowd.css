@@ -173,14 +173,17 @@ strong {
 
 /* Event List (used for Event Series and Institution) */
 
-#details .events,
-#details .events .event {
+#details .event-list {
     margin-top: 1em;
 }
 
-#details .events .event .date {
+#details .event-list .event {
+    margin-top: 0.7em;
+}
+
+#details .event-list .event .date {
     font-size: 0.75em;
-    margin-bottom: -0.3em;
+    margin-bottom: -0.4em;
 }
 
 /* Spinner */

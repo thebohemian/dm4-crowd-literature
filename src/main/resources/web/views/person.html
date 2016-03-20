@@ -40,13 +40,6 @@
             </li>
         </ul>
     </div>
-    <div class="events" ng-show="person.events">
-        <div class="heading">Events</div>
-        <ul>
-            <li ng-repeat="event in person.events">
-                <a ng-href="#/event/{{event.id}}">{{event.title}}</a>
-            </li>
-        </ul>
-    </div>
+    <event-list events="person.events"></event-list>
     <button ng-click="backToMap()" ng-if="portrait">Back to map</button>
 </div>

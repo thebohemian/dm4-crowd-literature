@@ -1,0 +1,9 @@
+<div class="event-list" ng-show="events">
+    <div class="heading">Events</div>
+    <ul>
+        <li class="event" ng-repeat="event in events">
+            <div class="date">{{event.from | datetime:event.to}}</div>
+            <a ng-href="#/event/{{event.id}}">{{event.title}}</a>
+        </li>
+    </ul>
+</div>

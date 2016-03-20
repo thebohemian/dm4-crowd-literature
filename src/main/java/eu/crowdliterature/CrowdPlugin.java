@@ -5,7 +5,6 @@ import eu.crowdliterature.model.DateTime;
 import eu.crowdliterature.model.Event;
 import eu.crowdliterature.model.EventBasics;
 import eu.crowdliterature.model.EventOfMap;
-import eu.crowdliterature.model.EventOfPerson;
 import eu.crowdliterature.model.EventSeries;
 import eu.crowdliterature.model.EventSeriesOfEvent;
 import eu.crowdliterature.model.Institution;
@@ -285,11 +284,8 @@ public class CrowdPlugin extends PluginActivator implements CrowdService, PreCre
         ResultList<RelatedTopic> eventTopics = eventsService.getEvents(personId);
         if (!eventTopics.isEmpty()) {
             events = new JSONArray();
-            for (RelatedTopic event : eventTopics) {
-                events.put(new EventOfPerson(
-                    event.getId(),
-                    event.getSimpleValue().toString()
-                ).toJSON());
+            for (Topic event : eventTopics) {
+                events.put(eventBasics(event));
             }
         }
         return events;
@@ -481,7 +477,7 @@ public class CrowdPlugin extends PluginActivator implements CrowdService, PreCre
                 if (events == null) {
                     events = new JSONArray();
                 }
-                for (RelatedTopic event : eventTopics) {
+                for (Topic event : eventTopics) {
                     events.put(eventBasics(event));
                 }
             }

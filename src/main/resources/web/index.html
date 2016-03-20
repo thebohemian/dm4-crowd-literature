@@ -13,12 +13,12 @@
     <body ng-controller="MapController">
         <div id="spinner"></div>
         <leaflet id="map" lf-center="center" defaults="defaults" tiles="tiles" layers="layers" geojson="bustour"
-            markers="markers" ng-show="landscape || mapVisibility">
+            markers="markers" ng-if="landscape || mapVisibility">
         </leaflet>
-        <div id="details" ng-show="landscape || !mapVisibility" ng-view>
+        <div id="details" ng-if="landscape || !mapVisibility" ng-view>
         </div>
         <div style="position: absolute; right: 3px; bottom: 0px; font-size: 9px; color: lightgrey;">
-            retina={{retina}}
+            retina={{retina}}, landscape={{landscape}}
         </div>
         <script src="lib/angular/angular.min.js"></script>
         <script src="lib/angular/angular-route.min.js"></script>

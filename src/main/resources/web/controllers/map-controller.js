@@ -130,7 +130,9 @@ angular.module("crowd").controller("MapController", function($scope, $location, 
     }
 
     function updateOrientation(mql) {
-        $scope.landscape = mql.matches;
-        $scope.portrait = !$scope.landscape;
+        $scope.$applyAsync(function() {
+            $scope.landscape = mql.matches;
+            $scope.portrait = !$scope.landscape
+        })
     }
 })

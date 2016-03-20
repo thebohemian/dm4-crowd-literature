@@ -1,4 +1,4 @@
-angular.module("crowd").directive("eventList", function() {
+angular.module("crowd").directive("dm4EventList", function() {
     return {
         restrict: "E",
         scope: {

@@ -17,9 +17,9 @@
         </leaflet>
         <div id="details" ng-if="landscape || !mapVisibility" ng-view>
         </div>
-        <div style="position: absolute; right: 3px; bottom: 0px; font-size: 9px; color: lightgrey;">
-            retina={{retina}}, landscape={{landscape}}
-        </div>
+        <!--div style="position: absolute; right: 3px; bottom: 12px; font-size: 10px;">
+            retina={{retina}}, landscape={{landscape}}, mapVisibility={{mapVisibility}}
+        </div-->
         <script src="lib/angular/angular.min.js"></script>
         <script src="lib/angular/angular-route.min.js"></script>
         <script src="lib/leaflet/leaflet.js"></script>
@@ -27,12 +27,12 @@
         <script src="lib/angular-leaflet/angular-leaflet-directive.min.js"></script>
         <script src="crowd.js"></script>
         <script src="controllers/map-controller.js"></script>
-        <script src="controllers/welcome-controller.js"></script>
         <script src="controllers/details-controller.js"></script>
         <script src="services/crowd-service.js"></script>
         <script src="services/js-utils.js"></script>
         <script src="directives/dm4-address.js"></script>
-        <script src="directives/event-list.js"></script>
+        <script src="directives/dm4-event-list.js"></script>
+        <script src="directives/dm4-map-button.js"></script>
         <script src="filters/datetime.js"></script>
         <script src="filters/trusted.js"></script>
         <script src="filters/weblink.js"></script>

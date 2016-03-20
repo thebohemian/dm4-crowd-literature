@@ -25,5 +25,5 @@
         <span ng-repeat-start="series in event.eventSeries" ng-show="!$first"> and</span>
         <a ng-repeat-end ng-href="#/event_series/{{series.id}}">{{series.title}}</a>.
     </div>
-    <button ng-click="backToMap()" ng-if="portrait">Back to map</button>
+    <dm4-map-button>Back to map</dm4-map-button>
 </div>

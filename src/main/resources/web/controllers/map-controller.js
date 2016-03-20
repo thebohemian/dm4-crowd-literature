@@ -76,7 +76,14 @@ angular.module("crowd").controller("MapController", function($scope, $location, 
     updateOrientation(mql);
 
     $scope.$on("leafletDirectiveMarker.map.click", function(event, args) {
-        var eventId = args.modelName
+        var eventId = args.modelName;
+        // Note 1: if the ng-view is not in the DOM (due to ng-if) its controllers are not called.
+        // So, the ng-view visibility must be controlled outside the ng-view controllers.
+        // Note 2: this event listener is apparently called outside the angular context.
+        // So, we must explicitly $apply the scope manipulation.
+        $scope.$applyAsync(function() {
+            $scope.mapVisibility = false;
+        })
         $location.path("/event/" + eventId);
     })
 
@@ -84,9 +91,10 @@ angular.module("crowd").controller("MapController", function($scope, $location, 
         $scope.mapVisibility = mapVisibility;
     }
 
+    /* ### TODO
     $scope.backToMap = function() {
         $location.path("/welcome");
-    }
+    } */
 
     if (SHOW_BUSTOUR) {
         crowdService.loadBustourGeojson(function(response) {
@@ -130,6 +138,8 @@ angular.module("crowd").controller("MapController", function($scope, $location, 
     }
 
     function updateOrientation(mql) {
+        // Note: this media query listener is called directly from the browser, that is outside the angular context.
+        // So, we must explicitly $apply the scope manipulation.
         $scope.$applyAsync(function() {
             $scope.landscape = mql.matches;
             $scope.portrait = !$scope.landscape

@@ -1,6 +1,6 @@
 <div class="institution">
     <div class="page-title">{{institution.name}}</div>
-    <div class="url" ng-show="institution.urls">
+    <div class="url" ng-if="institution.urls">
         <ul>
             <li ng-repeat="url in institution.urls">
                 <a ng-href="{{url | weblink}}">{{url}}</a>
@@ -31,7 +31,7 @@
         </ul>
     </div>
     <div class="notes" ng-bind-html="institution.notes | trusted"></div>
-    <!--div class="persons" ng-show="institution.persons">
+    <!--div class="persons" ng-if="institution.persons">
         Associates:
         <ul>
             <li ng-repeat="person in institution.persons">

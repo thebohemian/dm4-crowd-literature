@@ -2,45 +2,48 @@
     <div class="page-title">{{work.title}}</div>
     <div class="persons">
         <div>
-            <span ng-repeat-start="person in work.persons" ng-show="!$first">,</span>
-            <span ng-repeat-end><a ng-href="#/person/{{person.id}}">{{person.name}}</a> ({{person.role}})</span>
+            <span ng-repeat-start="person in work.persons" ng-if="!$first">,</span>
+            <span ng-repeat-end>
+                <a ng-href="#/person/{{person.id}}">{{person.name}}</a> ({{person.role}})
+            </span>
         </div>
         <div>
-            <span ng-repeat-start="institution in work.institutions" ng-show="!$first">,</span>
+            <span ng-repeat-start="institution in work.institutions" ng-if="!$first">,</span>
             <span ng-repeat-end>
-                <a ng-href="#/institution/{{institution.id}}">{{institution.name}}</a> ({{institution.role}})</span>
+                <a ng-href="#/institution/{{institution.id}}">{{institution.name}}</a> ({{institution.role}})
+            </span>
         </div>
     </div>
     <div class="type">
         <div>
-            {{work.type}}<span ng-show="work.type && work.language">,</span>
+            {{work.type}}<span ng-if="work.type && work.language">,</span>
             {{work.language}}
         </div>
         <div>
-            {{work.yearOfPublication}}<span ng-show="work.yearOfPublication && work.placeOfPublication">,</span>
+            {{work.yearOfPublication}}<span ng-if="work.yearOfPublication && work.placeOfPublication">,</span>
             {{work.placeOfPublication}}
         </div>
     </div>
-    <div class="genre" ng-show="work.genres">
+    <div class="genre" ng-if="work.genres">
         Genre:
-        <span ng-repeat-start="genre in work.genres" ng-show="!$first">,</span>
+        <span ng-repeat-start="genre in work.genres" ng-if="!$first">,</span>
         <span ng-repeat-end>{{genre}}</span>
     </div>
     <div class="notes" ng-bind-html="work.notes | trusted"></div>
-    <div class="isbn" ng-show="work.isbn">ISBN/ISSN: {{work.isbn}}</div>
+    <div class="isbn" ng-if="work.isbn">ISBN/ISSN: {{work.isbn}}</div>
     <div class="url" ng-if="work.url">
         <a ng-href="{{work.url | weblink}}">{{work.url}}</a>
     </div>
-    <div class="translations" ng-show="work.translations">
+    <div class="translations" ng-if="work.translations">
         <div class="heading">Translations</div>
         <div class="translation" ng-repeat="translation in work.translations">
             <div class="title">{{translation.title}}</div>
             <div>
-                <span ng-repeat-start="person in translation.persons" ng-show="!$first">,</span>
+                <span ng-repeat-start="person in translation.persons" ng-if="!$first">,</span>
                 <span ng-repeat-end><a ng-href="#/person/{{person.id}}">{{person.name}}</a> ({{person.role}})</span>
             </div>
             <div>{{translation.language}}</div>
-            <div ng-show="translation.isbn">ISBN/ISSN: {{translation.isbn}}</div>
+            <div ng-if="translation.isbn">ISBN/ISSN: {{translation.isbn}}</div>
         </div>
     </div>
     <dm4-map-button>Back to map</dm4-map-button>

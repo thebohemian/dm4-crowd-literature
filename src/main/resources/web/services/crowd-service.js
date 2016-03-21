@@ -1,7 +1,7 @@
 angular.module("crowd").service("crowdService", function($http) {
 
     this.loadBustourGeojson = function(callback) {
-        $http.get("bustour.geo.json").then(callback);
+        $http.get("crowd-bustour.geo.json").then(callback);
     }
 
     // --- Person ---

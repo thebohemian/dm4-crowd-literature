@@ -1,30 +1,30 @@
 <div class="person">
     <div class="page-title">{{person.name}}</div>
-    <div class="birth" ng-show="person.yearOfBirth || person.placeOfBirth">
+    <div class="birth" ng-if="person.yearOfBirth || person.placeOfBirth">
         Born {{person.yearOfBirth}}
-        <span ng-show="person.placeOfBirth">in {{person.placeOfBirth}}</span>
+        <span ng-if="person.placeOfBirth">in {{person.placeOfBirth}}</span>
     </div>
     <div class="nationality">
-        <div ng-show="person.nationalities">
+        <div ng-if="person.nationalities">
             Nationality:
-            <span ng-repeat-start="nationality in person.nationalities" ng-show="!$first">,</span>
+            <span ng-repeat-start="nationality in person.nationalities" ng-if="!$first">,</span>
             <span ng-repeat-end>{{nationality}}</span>
         </div>
-        <div ng-show="person.languages">
+        <div ng-if="person.languages">
             Languages:
-            <span ng-repeat-start="language in person.languages" ng-show="!$first">,</span>
+            <span ng-repeat-start="language in person.languages" ng-if="!$first">,</span>
             <span ng-repeat-end>{{language}}</span>
         </div>
     </div>
     <div class="notes" ng-bind-html="person.notes | trusted"></div>
-    <div class="url" ng-show="person.urls">
+    <div class="url" ng-if="person.urls">
         <ul>
             <li ng-repeat="url in person.urls">
                 <a ng-href="{{url | weblink}}">{{url}}</a>
             </li>
         </ul>
     </div>
-    <!--div class="institutions" ng-show="person.institutions">
+    <!--div class="institutions" ng-if="person.institutions">
         Associations:
         <ul>
             <li ng-repeat="institution in person.institutions">
@@ -32,7 +32,7 @@
             </li>
         </ul>
     </div-->
-    <div class="works" ng-show="person.works">
+    <div class="works" ng-if="person.works">
         <div class="heading">Works</div>
         <ul>
             <li ng-repeat="work in person.works">

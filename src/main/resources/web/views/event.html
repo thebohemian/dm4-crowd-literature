@@ -6,7 +6,7 @@
         <div dm4-address="event.address"></div>
     </div>
     <div class="notes" ng-bind-html="event.notes | trusted"></div>
-    <div class="participants" ng-show="event.participants">
+    <div class="participants" ng-if="event.participants">
         <div class="heading">Participants</div>
         <ul>
             <li ng-repeat="person in event.participants | orderBy:'value'">
@@ -14,15 +14,15 @@
             </li>
         </ul>
     </div>
-    <div class="entrance-fee" ng-show="event.entranceFee">
+    <div class="entrance-fee" ng-if="event.entranceFee">
         Entrance fee: {{event.entranceFee}}
     </div>
     <div class="url" ng-if="event.url">
         <a ng-href="{{event.url | weblink}}">{{event.url}}</a>
     </div>
-    <div class="event-series" ng-show="event.eventSeries">
+    <div class="event-series" ng-if="event.eventSeries">
         This event is part of series
-        <span ng-repeat-start="series in event.eventSeries" ng-show="!$first"> and</span>
+        <span ng-repeat-start="series in event.eventSeries" ng-if="!$first"> and</span>
         <a ng-repeat-end ng-href="#/event_series/{{series.id}}">{{series.title}}</a>.
     </div>
     <dm4-map-button>Back to map</dm4-map-button>

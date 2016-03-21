@@ -14,9 +14,30 @@ After installing open this page:
 Version History
 ---------------
 
+**0.5** -- Mar 21, 2016
+
+Webapp usability
+
+* Web design by Zlata Pasalic
+* Marker cluster rendering (by the help of Leaflet MarkerCluster plugin)
+* Auto-scale images and videos
+* Info pages:
+    * Institution page: show events
+    * Event page: show address along with institution link
+    * Proper date/time formatting on all pages
+    * New welcome page with CROWD logo and introduction text
+* Mobile devices: on hi-res displays markers and clusters are slightly enlarged
+* Spinning load indicator
+* Fixes:
+    * External links are working also if `http://` was not entered
+    * No map "flickering through" on page change when in portrait mode
+* Technical: the webapp talks solely to its own `/crowd` endpoint; does not rely on `/core` anymore
+* Compatible with DeepaMehta 4.8-SNAPSHOT
+
 **0.4** -- Jan 19, 2016
 
-* First production version, updatable
+First production version, updatable
+
 * Work Involvement associations are typed automatically
 * Pages:
     * Work page: show institutions (publishers)
@@ -26,6 +47,8 @@ Version History
 * Compatible with DeepaMehta 4.8-SNAPSHOT
 
 **0.3** -- Dec 30, 2015
+
+Model consolidation
 
 * Views: Work details page, Institution details page, Event Series details page
 * Model:
@@ -40,6 +63,8 @@ Version History
 
 **0.2** -- Dec 21, 2015
 
+Technical Basis
+
 * Responsive web design: individual layouts for portrait/landscape orientation
 * GeoJSON visualization of the bustour
 * Clickable Event markers
@@ -51,6 +76,8 @@ Version History
 
 **0.1** -- Dec 15, 2015
 
+Project setup
+
 * Data model: Work, Translation, Work Involvement
 * Leaflet based map rendering with Mapbox imagery
 * Compatible with DeepaMehta 4.8-SNAPSHOT
@@ -58,4 +85,4 @@ Version History
 
 ------------
 Jörg Richter  
-Jan 19, 2016
+Mar 21, 2016

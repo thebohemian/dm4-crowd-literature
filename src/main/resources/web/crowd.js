@@ -21,20 +21,20 @@ angular.module("crowd", ["ngRoute", "leaflet-directive"])
         return {
             request: function(config) {
                 // console.log("Loading starts")
-                setLoadingWidgetDisplay("block")
+                setSpinnerDisplay("block")
                 return config
             },
             response: function(response) {
                 $http = $http || $injector.get("$http")     // getting $http lazily avoids circular dependency
                 if (!$http.pendingRequests.length) {
                     // console.log("Loading complete")
-                    setLoadingWidgetDisplay("none")
+                    setSpinnerDisplay("none")
                 }
                 return response
             }
         }
 
-        function setLoadingWidgetDisplay(display) {
+        function setSpinnerDisplay(display) {
             document.getElementById("spinner").style.display = display
         }
     })

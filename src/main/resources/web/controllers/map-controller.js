@@ -91,7 +91,7 @@ angular.module("crowd").controller("MapController", function($scope, $location, 
         $scope.mapVisibility = mapVisibility;
     }
 
-    /* ### TODO
+    /* ### TODO: give the map (after pressing "Back to map") its own route
     $scope.backToMap = function() {
         $location.path("/welcome");
     } */

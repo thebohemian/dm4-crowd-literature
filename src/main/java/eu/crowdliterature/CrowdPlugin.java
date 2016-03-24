@@ -26,7 +26,6 @@ import de.deepamehta.core.Topic;
 import de.deepamehta.core.model.AssociationModel;
 import de.deepamehta.core.osgi.PluginActivator;
 import de.deepamehta.core.service.Inject;
-import de.deepamehta.core.service.ResultList;
 import de.deepamehta.core.service.event.PreCreateAssociationListener;
 import de.deepamehta.core.util.DeepaMehtaUtils;
 import de.deepamehta.plugins.accesscontrol.AccessControlService;
@@ -81,7 +80,7 @@ public class CrowdPlugin extends PluginActivator implements CrowdService, PreCre
     @Path("/person/{id}")
     @Override
     public Person getPerson(@PathParam("id") long personId) {
-        Topic person = dms.getTopic(personId);
+        Topic person = dm4.getTopic(personId);
         ChildTopics childs = person.getChildTopics();
         return new Person(
             person.getSimpleValue().toString(),
@@ -103,7 +102,7 @@ public class CrowdPlugin extends PluginActivator implements CrowdService, PreCre
     @Path("/work/{id}")
     @Override
     public Work getWork(@PathParam("id") long workId) {
-        Topic work = dms.getTopic(workId);
+        Topic work = dm4.getTopic(workId);
         ChildTopics childs = work.getChildTopics();
         return new Work(
             work.getSimpleValue().toString(),
@@ -127,7 +126,7 @@ public class CrowdPlugin extends PluginActivator implements CrowdService, PreCre
     @Path("/event/{id}")
     @Override
     public Event getEvent(@PathParam("id") long eventId) {
-        Topic event = dms.getTopic(eventId);
+        Topic event = dm4.getTopic(eventId);
         ChildTopics childs = event.getChildTopics();
         return new Event(
             event.getSimpleValue().toString(),
@@ -147,7 +146,7 @@ public class CrowdPlugin extends PluginActivator implements CrowdService, PreCre
     @Override
     public List<EventOfMap> getAllEvents() {
         List<EventOfMap> events = new ArrayList();
-        for (Topic event : dms.getTopics("dm4.events.event")) {
+        for (Topic event : dm4.getTopics("dm4.events.event")) {
             Topic address = event.getChildTopics().getTopicOrNull("dm4.contacts.address");
             GeoCoordinate geoCoord = address != null ? geomapsService.getGeoCoordinate(address) : null;
             events.add(new EventOfMap(
@@ -165,7 +164,7 @@ public class CrowdPlugin extends PluginActivator implements CrowdService, PreCre
     @Path("/event_series/{id}")
     @Override
     public EventSeries getEventSeries(@PathParam("id") long eventSeriesId) {
-        Topic eventSeries = dms.getTopic(eventSeriesId);
+        Topic eventSeries = dm4.getTopic(eventSeriesId);
         ChildTopics childs = eventSeries.getChildTopics();
         return new EventSeries(
             eventSeries.getSimpleValue().toString(),
@@ -181,7 +180,7 @@ public class CrowdPlugin extends PluginActivator implements CrowdService, PreCre
     @Path("/institution/{id}")
     @Override
     public Institution getInstitution(@PathParam("id") long instId) {
-        Topic inst = dms.getTopic(instId);
+        Topic inst = dm4.getTopic(instId);
         ChildTopics childs = inst.getChildTopics();
         List<RelatedTopic> addressTopics = getAddresses(inst);
         return new Institution(
@@ -208,15 +207,15 @@ public class CrowdPlugin extends PluginActivator implements CrowdService, PreCre
     public void preCreateAssociation(AssociationModel assoc) {
         // Work <-> Person
         DeepaMehtaUtils.associationAutoTyping(assoc, "crowd.work", "dm4.contacts.person",
-            "crowd.work.involvement", "dm4.core.default", "dm4.core.default", dms);
+            "crowd.work.involvement", "dm4.core.default", "dm4.core.default", dm4);
         //
         // Work <-> Institution
         DeepaMehtaUtils.associationAutoTyping(assoc, "crowd.work", "dm4.contacts.institution",
-            "crowd.work.involvement", "dm4.core.default", "dm4.core.default", dms);
+            "crowd.work.involvement", "dm4.core.default", "dm4.core.default", dm4);
         //
         // Translation <-> Person
         DeepaMehtaUtils.associationAutoTyping(assoc, "crowd.work.translation", "dm4.contacts.person",
-            "crowd.work.involvement", "dm4.core.default", "dm4.core.default", dms);
+            "crowd.work.involvement", "dm4.core.default", "dm4.core.default", dm4);
     }
 
 
@@ -227,7 +226,7 @@ public class CrowdPlugin extends PluginActivator implements CrowdService, PreCre
 
     private JSONArray getInstitutionsOfPerson(long personId) {
         JSONArray institutions = null;
-        ResultList<RelatedTopic> instTopics = contactsService.getInstitutions(personId);
+        List<RelatedTopic> instTopics = contactsService.getInstitutions(personId);
         if (!instTopics.isEmpty()) {
             institutions = new JSONArray();
             for (RelatedTopic inst : instTopics) {
@@ -244,8 +243,8 @@ public class CrowdPlugin extends PluginActivator implements CrowdService, PreCre
     private JSONArray getWorksOfPerson(Topic person) {
         JSONArray works = null;
         // 1) works
-        ResultList<RelatedTopic> workTopics = person.getRelatedTopics("crowd.work.involvement", "dm4.core.default",
-                                                                      "dm4.core.default", "crowd.work");
+        List<RelatedTopic> workTopics = person.getRelatedTopics("crowd.work.involvement", "dm4.core.default",
+            "dm4.core.default", "crowd.work");
         if (!workTopics.isEmpty()) {
             works = new JSONArray();
             for (RelatedTopic work : workTopics) {
@@ -257,8 +256,8 @@ public class CrowdPlugin extends PluginActivator implements CrowdService, PreCre
             }
         }
         // 2) translations
-        ResultList<RelatedTopic> translations = person.getRelatedTopics("crowd.work.involvement", "dm4.core.default",
-                                                                        "dm4.core.default", "crowd.work.translation");
+        List<RelatedTopic> translations = person.getRelatedTopics("crowd.work.involvement", "dm4.core.default",
+            "dm4.core.default", "crowd.work.translation");
         if (works == null && !translations.isEmpty()) {
             works = new JSONArray();
         }
@@ -275,13 +274,13 @@ public class CrowdPlugin extends PluginActivator implements CrowdService, PreCre
     }
 
     private Topic getWorkOfTranslation(long translationId) {
-        return dms.getTopic(translationId).getRelatedTopic("dm4.core.composition", "dm4.core.child", "dm4.core.parent",
+        return dm4.getTopic(translationId).getRelatedTopic("dm4.core.composition", "dm4.core.child", "dm4.core.parent",
             "crowd.work");
     }
 
     private JSONArray getEventsOfPerson(long personId) {
         JSONArray events = null;
-        ResultList<RelatedTopic> eventTopics = eventsService.getEvents(personId);
+        List<RelatedTopic> eventTopics = eventsService.getEvents(personId);
         if (!eventTopics.isEmpty()) {
             events = new JSONArray();
             for (Topic event : eventTopics) {
@@ -319,8 +318,8 @@ public class CrowdPlugin extends PluginActivator implements CrowdService, PreCre
      */
     private JSONArray getPersonsOfWork(long workId) {
         JSONArray persons = null;
-        ResultList<RelatedTopic> personTopics = dms.getTopic(workId).getRelatedTopics("crowd.work.involvement",
-                                                         "dm4.core.default", "dm4.core.default", "dm4.contacts.person");
+        List<RelatedTopic> personTopics = dm4.getTopic(workId).getRelatedTopics("crowd.work.involvement",
+            "dm4.core.default", "dm4.core.default", "dm4.contacts.person");
         if (!personTopics.isEmpty()) {
             persons = new JSONArray();
             for (RelatedTopic person : personTopics) {
@@ -339,7 +338,7 @@ public class CrowdPlugin extends PluginActivator implements CrowdService, PreCre
      */
     private JSONArray getInstitutionsOfWork(long workId) {
         JSONArray institutions = null;
-        ResultList<RelatedTopic> instTopics = dms.getTopic(workId).getRelatedTopics("crowd.work.involvement",
+        List<RelatedTopic> instTopics = dm4.getTopic(workId).getRelatedTopics("crowd.work.involvement",
             "dm4.core.default", "dm4.core.default", "dm4.contacts.institution");
         if (!instTopics.isEmpty()) {
             institutions = new JSONArray();
@@ -358,7 +357,7 @@ public class CrowdPlugin extends PluginActivator implements CrowdService, PreCre
 
     private JSONArray getParticipants(long eventId) {
         JSONArray participants = null;
-        ResultList<RelatedTopic> personTopics = eventsService.getParticipants(eventId);
+        List<RelatedTopic> personTopics = eventsService.getParticipants(eventId);
         if (!personTopics.isEmpty()) {
             participants = new JSONArray();
             for (RelatedTopic person : personTopics) {
@@ -373,8 +372,8 @@ public class CrowdPlugin extends PluginActivator implements CrowdService, PreCre
 
     private JSONArray getEventSeries(Topic event) {
         JSONArray eventSeries = null;
-        ResultList<RelatedTopic> eventSeriesTopics = event.getRelatedTopics("dm4.core.association", "dm4.core.default",
-                                                                            "dm4.core.default", "crowd.event_series");
+        List<RelatedTopic> eventSeriesTopics = event.getRelatedTopics("dm4.core.association", "dm4.core.default",
+            "dm4.core.default", "crowd.event_series");
         if (!eventSeriesTopics.isEmpty())  {
             eventSeries = new JSONArray();
             for (RelatedTopic eventSeriesTopic : eventSeriesTopics) {
@@ -408,7 +407,7 @@ public class CrowdPlugin extends PluginActivator implements CrowdService, PreCre
 
     private JSONArray getEventsOfEventSeries(Topic eventSeries) {
         JSONArray events = null;
-        ResultList<RelatedTopic> eventTopics = eventSeries.getRelatedTopics("dm4.core.association", "dm4.core.default",
+        List<RelatedTopic> eventTopics = eventSeries.getRelatedTopics("dm4.core.association", "dm4.core.default",
             "dm4.core.default", "dm4.events.event");
         if (!eventTopics.isEmpty()) {
             events = new JSONArray();
@@ -454,7 +453,7 @@ public class CrowdPlugin extends PluginActivator implements CrowdService, PreCre
 
     private JSONArray getPersonsOfInstitution(long instId) {
         JSONArray persons = null;
-        ResultList<RelatedTopic> personTopics = contactsService.getPersons(instId);
+        List<RelatedTopic> personTopics = contactsService.getPersons(instId);
         if (!personTopics.isEmpty()) {
             persons = new JSONArray();
             for (RelatedTopic person : personTopics) {
@@ -471,7 +470,7 @@ public class CrowdPlugin extends PluginActivator implements CrowdService, PreCre
     private JSONArray getEventsOfInstitution(List<RelatedTopic> addressTopics) {
         JSONArray events = null;
         for (Topic address : addressTopics) {
-            ResultList<RelatedTopic> eventTopics = address.getRelatedTopics("dm4.core.aggregation", "dm4.core.child",
+            List<RelatedTopic> eventTopics = address.getRelatedTopics("dm4.core.aggregation", "dm4.core.child",
                 "dm4.core.parent", "dm4.events.event");
             if (!eventTopics.isEmpty()) {
                 if (events == null) {

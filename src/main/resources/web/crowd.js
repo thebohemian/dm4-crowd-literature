@@ -1,14 +1,14 @@
 angular.module("crowd", ["ngRoute", "leaflet-directive"])
 .config(function($routeProvider) {
     $routeProvider
-        .when("/welcome",             {templateUrl: "views/welcome.html"})
+        .when("/start",               {templateUrl: "views/start.html",        controller: "StartPageController"})
         .when("/person/:personId",    {templateUrl: "views/person.html",       controller: "PersonController"})
         .when("/institution/:instId", {templateUrl: "views/institution.html",  controller: "InstitutionController"})
         .when("/work/:workId",        {templateUrl: "views/work.html",         controller: "WorkController"})
         .when("/event/:eventId",      {templateUrl: "views/event.html",        controller: "EventController"})
         .when("/event_series/:eventSeriesId",
                                       {templateUrl: "views/event-series.html", controller: "EventSeriesController"})
-        .otherwise({redirectTo: "/welcome"})
+        .otherwise({redirectTo: "/start"})
 })
 .config(function($logProvider) {
     $logProvider.debugEnabled(false);

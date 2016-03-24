@@ -24,6 +24,7 @@ import de.deepamehta.core.ChildTopics;
 import de.deepamehta.core.RelatedTopic;
 import de.deepamehta.core.Topic;
 import de.deepamehta.core.model.AssociationModel;
+import de.deepamehta.core.model.SimpleValue;
 import de.deepamehta.core.osgi.PluginActivator;
 import de.deepamehta.core.service.Inject;
 import de.deepamehta.core.service.event.PreCreateAssociationListener;
@@ -73,6 +74,15 @@ public class CrowdPlugin extends PluginActivator implements CrowdService, PreCre
     // ***********************************
 
 
+
+    @GET
+    @Path("/start_page")
+    @Produces("text/html")
+    @Override
+    public String getStartPageContent() {
+        return dm4.getTopic("uri", new SimpleValue("crowd.omnibus.start_page"))
+            .getChildTopics().getString("dm4.notes.text");
+    }
 
     // --- Person ---
 

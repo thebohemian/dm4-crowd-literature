@@ -13,6 +13,8 @@ import java.util.List;
 
 public interface CrowdService {
 
+    String getStartPageContent();
+
     // --- Person ---
 
     Person getPerson(long personId);

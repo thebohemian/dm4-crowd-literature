@@ -25,7 +25,7 @@ Webapp usability
     * Institution page: show events
     * Event page: show address along with institution link
     * Proper date/time formatting on all pages
-    * New welcome page with CROWD logo and introduction text
+    * New start page with CROWD logo and introduction text
 * Mobile devices: on hi-res displays markers and clusters are slightly enlarged
 * Spinning load indicator
 * Fixes:

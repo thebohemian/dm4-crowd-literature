@@ -1,5 +1,9 @@
 angular.module("crowd").service("crowdService", function($http) {
 
+    this.getStartPageContent = function(callback) {
+        $http.get("/crowd/start_page").then(callback);
+    }
+
     this.loadBustourGeojson = function(callback) {
         $http.get("crowd-bustour.geo.json").then(callback);
     }

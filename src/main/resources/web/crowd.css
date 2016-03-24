@@ -46,12 +46,6 @@ strong {
 
 /* Details */
 
-#details .welcome img {
-    width: 100%;
-    margin-left: -1%;
-    margin-bottom: 2em;
-}
-
 #details .page-title {
     display: inline-block;
     margin-top: -1em;

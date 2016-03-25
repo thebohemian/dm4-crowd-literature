@@ -1,4 +1,4 @@
-angular.module("crowd").controller("MapController", function($scope, $location, crowdService) {
+angular.module("crowd").controller("MainController", function($scope, $location, crowdService) {
 
     var SHOW_BUSTOUR = false;
 
@@ -77,24 +77,12 @@ angular.module("crowd").controller("MapController", function($scope, $location, 
 
     $scope.$on("leafletDirectiveMarker.map.click", function(event, args) {
         var eventId = args.modelName;
-        // Note 1: if the ng-view is not in the DOM (due to ng-if) its controllers are not called.
-        // So, the ng-view visibility must be controlled outside the ng-view controllers.
-        // Note 2: this event listener is apparently called outside the angular context.
-        // So, we must explicitly $apply the scope manipulation.
-        $scope.$applyAsync(function() {
-            $scope.mapVisibility = false;
-        })
         $location.path("/event/" + eventId);
     })
 
     $scope.setMapVisibility = function(mapVisibility) {
         $scope.mapVisibility = mapVisibility;
     }
-
-    /* ### TODO: give the map (after pressing "Back to map") its own route
-    $scope.backToMap = function() {
-        $location.path("/welcome");
-    } */
 
     if (SHOW_BUSTOUR) {
         crowdService.loadBustourGeojson(function(response) {

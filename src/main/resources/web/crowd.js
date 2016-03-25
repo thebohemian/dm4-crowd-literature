@@ -1,7 +1,8 @@
 angular.module("crowd", ["ngRoute", "leaflet-directive"])
 .config(function($routeProvider) {
     $routeProvider
-        .when("/start",               {templateUrl: "views/start.html",        controller: "StartPageController"})
+        .when("/start",               {templateUrl: "views/start.html",        controller: "StartController"})
+        .when("/map",                 {template:    "",                        controller: "MapController"})
         .when("/person/:personId",    {templateUrl: "views/person.html",       controller: "PersonController"})
         .when("/institution/:instId", {templateUrl: "views/institution.html",  controller: "InstitutionController"})
         .when("/work/:workId",        {templateUrl: "views/work.html",         controller: "WorkController"})

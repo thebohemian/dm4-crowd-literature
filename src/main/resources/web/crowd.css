@@ -25,6 +25,15 @@ strong {
     letter-spacing: 0.1em;
 }
 
+#header {
+    display: flex;
+    background-color: black;
+}
+
+#header .start-link {
+    flex-grow: 1;
+}
+
 #map {
     height: 100%;
 }
@@ -184,12 +193,10 @@ strong {
 
 #spinner {
     position: absolute;
-    top: 0;
-    right: 0;
+    top: 34px;
+    right: 10px;
     width: 40px;
     height: 40px;
-    margin-top: 10px;
-    margin-right: 10px;
     z-index: 1002;          /* Details panel is at 1001 */
     background-image: url(spinner.svg);
     animation: rotate 0.75s linear infinite;

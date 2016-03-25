@@ -10,12 +10,16 @@
         <link rel="stylesheet" href="lib/leaflet.markercluster/MarkerCluster.CROWD.css">
         <link rel="stylesheet" href="crowd.css">
     </head>
-    <body ng-controller="MapController">
+    <body ng-controller="MainController">
         <div id="spinner"></div>
+        <div id="header">
+            <span class="start-link"><a href="#/start">CROWD Omnibus</a></span>
+            <span class="map-link" ng-if="portrait"><a href="#/map">Show event map</a></span>
+        </div>
         <leaflet id="map" lf-center="center" defaults="defaults" tiles="tiles" layers="layers" geojson="bustour"
             markers="markers" ng-if="landscape || mapVisibility">
         </leaflet>
-        <div id="details" ng-if="landscape || !mapVisibility" ng-view>
+        <div id="details" ng-show="landscape || !mapVisibility" ng-view>
         </div>
         <!--div style="position: absolute; right: 3px; bottom: 12px; font-size: 10px;">
             retina={{retina}}, landscape={{landscape}}, mapVisibility={{mapVisibility}}
@@ -26,14 +30,13 @@
         <script src="lib/leaflet.markercluster/leaflet.markercluster.js"></script>
         <script src="lib/angular-leaflet/angular-leaflet-directive.min.js"></script>
         <script src="crowd.js"></script>
-        <script src="controllers/start-page-controller.js"></script>
-        <script src="controllers/map-controller.js"></script>
+        <script src="controllers/start-controller.js"></script>
+        <script src="controllers/main-controller.js"></script>
         <script src="controllers/details-controller.js"></script>
         <script src="services/crowd-service.js"></script>
         <script src="services/js-utils.js"></script>
         <script src="directives/dm4-address.js"></script>
         <script src="directives/dm4-event-list.js"></script>
-        <script src="directives/dm4-map-button.js"></script>
         <script src="filters/datetime.js"></script>
         <script src="filters/trusted.js"></script>
         <script src="filters/weblink.js"></script>

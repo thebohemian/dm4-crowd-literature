@@ -80,8 +80,7 @@ public class CrowdPlugin extends PluginActivator implements CrowdService, PreCre
     @Produces("text/html")
     @Override
     public String getStartPageContent() {
-        return dm4.getTopic("uri", new SimpleValue("crowd.omnibus.start_page"))
-            .getChildTopics().getString("dm4.notes.text");
+        return dm4.getTopicByUri("crowd.omnibus.start_page").getChildTopics().getString("dm4.notes.text");
     }
 
     // --- Person ---
@@ -156,7 +155,7 @@ public class CrowdPlugin extends PluginActivator implements CrowdService, PreCre
     @Override
     public List<EventOfMap> getAllEvents() {
         List<EventOfMap> events = new ArrayList();
-        for (Topic event : dm4.getTopics("dm4.events.event")) {
+        for (Topic event : dm4.getTopicsByType("dm4.events.event")) {
             Topic address = event.getChildTopics().getTopicOrNull("dm4.contacts.address");
             GeoCoordinate geoCoord = address != null ? geomapsService.getGeoCoordinate(address) : null;
             events.add(new EventOfMap(

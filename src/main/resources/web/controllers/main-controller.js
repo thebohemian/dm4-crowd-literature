@@ -43,9 +43,9 @@ angular.module("crowd").controller("MainController", function($scope, $location,
             scrollWheelZoom: false
         },
         tiles: {
-            url: "https://api.tiles.mapbox.com/v4/{mapId}/{z}/{x}/{y}.png?access_token={accessToken}",
+            url: "https://api.mapbox.com/v4/{mapId}/{z}/{x}/{y}.png?access_token={accessToken}",
             options: {
-                mapId: 'jri.ogoig93d',
+                mapId: 'mapbox.emerald',
                 accessToken: 'pk.eyJ1IjoianJpIiwiYSI6ImNpaG5ubmtsdDAwaHB1bG00aGk1c3BhamcifQ.2XkYFs4hGOel8DYCy4qKKw',
                 attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a>, ' +
                     'Imagery &copy; <a href="http://mapbox.com">Mapbox</a>'

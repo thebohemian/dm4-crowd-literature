@@ -40,7 +40,7 @@ angular.module("crowd").controller("MainController", function($scope, $location,
             zoom: 4
         },
         defaults: {
-            scrollWheelZoom: false
+            scrollWheelZoom: true
         },
         tiles: {
             url: "https://api.mapbox.com/v4/{mapId}/{z}/{x}/{y}.png?access_token={accessToken}",

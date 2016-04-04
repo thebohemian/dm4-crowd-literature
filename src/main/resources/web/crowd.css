@@ -91,6 +91,15 @@ strong {
     height: auto;
 }
 
+#details figure {
+    margin-left: 0;
+    margin-right: 0;
+}
+
+#details figcaption {
+    font-style: italic;
+}
+
 #details .embeddedContent > iframe {
     max-width: 100%;
 }

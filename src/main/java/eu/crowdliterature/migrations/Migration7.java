@@ -3,7 +3,7 @@ package eu.crowdliterature.migrations;
 import de.deepamehta.core.Topic;
 import de.deepamehta.core.service.Inject;
 import de.deepamehta.core.service.Migration;
-import de.deepamehta.plugins.workspaces.WorkspacesService;
+import de.deepamehta.workspaces.WorkspacesService;
 
 
 

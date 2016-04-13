@@ -96,7 +96,7 @@ strong {
     margin-right: 0;
 }
 
-#details figcaption {
+#details figure > figcaption {
     font-style: italic;
 }
 

@@ -29,12 +29,12 @@ import de.deepamehta.core.osgi.PluginActivator;
 import de.deepamehta.core.service.Inject;
 import de.deepamehta.core.service.event.PreCreateAssociationListener;
 import de.deepamehta.core.util.DeepaMehtaUtils;
-import de.deepamehta.plugins.accesscontrol.AccessControlService;
-import de.deepamehta.plugins.contacts.ContactsService;
-import de.deepamehta.plugins.events.EventsService;
-import de.deepamehta.plugins.geomaps.GeomapsService;
-import de.deepamehta.plugins.geomaps.model.GeoCoordinate;
-import de.deepamehta.plugins.workspaces.WorkspacesService;
+import de.deepamehta.accesscontrol.AccessControlService;
+import de.deepamehta.contacts.ContactsService;
+import de.deepamehta.events.EventsService;
+import de.deepamehta.geomaps.GeomapsService;
+import de.deepamehta.geomaps.model.GeoCoordinate;
+import de.deepamehta.workspaces.WorkspacesService;
 
 import org.codehaus.jettison.json.JSONArray;
 import org.codehaus.jettison.json.JSONObject;

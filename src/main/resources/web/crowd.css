@@ -86,6 +86,39 @@ strong {
     margin-top: 0;
 }
 
+#details pre {
+    font-size: 16px;    /* relative or no font-size results in different sizes in Safari and Firefox */
+    line-height: 1.3em;
+    white-space: pre-wrap;
+}
+
+#details pre.code-block {
+    background-color: #f8f8f8;
+    border: 1px solid #d8d8d8;
+    margin-left: 1.75em;
+    margin-right: 1.75em;
+    padding: 0.25em;
+    white-space: pre;
+    overflow: auto;
+}
+
+#details div.blockquote {
+    border: 0 solid #ccc;
+    border-left-width: 5px;
+    margin-left: 8px;
+    margin-right: 1.75em;
+    padding: 2px 0 2px 15px;
+    line-height: 1.3em;
+}
+
+#details .marker {
+    background-color: yellow;
+}
+
+#details code {
+    font-size: 18px;
+}
+
 #details img {
     max-width: 100%;
     height: auto;
@@ -102,10 +135,6 @@ strong {
 
 #details .embeddedContent > iframe {
     max-width: 100%;
-}
-
-#details button {
-    margin-top: 2em;
 }
 
 /* Person Details */

@@ -4,8 +4,9 @@ angular.module("crowd").controller("MainController", function($scope, $location,
 
     // leaflet config (marker + cluster)
 
-    $scope.retina = L.Browser.retina;
-    if (!$scope.retina) {
+    $scope.hires = matchMedia("(min-resolution: 144dpi)").matches;  // put in scope solely for debugging
+    $scope.devicePixelRatio = devicePixelRatio;                     // put in scope solely for debugging
+    if (!$scope.hires) {
         var markerIcon = {
             iconUrl: "lib/leaflet/images/event-marker.png",
             iconSize: [28, 41],

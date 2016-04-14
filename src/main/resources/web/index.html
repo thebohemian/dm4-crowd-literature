@@ -21,9 +21,9 @@
         </leaflet>
         <div id="details" ng-show="landscape || !mapVisibility" ng-view>
         </div>
-        <!--div style="position: absolute; right: 3px; bottom: 12px; font-size: 10px;">
-            retina={{retina}}, landscape={{landscape}}, mapVisibility={{mapVisibility}}
-        </div-->
+        <div style="position: absolute; right: 3px; bottom: 0; font-size: 10px; color: gray">
+            resolution>=144dpi: {{hires}}, devicePixelRatio: {{devicePixelRatio}}
+        </div>
         <script src="lib/angular/angular.min.js"></script>
         <script src="lib/angular/angular-route.min.js"></script>
         <script src="lib/leaflet/leaflet.js"></script>

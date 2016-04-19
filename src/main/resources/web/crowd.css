@@ -241,3 +241,19 @@ strong {
     from {transform: rotate(0deg);}
     to   {transform: rotate(360deg);}
 }
+
+/* Powered by */
+
+#powered-by {
+    position: absolute;
+    right: 6px;
+    bottom: -10px;
+    transform: translateX(100%) rotate(-90deg);
+    transform-origin: left;
+    font-size: 9px;
+    color: rgb(204, 204, 204);
+}
+
+#powered-by > a {
+    color: rgb(180, 180, 240);
+}

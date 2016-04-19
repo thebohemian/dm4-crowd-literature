@@ -1,14 +1,14 @@
 angular.module("crowd", ["ngRoute", "leaflet-directive"])
 .config(function($routeProvider) {
     $routeProvider
-        .when("/start",               {templateUrl: "/eu.crowd-literature/views/start.html",        controller: "StartController"})
-        .when("/map",                 {template:    "",                                             controller: "MapController"})
-        .when("/person/:personId",    {templateUrl: "/eu.crowd-literature/views/person.html",       controller: "PersonController"})
-        .when("/institution/:instId", {templateUrl: "/eu.crowd-literature/views/institution.html",  controller: "InstitutionController"})
-        .when("/work/:workId",        {templateUrl: "/eu.crowd-literature/views/work.html",         controller: "WorkController"})
-        .when("/event/:eventId",      {templateUrl: "/eu.crowd-literature/views/event.html",        controller: "EventController"})
+        .when("/start",               {templateUrl: "views/start.html",        controller: "StartController"})
+        .when("/map",                 {template:    "",                        controller: "MapController"})
+        .when("/person/:personId",    {templateUrl: "views/person.html",       controller: "PersonController"})
+        .when("/institution/:instId", {templateUrl: "views/institution.html",  controller: "InstitutionController"})
+        .when("/work/:workId",        {templateUrl: "views/work.html",         controller: "WorkController"})
+        .when("/event/:eventId",      {templateUrl: "views/event.html",        controller: "EventController"})
         .when("/event_series/:eventSeriesId",
-                                      {templateUrl: "/eu.crowd-literature/views/event-series.html", controller: "EventSeriesController"})
+                                      {templateUrl: "views/event-series.html", controller: "EventSeriesController"})
         .otherwise({redirectTo: "/start"})
 })
 .config(function($logProvider) {

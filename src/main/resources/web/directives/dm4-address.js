@@ -4,6 +4,6 @@ angular.module("crowd").directive("dm4Address", function() {
         scope: {
             address: "=dm4Address"
         },
-        templateUrl: "/eu.crowd-literature/views/address.html"
+        templateUrl: "views/address.html"
     }
 })

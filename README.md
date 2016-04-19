@@ -1,24 +1,25 @@
 
-CROWD Literature - Omnibus Tour 2016
-====================================
+CROWD Literature - Omnibus Reading Tour 2016
+============================================
 
-A geographical event calendar with author profiles for the CROWD Omnibus Reading Tour. A DeepaMehta 4 plugin.  
+A geographical event calendar with author profiles for the Omnibus Reading Tour.  
+A DeepaMehta 4 plugin.
+
+Public installation:  
+<http://crowdlitbus.eu/>
+
+About the Omnibus Reading Tour:  
 <http://crowd-literature.eu/omnibus-2/>
 
-DeepaMehta 4 is a platform for collaboration and knowledge management.  
+DeepaMehta 4 is a platform for collaboration and knowledge management:  
 <https://github.com/jri/deepamehta>
 
 
-Running
--------
+Running locally
+---------------
 
-After installing open this page:
-
-    http://localhost:8080/eu.crowd-literature/
-
-A public installation is available here:
-
-    https://crowd.metamesh.info/eu.crowd-literature/
+After installation open this page:  
+<http://localhost:8080/eu.crowd-literature/>
 
 
 Version History

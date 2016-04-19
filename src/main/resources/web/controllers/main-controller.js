@@ -8,10 +8,10 @@ angular.module("crowd").controller("MainController", function($scope, $location,
     $scope.devicePixelRatio = devicePixelRatio;                     // put in scope solely for debugging
     if (!$scope.hires) {
         var markerIcon = {
-            iconUrl: "lib/leaflet/images/event-marker.png",
+            iconUrl: "/eu.crowd-literature/lib/leaflet/images/event-marker.png",
             iconSize: [28, 41],
             iconAnchor: [14, 41],
-            shadowUrl: "lib/leaflet/images/marker-shadow.png",
+            shadowUrl: "/eu.crowd-literature/lib/leaflet/images/marker-shadow.png",
             shadowSize: [41, 41],
             shadowAnchor: [12, 41]
         }
@@ -20,10 +20,10 @@ angular.module("crowd").controller("MainController", function($scope, $location,
         var spiderfyDistanceMultiplier = 1.5;
     } else {
         var markerIcon = {
-            iconUrl: "lib/leaflet/images/event-marker-1.3x.png",
+            iconUrl: "/eu.crowd-literature/lib/leaflet/images/event-marker-1.3x.png",
             iconSize: [36, 53],
             iconAnchor: [18, 53],
-            shadowUrl: "lib/leaflet/images/marker-shadow.png",
+            shadowUrl: "/eu.crowd-literature/lib/leaflet/images/marker-shadow.png",
             shadowSize: [41, 41],
             shadowAnchor: [12, 41]
         }

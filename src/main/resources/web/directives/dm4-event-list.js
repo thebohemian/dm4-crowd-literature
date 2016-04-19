@@ -4,6 +4,6 @@ angular.module("crowd").directive("dm4EventList", function() {
         scope: {
             events: "="
         },
-        templateUrl: "views/event-list.html"
+        templateUrl: "/eu.crowd-literature/views/event-list.html"
     }
 })

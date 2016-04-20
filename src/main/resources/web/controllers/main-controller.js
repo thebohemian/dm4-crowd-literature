@@ -1,4 +1,4 @@
-angular.module("crowd").controller("MainController", function($scope, $location, crowdService) {
+angular.module("crowd").controller("MainController", function($scope, $location, $timeout, crowdService, leafletData) {
 
     var SHOW_BUSTOUR = false;
 
@@ -76,6 +76,16 @@ angular.module("crowd").controller("MainController", function($scope, $location,
     mql.addListener(updateOrientation);
     updateOrientation(mql);
 
+    // initial calculation of the map size once the flex layout is done
+    recalculateMapSize();
+
+    // recalculate the map size each time when the map reappears on screen
+    $scope.$watch("mapVisibility", function(mapVisibility) {
+        if (mapVisibility) {
+            recalculateMapSize();
+        }
+    });
+
     $scope.$on("leafletDirectiveMarker.map.click", function(event, args) {
         var eventId = args.modelName;
         $location.path("/event/" + eventId);
@@ -116,6 +126,14 @@ angular.module("crowd").controller("MainController", function($scope, $location,
             console.log("WARNING: event \"" + event.title + "\" (" + event.id +
                 ") can't appear on map -- its geo coordinate is unknown")
         }
+    }
+
+    function recalculateMapSize() {
+        leafletData.getMap("map").then(function(map) {
+            $timeout(function() {
+                map.invalidateSize();
+            }, 100);
+        });
     }
 
     function createClusterIcon(cluster) {

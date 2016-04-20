@@ -10,6 +10,8 @@ html {
 body {
     font-family: "Lucida Grande", "Trebuchet MS", sans-serif;
     line-height: 1.5em;
+    display: flex;
+    flex-flow: column;
     margin: 0;
     height: 100%;
 }
@@ -27,6 +29,7 @@ strong {
 
 #header {
     display: flex;
+    flex: none;
     background-color: black;
 }
 
@@ -34,23 +37,21 @@ strong {
     flex-grow: 1;
 }
 
+#content {
+    display: flex;
+    flex: auto;
+}
+
 #map {
-    height: 100%;
+    flex: 1 0 50%;
 }
 
 #details {
-    height: 100%;
+    flex: 1 0 50%;
     overflow: auto;
     padding: 1em;
     box-sizing: border-box;
     background-color: white;
-}
-
-@media (orientation: landscape) {
-    #map {
-        width: 50%;
-        float: left;
-    }
 }
 
 /* Details */
@@ -246,15 +247,16 @@ strong {
 
 #powered-by {
     position: absolute;
-    right: 6px;
-    bottom: -10px;
+    right: 7px;
+    bottom: 36px;
     transform: translateX(100%) rotate(-90deg);
     transform-origin: left;
     font-size: 10px;
-    color: rgb(204, 204, 204);
+    color: rgb(184, 184, 184);
+    letter-spacing: 0.5px;
     line-height: initial;
 }
 
 #powered-by > a {
-    color: rgb(180, 180, 240);
+    color: rgb(160, 160, 230);
 }

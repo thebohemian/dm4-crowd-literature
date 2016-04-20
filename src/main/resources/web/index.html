@@ -17,10 +17,12 @@
             <span class="start-link"><a href="#/start">CROWD Omnibus</a></span>
             <span class="map-link" ng-if="portrait"><a href="#/map">Show event map</a></span>
         </div>
-        <leaflet id="map" lf-center="center" defaults="defaults" tiles="tiles" layers="layers" geojson="bustour"
-            markers="markers" ng-if="landscape || mapVisibility">
-        </leaflet>
-        <div id="details" ng-show="landscape || !mapVisibility" ng-view>
+        <div id="content">
+            <leaflet id="map" lf-center="center" defaults="defaults" tiles="tiles" layers="layers" geojson="bustour"
+                markers="markers" ng-if="landscape || mapVisibility">
+            </leaflet>
+            <div id="details" ng-show="landscape || !mapVisibility" ng-view>
+            </div>
         </div>
         <div id="powered-by">
             powered by <a href="http://www.deepamehta.de/">DeepaMehta</a>

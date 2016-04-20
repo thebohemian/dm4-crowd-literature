@@ -250,8 +250,9 @@ strong {
     bottom: -10px;
     transform: translateX(100%) rotate(-90deg);
     transform-origin: left;
-    font-size: 9px;
+    font-size: 10px;
     color: rgb(204, 204, 204);
+    line-height: initial;
 }
 
 #powered-by > a {

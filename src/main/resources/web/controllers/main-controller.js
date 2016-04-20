@@ -77,12 +77,12 @@ angular.module("crowd").controller("MainController", function($scope, $location,
     updateOrientation(mql);
 
     // initial calculation of the map size once the flex layout is done
-    recalculateMapSize();
+    calculateMapSize();
 
     // recalculate the map size each time when the map reappears on screen
     $scope.$watch("mapVisibility", function(mapVisibility) {
         if (mapVisibility) {
-            recalculateMapSize();
+            calculateMapSize();
         }
     });
 
@@ -128,7 +128,7 @@ angular.module("crowd").controller("MainController", function($scope, $location,
         }
     }
 
-    function recalculateMapSize() {
+    function calculateMapSize() {
         leafletData.getMap("map").then(function(map) {
             $timeout(function() {
                 map.invalidateSize();

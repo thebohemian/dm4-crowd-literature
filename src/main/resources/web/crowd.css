@@ -251,7 +251,7 @@ strong {
 #powered-by {
     position: absolute;
     right: 7px;
-    bottom: 36px;
+    bottom: 50px;
     transform: translateX(100%) rotate(-90deg);
     transform-origin: left;
     font-size: 10px;

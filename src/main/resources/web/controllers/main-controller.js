@@ -1,6 +1,6 @@
 angular.module("crowd").controller("MainController", function($scope, $location, $timeout, crowdService, leafletData) {
 
-    var SHOW_BUSTOUR = false;
+    var SHOW_BUSTOUR = true;
 
     // leaflet config (marker + cluster)
 
@@ -132,7 +132,7 @@ angular.module("crowd").controller("MainController", function($scope, $location,
         leafletData.getMap("map").then(function(map) {
             $timeout(function() {
                 map.invalidateSize();
-            }, 100);
+            }, 200);
         });
     }
 

@@ -100,7 +100,12 @@ angular.module("crowd").controller("MainController", function($scope, $location,
             $scope.bustour = {
                 data: response.data,
                 style: {
-                    color: "#f55"
+                    color: "rgb(218, 105, 6)",
+                    weight: 5,
+                    opacity: 1,
+                    dashArray: "15, 10",
+                    lineCap: "butt",
+                    lineJoin: "miter"
                 }
             }
         })

@@ -1,7 +1,10 @@
 angular.module("crowd").controller("MainController", function($scope, $location, $timeout, crowdService, leafletData) {
 
     var SHOW_BUSTOUR = true;
+    var BUSTOUR_ZOOM_THRESHOLD = 11;    // bustour is shown only below this zoom level
 
+    var bustour;                        // GeoJSON cache
+    
     // leaflet config (marker + cluster)
 
     $scope.hires = matchMedia("(min-resolution: 144dpi)").matches;  // put in scope solely for debugging
@@ -111,7 +114,7 @@ angular.module("crowd").controller("MainController", function($scope, $location,
 
     if (SHOW_BUSTOUR) {
         crowdService.loadBustourGeojson(function(response) {
-            $scope.bustour = {
+            bustour = {
                 data: response.data,
                 style: {
                     color: "rgb(218, 105, 6)",
@@ -122,6 +125,9 @@ angular.module("crowd").controller("MainController", function($scope, $location,
                     lineJoin: "miter"
                 }
             }
+            $scope.$watch("center.zoom", function(zoom) {
+                $scope.bustour = $scope.center.zoom < BUSTOUR_ZOOM_THRESHOLD ? bustour : null;
+            });
         })
     }
 

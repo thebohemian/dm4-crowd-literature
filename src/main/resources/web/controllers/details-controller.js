@@ -2,11 +2,13 @@ angular.module("crowd")
 .controller("PersonController", function($scope, $routeParams, crowdService) {
     crowdService.getPerson($routeParams.personId, function(response) {
         $scope.person = response.data;
+        $scope.sortEvents($scope.person.events);
     })
 })
 .controller("InstitutionController", function($scope, $routeParams, crowdService) {
     crowdService.getInstitution($routeParams.instId, function(response) {
         $scope.institution = response.data;
+        $scope.sortEvents($scope.institution.events);
     })
 })
 .controller("WorkController", function($scope, $routeParams, crowdService) {
@@ -23,5 +25,6 @@ angular.module("crowd")
 .controller("EventSeriesController", function($scope, $routeParams, crowdService) {
     crowdService.getEventSeries($routeParams.eventSeriesId, function(response) {
         $scope.eventSeries = response.data;
+        $scope.sortEvents($scope.eventSeries.events);
     })
 })

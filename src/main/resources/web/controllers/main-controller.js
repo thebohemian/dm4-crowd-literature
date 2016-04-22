@@ -95,6 +95,20 @@ angular.module("crowd").controller("MainController", function($scope, $location,
         $scope.mapVisibility = mapVisibility;
     }
 
+    $scope.sortEvents = function(events) {
+        events.sort(function(e1, e2) {
+            var d1 = e1.from.date;
+            var d2 = e2.from.date;
+            if (d1.year != d2.year) {
+                return d1.year - d2.year;
+            } else if (d1.month != d2.month) {
+                return d1.month - d2.month;
+            } else {
+                return d1.day - d2.day;
+            }
+        });
+    }
+
     if (SHOW_BUSTOUR) {
         crowdService.loadBustourGeojson(function(response) {
             $scope.bustour = {

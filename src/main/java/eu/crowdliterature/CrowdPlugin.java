@@ -161,6 +161,7 @@ public class CrowdPlugin extends PluginActivator implements CrowdService, PreCre
             events.add(new EventOfMap(
                 event.getId(),
                 event.getSimpleValue().toString(),
+                getDateTime(event, "dm4.datetime#dm4.events.from"),
                 geoCoord
             ));
         }

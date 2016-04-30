@@ -1,40 +1,20 @@
 angular.module("crowd").controller("MainController", function($scope, $rootScope, $location, $timeout, crowdService,
                                                               leafletData) {
-
     var SHOW_BUSTOUR = true;
     var BUSTOUR_ZOOM_THRESHOLD = 11;    // bustour is shown only below this zoom level
 
     var bustour;                        // GeoJSON cache
+
+    var today = todayDate();
+    console.log("today", today);
     
     $scope.hires = matchMedia("(min-resolution: 144dpi)").matches;  // put in scope solely for debugging
     $scope.devicePixelRatio = devicePixelRatio;                     // put in scope solely for debugging
 
-    // leaflet config (marker + cluster)
+    // --- leaflet config (marker + cluster) ---
 
-    function createMarkerIcon(selected) {
-        return !$scope.hires ? {
-            iconUrl: markerIconUrl(selected),
-            iconSize: [28, 41],
-            iconAnchor: [14, 41],
-            shadowUrl: "lib/leaflet/images/marker-shadow.png",
-            shadowSize: [41, 41],
-            shadowAnchor: [12, 41]
-        } : {
-            iconUrl: markerIconUrl(selected),
-            iconSize: [36, 53],
-            iconAnchor: [18, 53],
-            shadowUrl: "lib/leaflet/images/marker-shadow.png",
-            shadowSize: [41, 41],
-            shadowAnchor: [12, 41]
-        }
-    }
-
-    function markerIconUrl(selected) {
-        var iconFile = "event-marker" + (selected ? "-selected" : "") + ($scope.hires ? "-1.3x" : "") + ".png";
-        return "lib/leaflet/images/" + iconFile;
-    }
-
-    var markerIcon = createMarkerIcon();
+    var markerIcon         = createMarkerIcon(false);
+    var markerIconPassed   = createMarkerIcon(false, true);
     var markerIconSelected = createMarkerIcon(true);
 
     if (!$scope.hires) {
@@ -47,45 +27,47 @@ angular.module("crowd").controller("MainController", function($scope, $rootScope
         var spiderfyDistanceMultiplier = 2;
     }
 
-    // leaflet config (map)
+    // --- leaflet config (map) ---
 
-    angular.extend($scope, {
-        center: {
-            lat: 56.5,
-            lng: 20,
-            zoom: 4
-        },
-        defaults: {
-            scrollWheelZoom: true
-        },
-        tiles: {
-            url: "https://api.mapbox.com/v4/{mapId}/{z}/{x}/{y}.png?access_token={accessToken}",
-            options: {
-                mapId: 'mapbox.emerald',
-                accessToken: 'pk.eyJ1IjoianJpIiwiYSI6ImNpaG5ubmtsdDAwaHB1bG00aGk1c3BhamcifQ.2XkYFs4hGOel8DYCy4qKKw',
-                attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a>, ' +
-                    'Imagery &copy; <a href="http://mapbox.com">Mapbox</a>'
-            }
-        },
-        layers: {
-            overlays: {
-                currentEvents: {
-                    name: "Current Events",
-                    type: "markercluster",
-                    visible: true,
-                    layerParams: {
-                        showOnSelector: false,
-                        maxClusterRadius: maxClusterRadius,
-                        spiderfyDistanceMultiplier: spiderfyDistanceMultiplier,
-                        iconCreateFunction: createClusterIcon
-                    }
+    $scope.center = {
+        lat: 56.5,
+        lng: 20,
+        zoom: 4
+    }
+
+    $scope.defaults = {
+        scrollWheelZoom: true
+    }
+
+    $scope.tiles = {
+        url: "https://api.mapbox.com/v4/{mapId}/{z}/{x}/{y}.png?access_token={accessToken}",
+        options: {
+            mapId: 'mapbox.emerald',
+            accessToken: 'pk.eyJ1IjoianJpIiwiYSI6ImNpaG5ubmtsdDAwaHB1bG00aGk1c3BhamcifQ.2XkYFs4hGOel8DYCy4qKKw',
+            attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a>, ' +
+                'Imagery &copy; <a href="http://mapbox.com">Mapbox</a>'
+        }
+    }
+
+    $scope.layers = {
+        overlays: {
+            events: {
+                name: "Events",
+                type: "markercluster",
+                visible: true,
+                layerParams: {
+                    showOnSelector: false,
+                    maxClusterRadius: maxClusterRadius,
+                    spiderfyDistanceMultiplier: spiderfyDistanceMultiplier,
+                    iconCreateFunction: createClusterIcon
                 }
             }
-        },
-        markers: {}
-    });
+        }
+    }
 
-    // startup code
+    $scope.markers = {};
+
+    // --- startup ---
 
     var mql = matchMedia("(orientation: landscape)");
     mql.addListener(updateOrientation);
@@ -106,7 +88,7 @@ angular.module("crowd").controller("MainController", function($scope, $rootScope
             $scope.markers[eventId].icon = markerIconSelected;
         }
         if (oldEventId) {
-            $scope.markers[oldEventId].icon = markerIcon;
+            $scope.markers[oldEventId].icon = $scope.markers[oldEventId].passed ? markerIconPassed : markerIcon;
         }
     });
 
@@ -125,17 +107,15 @@ angular.module("crowd").controller("MainController", function($scope, $rootScope
 
     $scope.sortEvents = function(events) {
         events.sort(function(e1, e2) {
-            var d1 = e1.from.date;
-            var d2 = e2.from.date;
-            if (d1.year != d2.year) {
-                return d1.year - d2.year;
-            } else if (d1.month != d2.month) {
-                return d1.month - d2.month;
-            } else {
-                return d1.day - d2.day;
-            }
+            return compareDate(e1.from.date, e2.from.date)
         });
     }
+
+    $rootScope.allEvents = crowdService.getAllEvents(function(response) {
+        response.data.forEach(function(event) {
+            addMarker(event);
+        })
+    })
 
     if (SHOW_BUSTOUR) {
         crowdService.loadBustourGeojson(function(response) {
@@ -156,34 +136,47 @@ angular.module("crowd").controller("MainController", function($scope, $rootScope
         })
     }
 
-    $rootScope.allEvents = crowdService.getAllEvents(function(response) {
-        response.data.forEach(function(event) {
-            addMarker(event);
-        })
-    })
-
     // ------------------------------------------------------------------------------------------------- Private Methods
+
+    function createMarkerIcon(selected, passed) {
+        return !$scope.hires ? {
+            iconUrl: markerIconUrl(selected, passed),
+            iconSize: [28, 41],
+            iconAnchor: [14, 41],
+            shadowUrl: "lib/leaflet/images/marker-shadow.png",
+            shadowSize: [41, 41],
+            shadowAnchor: [12, 41]
+        } : {
+            iconUrl: markerIconUrl(selected, passed),
+            iconSize: [36, 53],
+            iconAnchor: [18, 53],
+            shadowUrl: "lib/leaflet/images/marker-shadow.png",
+            shadowSize: [41, 41],
+            shadowAnchor: [12, 41]
+        }
+    }
+
+    function markerIconUrl(selected, passed) {
+        var iconFile = "event-marker" +
+            (selected ? "-selected" : passed ? "-passed" : "") +
+            ($scope.hires ? "-1.3x" : "") + ".png";
+        return "lib/leaflet/images/" + iconFile;
+    }
 
     function addMarker(event) {
         if (event.lat != undefined && event.lng != undefined) {
+            var passed = dateHasPassed(event.from.date);
             $scope.markers[event.id] = {
                 lat: event.lat,
                 lng: event.lng,
-                layer: "currentEvents",
-                icon: markerIcon
+                layer: "events",
+                icon: passed ? markerIconPassed : markerIcon,
+                passed: passed
             }
         } else {
             console.log("WARNING: event \"" + event.title + "\" (" + event.id +
                 ") can't appear on map -- its geo coordinate is unknown")
         }
-    }
-
-    function calculateMapSize() {
-        leafletData.getMap("map").then(function(map) {
-            $timeout(function() {
-                map.invalidateSize();
-            }, 1500);
-        });
     }
 
     function createClusterIcon(cluster) {
@@ -194,6 +187,14 @@ angular.module("crowd").controller("MainController", function($scope, $rootScope
         });
     }
 
+    function calculateMapSize() {
+        leafletData.getMap("map").then(function(map) {
+            $timeout(function() {
+                map.invalidateSize();
+            }, 1500);
+        });
+    }
+
     function updateOrientation(mql) {
         // Note: this media query listener is called directly from the browser, that is outside the angular context.
         // So, we must explicitly $apply the scope manipulation.
@@ -201,5 +202,30 @@ angular.module("crowd").controller("MainController", function($scope, $rootScope
             $scope.landscape = mql.matches;
             $scope.portrait = !$scope.landscape
         })
+    }
+
+    // ---
+
+    function dateHasPassed(date) {
+        return compareDate(date, today) == -1;
+    }
+
+    function compareDate(d1, d2) {
+        if (d1.year != d2.year) {
+            return d1.year - d2.year;
+        } else if (d1.month != d2.month) {
+            return d1.month - d2.month;
+        } else {
+            return d1.day - d2.day;
+        }
+    }
+
+    function todayDate() {
+        var d = new Date();
+        return {
+            month: d.getMonth() + 1,
+            day:   d.getDate(), 
+            year:  d.getFullYear()
+        }
     }
 })

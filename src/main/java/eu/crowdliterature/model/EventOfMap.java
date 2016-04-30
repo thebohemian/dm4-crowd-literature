@@ -15,11 +15,12 @@ public class EventOfMap implements JSONEnabled {
 
     // ---------------------------------------------------------------------------------------------------- Constructors
 
-    public EventOfMap(long id, String title, GeoCoordinate geoCoord) {
+    public EventOfMap(long id, String title, JSONObject from, GeoCoordinate geoCoord) {
         try {
             json = new JSONObject()
-                .put("id",  id)
-                .put("title", title);
+                .put("id",    id)
+                .put("title", title)
+                .put("from",  from);
             if (geoCoord != null) {
                 json.put("lat", geoCoord.lat)
                     .put("lng", geoCoord.lon);

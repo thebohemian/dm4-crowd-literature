@@ -5,31 +5,42 @@ angular.module("crowd").controller("MainController", function($scope, $location,
 
     var bustour;                        // GeoJSON cache
     
-    // leaflet config (marker + cluster)
-
     $scope.hires = matchMedia("(min-resolution: 144dpi)").matches;  // put in scope solely for debugging
     $scope.devicePixelRatio = devicePixelRatio;                     // put in scope solely for debugging
-    if (!$scope.hires) {
-        var markerIcon = {
-            iconUrl: "lib/leaflet/images/event-marker.png",
+
+    // leaflet config (marker + cluster)
+
+    function createMarkerIcon(selected) {
+        return !$scope.hires ? {
+            iconUrl: markerIconUrl(selected),
             iconSize: [28, 41],
             iconAnchor: [14, 41],
             shadowUrl: "lib/leaflet/images/marker-shadow.png",
             shadowSize: [41, 41],
             shadowAnchor: [12, 41]
-        }
-        var clusterSize = 40;
-        var maxClusterRadius = 40;
-        var spiderfyDistanceMultiplier = 1.5;
-    } else {
-        var markerIcon = {
-            iconUrl: "lib/leaflet/images/event-marker-1.3x.png",
+        } : {
+            iconUrl: markerIconUrl(selected),
             iconSize: [36, 53],
             iconAnchor: [18, 53],
             shadowUrl: "lib/leaflet/images/marker-shadow.png",
             shadowSize: [41, 41],
             shadowAnchor: [12, 41]
         }
+    }
+
+    function markerIconUrl(selected) {
+        var iconFile = "event-marker" + (selected ? "-selected" : "") + ($scope.hires ? "-1.3x" : "") + ".png";
+        return "lib/leaflet/images/" + iconFile;
+    }
+
+    var markerIcon = createMarkerIcon();
+    var markerIconSelected = createMarkerIcon(true);
+
+    if (!$scope.hires) {
+        var clusterSize = 40;
+        var maxClusterRadius = 40;
+        var spiderfyDistanceMultiplier = 1.5;
+    } else {
         var clusterSize = 52;
         var maxClusterRadius = 52;
         var spiderfyDistanceMultiplier = 2;
@@ -39,7 +50,7 @@ angular.module("crowd").controller("MainController", function($scope, $location,
 
     angular.extend($scope, {
         center: {
-            lat: 55,
+            lat: 56.5,
             lng: 20,
             zoom: 4
         },
@@ -89,6 +100,15 @@ angular.module("crowd").controller("MainController", function($scope, $location,
         }
     });
 
+    $scope.$watch("selectedEventId", function(eventId, oldEventId) {
+        if (eventId) {
+            $scope.markers[eventId].icon = markerIconSelected;
+        }
+        if (oldEventId) {
+            $scope.markers[oldEventId].icon = markerIcon;
+        }
+    });
+
     $scope.$on("leafletDirectiveMarker.map.click", function(event, args) {
         var eventId = args.modelName;
         $location.path("/event/" + eventId);
@@ -96,6 +116,10 @@ angular.module("crowd").controller("MainController", function($scope, $location,
 
     $scope.setMapVisibility = function(mapVisibility) {
         $scope.mapVisibility = mapVisibility;
+    }
+
+    $scope.setSelectedEvent = function(eventId) {
+        $scope.selectedEventId = eventId;
     }
 
     $scope.sortEvents = function(events) {
@@ -157,7 +181,7 @@ angular.module("crowd").controller("MainController", function($scope, $location,
         leafletData.getMap("map").then(function(map) {
             $timeout(function() {
                 map.invalidateSize();
-            }, 200);
+            }, 3000);
         });
     }
 

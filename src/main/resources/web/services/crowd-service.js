@@ -27,7 +27,7 @@ angular.module("crowd").service("crowdService", function($http) {
     }
 
     this.getAllEvents = function(callback) {
-        $http.get("/crowd/events").then(callback);
+        return $http.get("/crowd/events").then(callback);
     }
 
     // --- Event Series ---

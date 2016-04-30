@@ -1,4 +1,5 @@
-angular.module("crowd").controller("MainController", function($scope, $location, $timeout, crowdService, leafletData) {
+angular.module("crowd").controller("MainController", function($scope, $rootScope, $location, $timeout, crowdService,
+                                                              leafletData) {
 
     var SHOW_BUSTOUR = true;
     var BUSTOUR_ZOOM_THRESHOLD = 11;    // bustour is shown only below this zoom level
@@ -155,7 +156,7 @@ angular.module("crowd").controller("MainController", function($scope, $location,
         })
     }
 
-    crowdService.getAllEvents(function(response) {
+    $rootScope.allEvents = crowdService.getAllEvents(function(response) {
         response.data.forEach(function(event) {
             addMarker(event);
         })
@@ -181,7 +182,7 @@ angular.module("crowd").controller("MainController", function($scope, $location,
         leafletData.getMap("map").then(function(map) {
             $timeout(function() {
                 map.invalidateSize();
-            }, 3000);
+            }, 1500);
         });
     }
 

@@ -207,7 +207,7 @@ angular.module("crowd").controller("MainController", function($scope, $rootScope
     // ---
 
     function dateHasPassed(date) {
-        return compareDate(date, today) == -1;
+        return compareDate(date, today) < 0;
     }
 
     function compareDate(d1, d2) {

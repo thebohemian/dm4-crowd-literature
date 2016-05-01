@@ -11,11 +11,11 @@ angular.module("crowd").controller("MainController", function($scope, $rootScope
     $scope.hires = matchMedia("(min-resolution: 144dpi)").matches;  // put in scope solely for debugging
     $scope.devicePixelRatio = devicePixelRatio;                     // put in scope solely for debugging
 
-    // --- leaflet config (marker + cluster) ---
+    // --- Leaflet config (marker + cluster) ---
 
-    var markerIcon         = createMarkerIcon(false);
-    var markerIconPassed   = createMarkerIcon(false, true);
-    var markerIconSelected = createMarkerIcon(true);
+    var markerIcon          = createMarkerIcon(false);
+    var markerIconEventOver = createMarkerIcon(false, true);
+    var markerIconSelected  = createMarkerIcon(true);
 
     if (!$scope.hires) {
         var clusterSize = 40;
@@ -27,7 +27,7 @@ angular.module("crowd").controller("MainController", function($scope, $rootScope
         var spiderfyDistanceMultiplier = 2;
     }
 
-    // --- leaflet config (map) ---
+    // --- Leaflet config (map) ---
 
     $scope.center = {
         lat: 56.5,
@@ -67,14 +67,7 @@ angular.module("crowd").controller("MainController", function($scope, $rootScope
 
     $scope.markers = {};
 
-    // --- startup ---
-
-    var mql = matchMedia("(orientation: landscape)");
-    mql.addListener(updateOrientation);
-    updateOrientation(mql);
-
-    // initial calculation of the map size once the flex layout is done
-    calculateMapSize();
+    // --- Event Listeners ---
 
     // recalculate the map size each time when the map reappears on screen
     $scope.$watch("mapVisibility", function(mapVisibility) {
@@ -88,7 +81,7 @@ angular.module("crowd").controller("MainController", function($scope, $rootScope
             $scope.markers[eventId].icon = markerIconSelected;
         }
         if (oldEventId) {
-            $scope.markers[oldEventId].icon = $scope.markers[oldEventId].passed ? markerIconPassed : markerIcon;
+            $scope.markers[oldEventId].icon = $scope.markers[oldEventId].eventOver ? markerIconEventOver : markerIcon;
         }
     });
 
@@ -96,6 +89,8 @@ angular.module("crowd").controller("MainController", function($scope, $rootScope
         var eventId = args.modelName;
         $location.path("/event/" + eventId);
     })
+
+    // --- Controller Methods ---
 
     $scope.setMapVisibility = function(mapVisibility) {
         $scope.mapVisibility = mapVisibility;
@@ -105,11 +100,21 @@ angular.module("crowd").controller("MainController", function($scope, $rootScope
         $scope.selectedEventId = eventId;
     }
 
+    // ### TODO: use a filter instead?
     $scope.sortEvents = function(events) {
         events.sort(function(e1, e2) {
             return compareDate(e1.from.date, e2.from.date)
         });
     }
+
+    // --- Startup ---
+
+    var mql = matchMedia("(orientation: landscape)");
+    mql.addListener(updateOrientation);
+    updateOrientation(mql);
+
+    // initial calculation of the map size once the flex layout is done
+    calculateMapSize();
 
     $rootScope.allEvents = crowdService.getAllEvents(function(response) {
         response.data.forEach(function(event) {
@@ -138,16 +143,18 @@ angular.module("crowd").controller("MainController", function($scope, $rootScope
 
     // ------------------------------------------------------------------------------------------------- Private Methods
 
-    function createMarkerIcon(selected, passed) {
+    // --- Marker ---
+
+    function createMarkerIcon(selected, eventOver) {
         return !$scope.hires ? {
-            iconUrl: markerIconUrl(selected, passed),
+            iconUrl: markerIconUrl(selected, eventOver),
             iconSize: [28, 41],
             iconAnchor: [14, 41],
             shadowUrl: "lib/leaflet/images/marker-shadow.png",
             shadowSize: [41, 41],
             shadowAnchor: [12, 41]
         } : {
-            iconUrl: markerIconUrl(selected, passed),
+            iconUrl: markerIconUrl(selected, eventOver),
             iconSize: [36, 53],
             iconAnchor: [18, 53],
             shadowUrl: "lib/leaflet/images/marker-shadow.png",
@@ -156,22 +163,22 @@ angular.module("crowd").controller("MainController", function($scope, $rootScope
         }
     }
 
-    function markerIconUrl(selected, passed) {
+    function markerIconUrl(selected, eventOver) {
         var iconFile = "event-marker" +
-            (selected ? "-selected" : passed ? "-passed" : "") +
+            (selected ? "-selected" : eventOver ? "-over" : "") +
             ($scope.hires ? "-1.3x" : "") + ".png";
         return "lib/leaflet/images/" + iconFile;
     }
 
     function addMarker(event) {
         if (event.lat != undefined && event.lng != undefined) {
-            var passed = dateHasPassed(event.from.date);
+            var eventOver = dateIsOver(event.from.date);
             $scope.markers[event.id] = {
                 lat: event.lat,
                 lng: event.lng,
                 layer: "events",
-                icon: passed ? markerIconPassed : markerIcon,
-                passed: passed
+                icon: eventOver ? markerIconEventOver : markerIcon,
+                eventOver: eventOver
             }
         } else {
             console.log("WARNING: event \"" + event.title + "\" (" + event.id +
@@ -179,21 +186,33 @@ angular.module("crowd").controller("MainController", function($scope, $rootScope
         }
     }
 
+    // --- Cluster ---
+
     function createClusterIcon(cluster) {
         return new L.DivIcon({
             html: "<div><span>" + cluster.getChildCount() + "</span></div>",
-            className: "marker-cluster",
+            className: "marker-cluster" + (allEventsOver(cluster) ? " all-events-over" : ""),
             iconSize: new L.Point(clusterSize, clusterSize)
         });
     }
+
+    function allEventsOver(cluster) {
+        return cluster.getAllChildMarkers().every(function(marker) {
+            return marker.options.eventOver;
+        });
+    }
+
+    // --- Map ---
 
     function calculateMapSize() {
         leafletData.getMap("map").then(function(map) {
             $timeout(function() {
                 map.invalidateSize();
-            }, 1500);
+            }, 1200);
         });
     }
+
+    // --- Viewport ---
 
     function updateOrientation(mql) {
         // Note: this media query listener is called directly from the browser, that is outside the angular context.
@@ -204,9 +223,9 @@ angular.module("crowd").controller("MainController", function($scope, $rootScope
         })
     }
 
-    // ---
+    // --- Date ---
 
-    function dateHasPassed(date) {
+    function dateIsOver(date) {
         return compareDate(date, today) < 0;
     }
 

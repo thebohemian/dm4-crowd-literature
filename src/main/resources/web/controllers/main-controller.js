@@ -6,7 +6,6 @@ angular.module("crowd").controller("MainController", function($scope, $rootScope
     var bustour;                        // GeoJSON cache
 
     var today = todayDate();
-    console.log("today", today);
     
     $scope.hires = matchMedia("(min-resolution: 144dpi)").matches;  // put in scope solely for debugging
     $scope.devicePixelRatio = devicePixelRatio;                     // put in scope solely for debugging
@@ -103,7 +102,7 @@ angular.module("crowd").controller("MainController", function($scope, $rootScope
     // ### TODO: use a filter instead?
     $scope.sortEvents = function(events) {
         events.sort(function(e1, e2) {
-            return compareDate(e1.from.date, e2.from.date)
+            return compareDateTime(e1.from, e2.from)
         });
     }
 
@@ -172,7 +171,7 @@ angular.module("crowd").controller("MainController", function($scope, $rootScope
 
     function addMarker(event) {
         if (event.lat != undefined && event.lng != undefined) {
-            var eventOver = dateIsOver(event.from.date);
+            var eventOver = dateIsOver(event.from);
             $scope.markers[event.id] = {
                 lat: event.lat,
                 lng: event.lng,
@@ -225,26 +224,40 @@ angular.module("crowd").controller("MainController", function($scope, $rootScope
 
     // --- Date ---
 
-    function dateIsOver(date) {
-        return compareDate(date, today) < 0;
+    function dateIsOver(dt) {
+        return compareDateTime(dt, today) < 0;
     }
 
-    function compareDate(d1, d2) {
+    function compareDateTime(dt1, dt2) {
+        var d1 = dt1.date;
+        var d2 = dt2.date;
+        var t1 = dt1.time;
+        var t2 = dt2.time;
         if (d1.year != d2.year) {
             return d1.year - d2.year;
         } else if (d1.month != d2.month) {
             return d1.month - d2.month;
-        } else {
+        } else if (d1.day != d2.day) {
             return d1.day - d2.day;
+        } else if (t1.hour != t2.hour) {
+            return t1.hour - t2.hour;
+        } else {
+            return t1.minute - t2.minute;
         }
     }
 
     function todayDate() {
         var d = new Date();
         return {
-            month: d.getMonth() + 1,
-            day:   d.getDate(), 
-            year:  d.getFullYear()
+            date: {
+                month: d.getMonth() + 1,
+                day:   d.getDate(), 
+                year:  d.getFullYear()
+            },
+            time: {
+                hour: 0,    // the date-is-over check is based only on the date, not the time
+                minute: 0
+            }
         }
     }
 })

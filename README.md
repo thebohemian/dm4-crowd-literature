@@ -3,7 +3,8 @@ CROWD Literature - Omnibus Reading Tour 2016
 ============================================
 
 A geographical event calendar with author profiles for the Omnibus Reading Tour.  
-A DeepaMehta 4 plugin.
+A DeepaMehta 4 plugin.  
+Content authoring is done via the DeepaMehta Webclient.
 
 Public installation:  
 <http://crowdlitbus.eu/>
@@ -18,12 +19,35 @@ DeepaMehta 4 is a platform for collaboration and knowledge management:
 Running locally
 ---------------
 
-After installation open this page:  
+After installation go to:  
 <http://localhost:8080/eu.crowd-literature/>
 
 
 Version History
 ---------------
+
+**0.6** -- May 19, 2016
+
+Public launch
+
+* Map:
+    * English country names
+    * Real bustour line string
+    * Markers/clusters of events over are gray
+    * Selected event marker is orange
+    * Zoom with mouse wheel
+* Start page content is user editable
+* Site header for main navigation
+* Info pages:
+    * Event lists are sorted by From date/time
+    * Captioned images have no margin
+    * Event page: show Participants before Notes
+* "powered by DeepaMehta" attribution
+* Fixes:
+    * No double vertical scrollbars
+    * Fix hires (>=144dpi) display detection
+    * Works behind a reverse proxy
+* Compatible with DeepaMehta 4.8
 
 **0.5** -- Mar 21, 2016
 
@@ -50,7 +74,7 @@ Webapp usability
 First production version, updatable
 
 * Work Involvement associations are typed automatically
-* Pages:
+* Info pages:
     * Work page: show institutions (publishers)
     * Event Series page: show events with dates
 * Own public "CROWD" workspace
@@ -59,10 +83,10 @@ First production version, updatable
 
 **0.3** -- Dec 30, 2015
 
-Model consolidation
+Data model consolidation
 
 * Views: Work details page, Institution details page, Event Series details page
-* Model:
+* Data model:
     * Person has "Gender", "Place of birth", "Nationality" (multi), and "Language" (multi)
     * Work has "Year of publication" and "Place of publication"
     * Work "Genre" is a multi field
@@ -74,7 +98,7 @@ Model consolidation
 
 **0.2** -- Dec 21, 2015
 
-Technical Basis
+Technical basis
 
 * Responsive web design: individual layouts for portrait/landscape orientation
 * GeoJSON visualization of the bustour
@@ -96,4 +120,4 @@ Project setup
 
 ------------
 Jörg Richter  
-Mar 21, 2016
+May 19, 2016

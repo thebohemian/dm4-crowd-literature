@@ -41,7 +41,7 @@ angular.module("crowd").controller("MainController", function($scope, $rootScope
     $scope.tiles = {
         url: "https://api.mapbox.com/v4/{mapId}/{z}/{x}/{y}.png?access_token={accessToken}",
         options: {
-            mapId: 'mapbox.emerald',
+            mapId: 'jri.2eeeaa1d',
             accessToken: 'pk.eyJ1IjoianJpIiwiYSI6ImNpaG5ubmtsdDAwaHB1bG00aGk1c3BhamcifQ.2XkYFs4hGOel8DYCy4qKKw',
             attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a>, ' +
                 'Imagery &copy; <a href="http://mapbox.com">Mapbox</a>'

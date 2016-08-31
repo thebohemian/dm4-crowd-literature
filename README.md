@@ -49,6 +49,14 @@ Your changes will appear immediately. No building required.
 Version History
 ---------------
 
+**0.6.1** -- Aug 31, 2016
+
+* Map:
+    * All-english names
+    * Tour course updated
+    * Optional initial center/zoom state for 2nd tour half
+* Compatible with DeepaMehta 4.8
+
 **0.6** -- May 19, 2016
 
 Public launch
@@ -143,4 +151,4 @@ Project setup
 
 ------------
 Jörg Richter  
-May 19, 2016
+Aug 31, 2016

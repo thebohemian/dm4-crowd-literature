@@ -32,6 +32,9 @@ angular.module("crowd").controller("MainController", function($scope, $rootScope
         lat: 56.5,
         lng: 20,
         zoom: 4
+        // lat: 42,     // focus on south europe for 2nd tour half
+        // lng: 24,
+        // zoom: 5
     }
 
     $scope.defaults = {

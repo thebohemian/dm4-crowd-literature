@@ -49,6 +49,10 @@ Your changes will appear immediately. No building required.
 Version History
 ---------------
 
+**0.6.2** -- Sep 1, 2016
+
+* Compatible with DeepaMehta 4.8.3
+
 **0.6.1** -- Aug 31, 2016
 
 * Map:
@@ -151,4 +155,4 @@ Project setup
 
 ------------
 Jörg Richter  
-Aug 31, 2016
+Sep 1, 2016

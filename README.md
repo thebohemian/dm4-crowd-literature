@@ -23,6 +23,29 @@ After installation go to:
 <http://localhost:8080/eu.crowd-literature/>
 
 
+Development
+-----------
+
+For a save-reload turnaround start the frontend directly from the DeepaMehta file repository:
+
+    http://localhost:8080/filerepo/dm4-crowd-literature/src/main/resources/web/
+
+Now, when you edit any client-side resource (Javascript, HTML, CSS, ...) save it and press reload in the browser.
+Your changes will appear immediately. No building required.
+
+3 requirements for this to work:
+
+* The `jri/dm4-crowd-literature` git repo is cloned inside DM's `modules-external` directory.
+
+* In DM's `pom.xml` the file repo is configured this way:
+
+    `<dm4.filerepo.path>${project.basedir}/modules-external</dm4.filerepo.path>`
+
+* In CROWD's `src/main/resources/web/index.html` comment this line:
+
+    `<base href="/eu.crowd-literature/">`
+
+
 Version History
 ---------------
 

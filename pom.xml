@@ -4,10 +4,10 @@
 
     <modelVersion>4.0.0</modelVersion>
 
-    <name>DeepaMehta 4 CROWD Literature</name>
+    <name>DeepaMehta 4 CROWD Literature Meet</name>
     <groupId>eu.crowd-literature</groupId>
-    <artifactId>dm48-crowd-literature</artifactId>
-    <version>0.6.2</version>
+    <artifactId>dm48-crowd-literature-meet</artifactId>
+    <version>0.7.0</version>
     <packaging>bundle</packaging>
 
     <parent>

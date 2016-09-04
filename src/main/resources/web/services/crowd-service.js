@@ -14,26 +14,14 @@ angular.module("crowd").service("crowdService", function($http) {
         $http.get("/crowd/person/" + personId).then(callback);
     }
 
+    this.getAllPersons = function(callback) {
+        return $http.get("/crowd/persons").then(callback);
+    }
+
     // --- Work ---
 
     this.getWork = function(workId, callback) {
         $http.get("/crowd/work/" + workId).then(callback);
-    }
-
-    // --- Event ---
-
-    this.getEvent = function(eventId, callback) {
-        $http.get("/crowd/event/" + eventId).then(callback);
-    }
-
-    this.getAllEvents = function(callback) {
-        return $http.get("/crowd/events").then(callback);
-    }
-
-    // --- Event Series ---
-
-    this.getEventSeries = function(eventSeriesId, callback) {
-        $http.get("/crowd/event_series/" + eventSeriesId).then(callback);
     }
 
     // --- Institution ---

@@ -3,17 +3,14 @@ angular.module("crowd", ["ngRoute", "leaflet-directive"])
     $routeProvider
         .when("/start",               {templateUrl: "views/start.html",        controller: "StartController"})
         .when("/map",                 {template:    "",                        controller: "MapController"})
-        .when("/person/:personId",    {templateUrl: "views/person.html",       controller: "PersonController"})
-        .when("/institution/:instId", {templateUrl: "views/institution.html",  controller: "InstitutionController"})
         .when("/work/:workId",        {templateUrl: "views/work.html",         controller: "WorkController"})
-        .when("/event/:eventId",      {templateUrl: "views/event.html",        controller: "EventController", resolve: {
+        .when("/person/:personId",    {templateUrl: "views/person.html",       controller: "PersonController", resolve: {
             // wait for all events to be loaded before selecting an event marker programmatically
-            allEvents: function($rootScope) {
-                return $rootScope.allEvents;
+            allPersons: function($rootScope) {
+                return $rootScope.allPersons;
             }
         }})
-        .when("/event_series/:eventSeriesId",
-                                      {templateUrl: "views/event-series.html", controller: "EventSeriesController"})
+        .when("/institution/:instId", {templateUrl: "views/institution.html",  controller: "InstitutionController"})
         .otherwise({redirectTo: "/start"})
 })
 .config(function($logProvider) {

@@ -1,6 +1,6 @@
 dm4c.add_plugin("eu.crowd-literature", function() {
 
-    var start_page = new Topic(dm4c.restc.get_topic_by_value("uri", "crowd.omnibus.start_page", true))
+    var start_page = new Topic(dm4c.restc.get_topic_by_value("uri", "crowd.meet.start_page", true))
 
     dm4c.add_listener("canvas_commands", function() {
         return [
@@ -9,7 +9,7 @@ dm4c.add_plugin("eu.crowd-literature", function() {
                 context: "context-menu"
             },
             {
-                label: "CROWD Omnibus start page",
+                label: "CROWD Meet start page",
                 handler: function() {
                     dm4c.show_topic(start_page, "show", undefined, true)     // coordinates=undefined, do_center=true
                 },

@@ -14,6 +14,7 @@ import eu.crowdliterature.model.InstitutionOfWork;
 import eu.crowdliterature.model.Person;
 import eu.crowdliterature.model.PersonOfEvent;
 import eu.crowdliterature.model.PersonOfInstitution;
+import eu.crowdliterature.model.PersonOfMap;
 import eu.crowdliterature.model.PersonOfWork;
 import eu.crowdliterature.model.PhoneNumber;
 import eu.crowdliterature.model.Translation;
@@ -80,7 +81,7 @@ public class CrowdPlugin extends PluginActivator implements CrowdService, PreCre
     @Produces("text/html")
     @Override
     public String getStartPageContent() {
-        return dm4.getTopicByUri("crowd.omnibus.start_page").getChildTopics().getString("dm4.notes.text");
+        return dm4.getTopicByUri("crowd.meet.start_page").getChildTopics().getString("dm4.notes.text");
     }
 
     // --- Person ---
@@ -105,6 +106,24 @@ public class CrowdPlugin extends PluginActivator implements CrowdService, PreCre
         );
     }
 
+    @GET
+    @Path("/persons")
+    @Override
+    public List<PersonOfMap> getAllPersons() {
+        List<PersonOfMap> persons = new ArrayList();
+        for (Topic person : dm4.getTopicsByType("dm4.contacts.person")) {
+            Topic address = getAddresses(person).get(0);
+            GeoCoordinate geoCoord = address != null ? geomapsService.getGeoCoordinate(address) : null;
+            persons.add(new PersonOfMap(
+                person.getId(),
+                person.getSimpleValue().toString(),
+                geoCoord
+            ));
+
+        }
+        return persons;
+    }
+
     // --- Work ---
 
     @GET
@@ -126,61 +145,6 @@ public class CrowdPlugin extends PluginActivator implements CrowdService, PreCre
             getTranslations(work),
             getPersonsOfWork(workId),
             getInstitutionsOfWork(workId)
-        );
-    }
-
-    // --- Event ---
-
-    @GET
-    @Path("/event/{id}")
-    @Override
-    public Event getEvent(@PathParam("id") long eventId) {
-        Topic event = dm4.getTopic(eventId);
-        ChildTopics childs = event.getChildTopics();
-        return new Event(
-            event.getSimpleValue().toString(),
-            getDateTime(event, "dm4.datetime#dm4.events.from"),
-            getDateTime(event, "dm4.datetime#dm4.events.to"),
-            getAddress(event),
-            childs.getString("dm4.events.notes"),
-            getParticipants(eventId),
-            childs.getStringOrNull("crowd.event.entrance_fee"),
-            childs.getStringOrNull("dm4.webbrowser.url"),
-            getEventSeries(event)
-        );
-    }
-
-    @GET
-    @Path("/events")
-    @Override
-    public List<EventOfMap> getAllEvents() {
-        List<EventOfMap> events = new ArrayList();
-        for (Topic event : dm4.getTopicsByType("dm4.events.event")) {
-            Topic address = event.getChildTopics().getTopicOrNull("dm4.contacts.address");
-            GeoCoordinate geoCoord = address != null ? geomapsService.getGeoCoordinate(address) : null;
-            events.add(new EventOfMap(
-                event.getId(),
-                event.getSimpleValue().toString(),
-                getDateTime(event, "dm4.datetime#dm4.events.from"),
-                geoCoord
-            ));
-        }
-        return events;
-    }
-
-    // --- Event Series ---
-
-    @GET
-    @Path("/event_series/{id}")
-    @Override
-    public EventSeries getEventSeries(@PathParam("id") long eventSeriesId) {
-        Topic eventSeries = dm4.getTopic(eventSeriesId);
-        ChildTopics childs = eventSeries.getChildTopics();
-        return new EventSeries(
-            eventSeries.getSimpleValue().toString(),
-            childs.getString("crowd.event_series.notes"),
-            childs.getStringOrNull("dm4.webbrowser.url"),
-            getEventsOfEventSeries(eventSeries)
         );
     }
 
@@ -290,6 +254,8 @@ public class CrowdPlugin extends PluginActivator implements CrowdService, PreCre
 
     private JSONArray getEventsOfPerson(long personId) {
         JSONArray events = null;
+
+	/* not needed anymore
         List<RelatedTopic> eventTopics = eventsService.getEvents(personId);
         if (!eventTopics.isEmpty()) {
             events = new JSONArray();
@@ -297,6 +263,8 @@ public class CrowdPlugin extends PluginActivator implements CrowdService, PreCre
                 events.put(eventBasics(event));
             }
         }
+	*/
+
         return events;
     }
 
@@ -382,6 +350,8 @@ public class CrowdPlugin extends PluginActivator implements CrowdService, PreCre
 
     private JSONArray getEventSeries(Topic event) {
         JSONArray eventSeries = null;
+
+	/* not needed
         List<RelatedTopic> eventSeriesTopics = event.getRelatedTopics("dm4.core.association", "dm4.core.default",
             "dm4.core.default", "crowd.event_series");
         if (!eventSeriesTopics.isEmpty())  {
@@ -393,6 +363,8 @@ public class CrowdPlugin extends PluginActivator implements CrowdService, PreCre
                 ).toJSON());
             }
         }
+	*/
+
         return eventSeries;
     }
 
@@ -479,6 +451,7 @@ public class CrowdPlugin extends PluginActivator implements CrowdService, PreCre
 
     private JSONArray getEventsOfInstitution(List<RelatedTopic> addressTopics) {
         JSONArray events = null;
+	/* not needed
         for (Topic address : addressTopics) {
             List<RelatedTopic> eventTopics = address.getRelatedTopics("dm4.core.aggregation", "dm4.core.child",
                 "dm4.core.parent", "dm4.events.event");
@@ -491,6 +464,7 @@ public class CrowdPlugin extends PluginActivator implements CrowdService, PreCre
                 }
             }
         }
+	*/
         return events;
     }
 

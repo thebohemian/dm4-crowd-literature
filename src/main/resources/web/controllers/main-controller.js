@@ -1,12 +1,12 @@
 angular.module("crowd").controller("MainController", function($scope, $rootScope, $location, $timeout, crowdService,
                                                               leafletData) {
-    var SHOW_BUSTOUR = true;
+    var SHOW_BUSTOUR = false;
     var BUSTOUR_ZOOM_THRESHOLD = 11;    // bustour is shown only below this zoom level
 
     var bustour;                        // GeoJSON cache
 
     var today = todayDate();
-    
+
     $scope.hires = matchMedia("(min-resolution: 144dpi)").matches;  // put in scope solely for debugging
     $scope.devicePixelRatio = devicePixelRatio;                     // put in scope solely for debugging
 
@@ -78,18 +78,18 @@ angular.module("crowd").controller("MainController", function($scope, $rootScope
         }
     });
 
-    $scope.$watch("selectedEventId", function(eventId, oldEventId) {
-        if (eventId) {
-            $scope.markers[eventId].icon = markerIconSelected;
+    $scope.$watch("selectedPersonId", function(personId, oldPersonId) {
+        if (personId) {
+            $scope.markers[personId].icon = markerIconSelected;
         }
-        if (oldEventId) {
-            $scope.markers[oldEventId].icon = $scope.markers[oldEventId].eventOver ? markerIconEventOver : markerIcon;
+        if (oldPersonId) {
+            $scope.markers[oldPersonId].icon = markerIcon;
         }
     });
 
     $scope.$on("leafletDirectiveMarker.map.click", function(event, args) {
-        var eventId = args.modelName;
-        $location.path("/event/" + eventId);
+        var personId = args.modelName;
+        $location.path("/person/" + personId);
     })
 
     // --- Controller Methods ---
@@ -98,15 +98,8 @@ angular.module("crowd").controller("MainController", function($scope, $rootScope
         $scope.mapVisibility = mapVisibility;
     }
 
-    $scope.setSelectedEvent = function(eventId) {
-        $scope.selectedEventId = eventId;
-    }
-
-    // ### TODO: use a filter instead?
-    $scope.sortEvents = function(events) {
-        events.sort(function(e1, e2) {
-            return compareDateTime(e1.from, e2.from)
-        });
+    $scope.setSelectedPerson = function(personId) {
+        $scope.selectedPersonId = personId;
     }
 
     // --- Startup ---
@@ -118,30 +111,11 @@ angular.module("crowd").controller("MainController", function($scope, $rootScope
     // initial calculation of the map size once the flex layout is done
     calculateMapSize();
 
-    $rootScope.allEvents = crowdService.getAllEvents(function(response) {
-        response.data.forEach(function(event) {
-            addMarker(event);
+    $rootScope.allPersons = crowdService.getAllPersons(function(response) {
+        response.data.forEach(function(person) {
+            addMarker(person);
         })
     })
-
-    if (SHOW_BUSTOUR) {
-        crowdService.loadBustourGeojson(function(response) {
-            bustour = {
-                data: response.data,
-                style: {
-                    color: "rgb(218, 105, 6)",
-                    weight: 5,
-                    opacity: 1,
-                    dashArray: "15, 10",
-                    lineCap: "butt",
-                    lineJoin: "miter"
-                }
-            }
-            $scope.$watch("center.zoom", function(zoom) {
-                $scope.bustour = $scope.center.zoom < BUSTOUR_ZOOM_THRESHOLD ? bustour : null;
-            });
-        })
-    }
 
     // ------------------------------------------------------------------------------------------------- Private Methods
 
@@ -172,18 +146,16 @@ angular.module("crowd").controller("MainController", function($scope, $rootScope
         return "lib/leaflet/images/" + iconFile;
     }
 
-    function addMarker(event) {
-        if (event.lat != undefined && event.lng != undefined) {
-            var eventOver = dateIsOver(event.from);
+    function addMarker(person) {
+        if (person.lat != undefined && person.lng != undefined) {
             $scope.markers[event.id] = {
                 lat: event.lat,
                 lng: event.lng,
                 layer: "events",
-                icon: eventOver ? markerIconEventOver : markerIcon,
-                eventOver: eventOver
+                icon: markerIcon
             }
         } else {
-            console.log("WARNING: event \"" + event.title + "\" (" + event.id +
+            console.log("WARNING: person \"" + person.name + "\" (" + person.id +
                 ") can't appear on map -- its geo coordinate is unknown")
         }
     }
@@ -193,14 +165,8 @@ angular.module("crowd").controller("MainController", function($scope, $rootScope
     function createClusterIcon(cluster) {
         return new L.DivIcon({
             html: "<div><span>" + cluster.getChildCount() + "</span></div>",
-            className: "marker-cluster" + (allEventsOver(cluster) ? " all-events-over" : ""),
+            className: "marker-cluster",
             iconSize: new L.Point(clusterSize, clusterSize)
-        });
-    }
-
-    function allEventsOver(cluster) {
-        return cluster.getAllChildMarkers().every(function(marker) {
-            return marker.options.eventOver;
         });
     }
 
@@ -254,7 +220,7 @@ angular.module("crowd").controller("MainController", function($scope, $rootScope
         return {
             date: {
                 month: d.getMonth() + 1,
-                day:   d.getDate(), 
+                day:   d.getDate(),
                 year:  d.getFullYear()
             },
             time: {

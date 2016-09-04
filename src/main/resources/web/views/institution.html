@@ -31,13 +31,13 @@
         </ul>
     </div>
     <div class="notes" ng-bind-html="institution.notes | trusted"></div>
-    <!--div class="persons" ng-if="institution.persons">
+    <div class="persons" ng-if="institution.persons">
         Associates:
         <ul>
             <li ng-repeat="person in institution.persons">
                 <a ng-href="#/person/{{person.id}}">{{person.name}}</a> ({{person.role}})
             </li>
         </ul>
-    </div-->
+    </div>
     <dm4-event-list events="institution.events"></dm4-event-list>
 </div>

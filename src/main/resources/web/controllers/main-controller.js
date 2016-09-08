@@ -107,6 +107,13 @@ angular.module("crowd").controller("MainController", function($scope, $rootScope
 
     $scope.setSelectedMarker = function(markerId) {
         $scope.selectedMarkerId = markerId;
+
+        // Center around newly selected
+        var marker = $scope.markers[markerId];
+        if (marker) {
+          $scope.center.lat = marker.lat;
+          $scope.center.lng = marker.lng;
+        }
     }
 
     // --- Startup ---
@@ -159,16 +166,16 @@ angular.module("crowd").controller("MainController", function($scope, $rootScope
         return "lib/leaflet/images/" + iconFile;
     }
 
-    function addMarker(layer, person) {
-        if (person.lat != undefined && person.lng != undefined) {
-            $scope.markers[person.id] = {
-                lat: person.lat,
-                lng: person.lng,
+    function addMarker(layer, objectOfMap) {
+        if (objectOfMap.lat != undefined && objectOfMap.lng != undefined) {
+            $scope.markers[objectOfMap.id] = {
+                lat: objectOfMap.lat,
+                lng: objectOfMap.lng,
                 layer: layer,
                 icon: markerIcon
             }
         } else {
-            console.log("WARNING: person \"" + person.name + "\" (" + person.id +
+            console.log("WARNING: element \"" + element.name + "\" (" + element.id +
                 ") can't appear on map -- its geo coordinate is unknown")
         }
     }

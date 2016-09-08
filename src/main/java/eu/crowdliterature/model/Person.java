@@ -15,12 +15,13 @@ public class Person implements JSONEnabled {
 
     // ---------------------------------------------------------------------------------------------------- Constructors
 
-    public Person(String name, String yearOfBirth, String placeOfBirth, String notes, JSONArray urls,
+    public Person(String name, String placeOfLiving, String yearOfBirth, String placeOfBirth, String notes, JSONArray urls,
                   JSONArray nationalities, JSONArray languages, JSONArray institutions, JSONArray works,
                   JSONArray events) {
         try {
             json = new JSONObject()
                 .put("name", name)
+		.put("placeOfLiving", placeOfLiving)
                 .put("yearOfBirth", yearOfBirth)
                 .put("placeOfBirth", placeOfBirth)
                 .put("notes", notes)

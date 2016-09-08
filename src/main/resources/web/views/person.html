@@ -4,6 +4,9 @@
         Born {{person.yearOfBirth}}
         <span ng-if="person.placeOfBirth">in {{person.placeOfBirth}}</span>
     </div>
+    <div class="birth" ng-if="person.placeOfLiving">
+        Living in {{person.placeOfLiving}}
+    </div>
     <div class="nationality">
         <div ng-if="person.nationalities">
             Nationality:
@@ -24,14 +27,14 @@
             </li>
         </ul>
     </div>
-    <!--div class="institutions" ng-if="person.institutions">
+    <div class="institutions" ng-if="person.institutions">
         Associations:
         <ul>
             <li ng-repeat="institution in person.institutions">
                 <a ng-href="#/institution/{{institution.id}}">{{institution.name}}</a> ({{institution.role}})
             </li>
         </ul>
-    </div-->
+    </div>
     <div class="works" ng-if="person.works">
         <div class="heading">Works</div>
         <ul>

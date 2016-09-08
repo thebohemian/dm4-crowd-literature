@@ -95,6 +95,7 @@ public class CrowdPlugin extends PluginActivator implements CrowdService, PreCre
         ChildTopics childs = person.getChildTopics();
         return new Person(
             person.getSimpleValue().toString(),
+	    getPlaceOfLiving(person),
             childs.getChildTopics("dm4.datetime.date#dm4.contacts.date_of_birth").getStringOrNull("dm4.datetime.year"),
             childs.getStringOrNull("dm4.contacts.city#crowd.person.place_of_birth"),
             childs.getString("dm4.contacts.notes"),
@@ -422,6 +423,12 @@ public class CrowdPlugin extends PluginActivator implements CrowdService, PreCre
 
     private List<RelatedTopic> getAddresses(Topic institution) {
         return institution.getChildTopics().getTopics("dm4.contacts.address#dm4.contacts.address_entry");
+    }
+
+    private String getPlaceOfLiving(Topic person) {
+        String placeOfLiving = null;
+        Topic address = getAddresses(person).get(0);
+        return (address != null) ? address.getChildTopics().getStringOrNull("dm4.contacts.city") : null;
     }
 
     private JSONArray getAddresses(List<RelatedTopic> addressTopics) {

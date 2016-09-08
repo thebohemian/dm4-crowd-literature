@@ -1,10 +1,5 @@
 angular.module("crowd").controller("MainController", function($scope, $rootScope, $location, $timeout, crowdService,
                                                               leafletData) {
-    var SHOW_BUSTOUR = false;
-    var BUSTOUR_ZOOM_THRESHOLD = 11;    // bustour is shown only below this zoom level
-
-    var bustour;                        // GeoJSON cache
-
     var today = todayDate();
 
     $scope.hires = matchMedia("(min-resolution: 144dpi)").matches;  // put in scope solely for debugging
@@ -89,12 +84,12 @@ angular.module("crowd").controller("MainController", function($scope, $rootScope
         }
     });
 
-    $scope.$watch("selectedPersonId", function(personId, oldPersonId) {
-        if (personId) {
-            $scope.markers[personId].icon = markerIconSelected;
+    $scope.$watch("selectedMarkerId", function(markerId, oldMarkerId) {
+        if (markerId) {
+            $scope.markers[markerId].icon = markerIconSelected;
         }
-        if (oldPersonId) {
-            $scope.markers[oldPersonId].icon = markerIcon;
+        if (oldMarkerId) {
+            $scope.markers[oldMarkerId].icon = markerIcon;
         }
     });
 
@@ -110,8 +105,8 @@ angular.module("crowd").controller("MainController", function($scope, $rootScope
         $scope.mapVisibility = mapVisibility;
     }
 
-    $scope.setSelectedPerson = function(personId) {
-        $scope.selectedPersonId = personId;
+    $scope.setSelectedMarker = function(markerId) {
+        $scope.selectedMarkerId = markerId;
     }
 
     // --- Startup ---

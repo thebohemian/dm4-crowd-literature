@@ -29,4 +29,9 @@ angular.module("crowd").service("crowdService", function($http) {
     this.getInstitution = function(instId, callback) {
         $http.get("/crowd/institution/" + instId).then(callback);
     }
+
+    this.getAllInstitutions = function(callback) {
+        return $http.get("/crowd/institutions").then(callback);
+    }
+
 })

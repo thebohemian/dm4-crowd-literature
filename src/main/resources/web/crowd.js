@@ -8,6 +8,10 @@ angular.module("crowd", ["ngRoute", "leaflet-directive"])
             // wait for all events to be loaded before selecting an event marker programmatically
             allPersons: function($rootScope) {
                 return $rootScope.allPersons;
+            },
+            
+            allInstitutions: function($rootScope) {
+                return $rootScope.allInstitutions;
             }
         }})
         .when("/institution/:instId", {templateUrl: "views/institution.html",  controller: "InstitutionController"})

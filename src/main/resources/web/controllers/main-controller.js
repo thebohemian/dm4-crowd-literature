@@ -53,8 +53,19 @@ angular.module("crowd").controller("MainController", function($scope, $rootScope
 
     $scope.layers = {
         overlays: {
-            events: {
-                name: "Events",
+            person: {
+                name: "Persons",
+                type: "markercluster",
+                visible: true,
+                layerParams: {
+                    showOnSelector: false,
+                    maxClusterRadius: maxClusterRadius,
+                    spiderfyDistanceMultiplier: spiderfyDistanceMultiplier,
+                    iconCreateFunction: createClusterIcon
+                }
+            },
+            institution: {
+                name: "Institutions",
                 type: "markercluster",
                 visible: true,
                 layerParams: {
@@ -88,8 +99,9 @@ angular.module("crowd").controller("MainController", function($scope, $rootScope
     });
 
     $scope.$on("leafletDirectiveMarker.map.click", function(event, args) {
-        var personId = args.modelName;
-        $location.path("/person/" + personId);
+        var id = args.modelName;
+        var typeFromLayer = args.layerName;
+        $location.path("/" + typeFromLayer + "/" + id);
     })
 
     // --- Controller Methods ---
@@ -113,7 +125,13 @@ angular.module("crowd").controller("MainController", function($scope, $rootScope
 
     $rootScope.allPersons = crowdService.getAllPersons(function(response) {
         response.data.forEach(function(person) {
-            addMarker(person);
+            addMarker("person", person);
+        })
+    })
+
+    $rootScope.allInstitutions = crowdService.getAllInstitutions(function(response) {
+        response.data.forEach(function(inst) {
+            addMarker("institution", inst);
         })
     })
 
@@ -146,12 +164,12 @@ angular.module("crowd").controller("MainController", function($scope, $rootScope
         return "lib/leaflet/images/" + iconFile;
     }
 
-    function addMarker(person) {
+    function addMarker(layer, person) {
         if (person.lat != undefined && person.lng != undefined) {
-            $scope.markers[event.id] = {
-                lat: event.lat,
-                lng: event.lng,
-                layer: "events",
+            $scope.markers[person.id] = {
+                lat: person.lat,
+                lng: person.lng,
+                layer: layer,
                 icon: markerIcon
             }
         } else {

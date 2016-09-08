@@ -9,6 +9,7 @@ import eu.crowdliterature.model.EventSeries;
 import eu.crowdliterature.model.EventSeriesOfEvent;
 import eu.crowdliterature.model.Institution;
 import eu.crowdliterature.model.InstitutionOfAddress;
+import eu.crowdliterature.model.InstitutionOfMap;
 import eu.crowdliterature.model.InstitutionOfPerson;
 import eu.crowdliterature.model.InstitutionOfWork;
 import eu.crowdliterature.model.Person;
@@ -169,6 +170,23 @@ public class CrowdPlugin extends PluginActivator implements CrowdService, PreCre
         );
     }
 
+    @GET
+    @Path("/institutions")
+    @Override
+    public List<InstitutionOfMap> getAllInstitutions() {
+        List<InstitutionOfMap> result = new ArrayList();
+        for (Topic inst : dm4.getTopicsByType("dm4.contacts.institution")) {
+            Topic address = getAddresses(inst).get(0);
+            GeoCoordinate geoCoord = address != null ? geomapsService.getGeoCoordinate(address) : null;
+            result.add(new InstitutionOfMap(
+                inst.getId(),
+                inst.getSimpleValue().toString(),
+                geoCoord
+            ));
+
+        }
+        return result;
+    }
 
 
     // ********************************

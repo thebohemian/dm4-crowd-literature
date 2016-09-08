@@ -1,6 +1,7 @@
 package eu.crowdliterature;
 
 import eu.crowdliterature.model.Institution;
+import eu.crowdliterature.model.InstitutionOfMap;
 import eu.crowdliterature.model.Person;
 import eu.crowdliterature.model.PersonOfMap;
 import eu.crowdliterature.model.Work;
@@ -26,4 +27,6 @@ public interface CrowdService {
     // --- Institution ---
 
     Institution getInstitution(long instId);
+
+    List<InstitutionOfMap> getAllInstitutions();
 }

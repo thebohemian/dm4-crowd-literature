@@ -5,8 +5,17 @@ angular.module("crowd").controller("MainController", function($scope, $rootScope
 
     // --- Leaflet config (marker + cluster) ---
 
-    var markerIcon          = createMarkerIcon(false);
-    var markerIconSelected  = createMarkerIcon(true);
+    var icons = {
+      person: {
+        normal:   createMarkerIcon('person', false),
+        selected: createMarkerIcon('person', true)
+      },
+      institution: {
+        normal:   createMarkerIcon('institution', false),
+        selected: createMarkerIcon('institution', true)
+      }
+
+    };
 
     if (!$scope.hires) {
         var clusterSize = 40;
@@ -80,10 +89,12 @@ angular.module("crowd").controller("MainController", function($scope, $rootScope
 
     $scope.$watch("selectedMarkerId", function(markerId, oldMarkerId) {
         if (markerId) {
-            $scope.markers[markerId].icon = markerIconSelected;
+            var marker = $scope.markers[markerId];
+            $scope.markers[markerId].icon = icons[marker.layer].selected;
         }
         if (oldMarkerId) {
-            $scope.markers[oldMarkerId].icon = markerIcon;
+          var marker = $scope.markers[oldMarkerId];
+          $scope.markers[markerId].icon = icons[marker.layer].normal;
         }
     });
 
@@ -135,7 +146,8 @@ angular.module("crowd").controller("MainController", function($scope, $rootScope
 
     // --- Marker ---
 
-    function createMarkerIcon(selected) {
+    function createMarkerIcon(type, selected) {
+        // TODO: Take type into account
         return !$scope.hires ? {
             iconUrl: markerIconUrl(selected),
             iconSize: [28, 41],
@@ -166,7 +178,7 @@ angular.module("crowd").controller("MainController", function($scope, $rootScope
                 lat: objectOfMap.lat,
                 lng: objectOfMap.lng,
                 layer: layer,
-                icon: markerIcon
+                icon: icons[layer].normal
             }
         } else {
             console.log("WARNING: element \"" + element.name + "\" (" + element.id +

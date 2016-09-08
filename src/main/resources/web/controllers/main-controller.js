@@ -1,14 +1,11 @@
 angular.module("crowd").controller("MainController", function($scope, $rootScope, $location, $timeout, crowdService,
                                                               leafletData) {
-    var today = todayDate();
-
     $scope.hires = matchMedia("(min-resolution: 144dpi)").matches;  // put in scope solely for debugging
     $scope.devicePixelRatio = devicePixelRatio;                     // put in scope solely for debugging
 
     // --- Leaflet config (marker + cluster) ---
 
     var markerIcon          = createMarkerIcon(false);
-    var markerIconEventOver = createMarkerIcon(false, true);
     var markerIconSelected  = createMarkerIcon(true);
 
     if (!$scope.hires) {
@@ -27,9 +24,6 @@ angular.module("crowd").controller("MainController", function($scope, $rootScope
         lat: 56.5,
         lng: 20,
         zoom: 4
-        // lat: 42,     // focus on south europe for 2nd tour half
-        // lng: 24,
-        // zoom: 5
     }
 
     $scope.defaults = {
@@ -141,16 +135,16 @@ angular.module("crowd").controller("MainController", function($scope, $rootScope
 
     // --- Marker ---
 
-    function createMarkerIcon(selected, eventOver) {
+    function createMarkerIcon(selected) {
         return !$scope.hires ? {
-            iconUrl: markerIconUrl(selected, eventOver),
+            iconUrl: markerIconUrl(selected),
             iconSize: [28, 41],
             iconAnchor: [14, 41],
             shadowUrl: "lib/leaflet/images/marker-shadow.png",
             shadowSize: [41, 41],
             shadowAnchor: [12, 41]
         } : {
-            iconUrl: markerIconUrl(selected, eventOver),
+            iconUrl: markerIconUrl(selected),
             iconSize: [36, 53],
             iconAnchor: [18, 53],
             shadowUrl: "lib/leaflet/images/marker-shadow.png",
@@ -159,9 +153,9 @@ angular.module("crowd").controller("MainController", function($scope, $rootScope
         }
     }
 
-    function markerIconUrl(selected, eventOver) {
+    function markerIconUrl(selected) {
         var iconFile = "event-marker" +
-            (selected ? "-selected" : eventOver ? "-over" : "") +
+            (selected ? "-selected" : "") +
             ($scope.hires ? "-1.3x" : "") + ".png";
         return "lib/leaflet/images/" + iconFile;
     }
@@ -211,42 +205,4 @@ angular.module("crowd").controller("MainController", function($scope, $rootScope
         })
     }
 
-    // --- Date ---
-
-    function dateIsOver(dt) {
-        return compareDateTime(dt, today) < 0;
-    }
-
-    function compareDateTime(dt1, dt2) {
-        var d1 = dt1.date;
-        var d2 = dt2.date;
-        var t1 = dt1.time;
-        var t2 = dt2.time;
-        if (d1.year != d2.year) {
-            return d1.year - d2.year;
-        } else if (d1.month != d2.month) {
-            return d1.month - d2.month;
-        } else if (d1.day != d2.day) {
-            return d1.day - d2.day;
-        } else if (t1.hour != t2.hour) {
-            return t1.hour - t2.hour;
-        } else {
-            return t1.minute - t2.minute;
-        }
-    }
-
-    function todayDate() {
-        var d = new Date();
-        return {
-            date: {
-                month: d.getMonth() + 1,
-                day:   d.getDate(),
-                year:  d.getFullYear()
-            },
-            time: {
-                hour: 0,    // the date-is-over check is based only on the date, not the time
-                minute: 0
-            }
-        }
-    }
 })

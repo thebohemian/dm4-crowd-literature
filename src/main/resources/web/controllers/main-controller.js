@@ -106,6 +106,14 @@ angular.module("crowd").controller("MainController", function($scope, $rootScope
 
     // --- Controller Methods ---
 
+    $scope.resetMap = function() {
+      scope.center = {
+        lat: 56.5,
+        lng: 20,
+        zoom: 4
+      };
+    }
+
     $scope.setMapVisibility = function(mapVisibility) {
         $scope.mapVisibility = mapVisibility;
     }

@@ -6,8 +6,8 @@
 
     <name>DeepaMehta 4 CROWD Literature Meet</name>
     <groupId>eu.crowd-literature</groupId>
-    <artifactId>dm48-crowd-literature-meet</artifactId>
-    <version>0.7.0</version>
+    <artifactId>dm48-crowd-literature</artifactId>
+    <version>0.7.0-SNAPSHOT</version>
     <packaging>bundle</packaging>
 
     <parent>

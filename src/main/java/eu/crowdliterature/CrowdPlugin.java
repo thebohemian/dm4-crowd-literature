@@ -51,7 +51,7 @@ import java.util.List;
 
 
 
-@Path("/crowdmeet")
+@Path("/crowd")
 @Produces("application/json")
 public class CrowdPlugin extends PluginActivator implements CrowdService, PreCreateAssociationListener {
 

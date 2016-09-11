@@ -1,5 +1,6 @@
 package eu.crowdliterature;
 
+import eu.crowdliterature.model.EditablePerson;
 import eu.crowdliterature.model.Institution;
 import eu.crowdliterature.model.InstitutionOfMap;
 import eu.crowdliterature.model.Person;
@@ -19,6 +20,8 @@ public interface CrowdService {
     Person getPerson(long personId);
 
     List<PersonOfMap> getAllPersons();
+
+    EditablePerson getEditablePersonByUsername(String userName);
 
     // --- Work ---
 

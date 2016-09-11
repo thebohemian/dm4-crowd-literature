@@ -2,6 +2,7 @@ package eu.crowdliterature;
 
 import eu.crowdliterature.model.Address;
 import eu.crowdliterature.model.DateTime;
+import eu.crowdliterature.model.EditablePerson;
 import eu.crowdliterature.model.Event;
 import eu.crowdliterature.model.EventBasics;
 import eu.crowdliterature.model.EventOfMap;
@@ -124,6 +125,29 @@ public class CrowdPlugin extends PluginActivator implements CrowdService, PreCre
 
         }
         return persons;
+    }
+
+    @GET
+    @Path("/editable_person/by_username/{userName}")
+    @Override
+    public EditablePerson getEditablePersonByUsername(@PathParam("userName") String userName) {
+	Topic userNameTopic = dm4.getTopicByValue("dm4.accesscontrol.username", new SimpleValue(userName));
+
+	RelatedTopic person = userNameTopic.getRelatedTopic("dm4.core.association", null, null, "dm4.contacts.person");
+
+	if (person == null) {
+		return null;
+	}
+
+	ChildTopics childs = person.getChildTopics();
+        return new EditablePerson(
+	    person.getId(),
+            person.getSimpleValue().toString(),
+	    childs.getTopics("dm4.contacts.email_address").get(0).getSimpleValue().toString(), // TODO: Add a helper method
+            childs.getChildTopics("dm4.datetime.date#dm4.contacts.date_of_birth").getStringOrNull("dm4.datetime.year"),
+            childs.getStringOrNull("dm4.contacts.city#crowd.person.place_of_birth"),
+            childs.getString("dm4.contacts.notes")
+        );
     }
 
     // --- Work ---

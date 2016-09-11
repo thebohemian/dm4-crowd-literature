@@ -15,12 +15,13 @@ public class EditablePerson implements JSONEnabled {
 
     // ---------------------------------------------------------------------------------------------------- Constructors
 
-    public EditablePerson(long id, String name, String email, String yearOfBirth, String placeOfBirth, String notes) {
+    public EditablePerson(long id, String firstName, String lastName, JSONArray emails, String yearOfBirth, String placeOfBirth, String notes) {
         try {
             json = new JSONObject()
                 .put("id", id)
-                .put("name", name)
-		.put("email", email)
+                .put("firstName", firstName)
+                .put("lastName", lastName)
+		.put("emails", emails)
                 .put("yearOfBirth", yearOfBirth)
                 .put("placeOfBirth", placeOfBirth)
                 .put("notes", notes);

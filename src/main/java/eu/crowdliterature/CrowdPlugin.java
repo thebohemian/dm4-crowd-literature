@@ -131,7 +131,7 @@ public class CrowdPlugin extends PluginActivator implements CrowdService, PreCre
     @Path("/editable_person/by_username/{userName}")
     @Override
     public EditablePerson getEditablePersonByUsername(@PathParam("userName") String userName) {
-	Topic userNameTopic = dm4.getTopicByValue("dm4.accesscontrol.username", new SimpleValue(userName));
+	Topic userNameTopic = acService.getUsernameTopic(userName);
 
 	RelatedTopic person = userNameTopic.getRelatedTopic("dm4.core.association", null, null, "dm4.contacts.person");
 
@@ -142,8 +142,9 @@ public class CrowdPlugin extends PluginActivator implements CrowdService, PreCre
 	ChildTopics childs = person.getChildTopics();
         return new EditablePerson(
 	    person.getId(),
-            person.getSimpleValue().toString(),
-	    childs.getTopics("dm4.contacts.email_address").get(0).getSimpleValue().toString(), // TODO: Add a helper method
+            childs.getChildTopics("dm4.contacts.person_name").getStringOrNull("dm4.contacts.first_name"),
+            childs.getChildTopics("dm4.contacts.person_name").getStringOrNull("dm4.contacts.last_name"),
+	    getStrings(person, "dm4.contacts.email_address"),
             childs.getChildTopics("dm4.datetime.date#dm4.contacts.date_of_birth").getStringOrNull("dm4.datetime.year"),
             childs.getStringOrNull("dm4.contacts.city#crowd.person.place_of_birth"),
             childs.getString("dm4.contacts.notes")

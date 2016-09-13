@@ -1,13 +1,15 @@
 package eu.crowdliterature;
 
+import java.util.List;
+
+import org.codehaus.jettison.json.JSONObject;
+
 import eu.crowdliterature.model.EditablePerson;
 import eu.crowdliterature.model.Institution;
 import eu.crowdliterature.model.InstitutionOfMap;
 import eu.crowdliterature.model.Person;
 import eu.crowdliterature.model.PersonOfMap;
 import eu.crowdliterature.model.Work;
-
-import java.util.List;
 
 
 
@@ -21,7 +23,11 @@ public interface CrowdService {
 
     List<PersonOfMap> getAllPersons();
 
+    // Editable Person
+    
     EditablePerson getEditablePersonByUsername(String userName);
+    
+    void updateEditablePerson(long personId, String editablePersonJSON);
 
     // --- Work ---
 

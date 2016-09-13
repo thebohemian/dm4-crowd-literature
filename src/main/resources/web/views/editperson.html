@@ -1,0 +1,37 @@
+<div class="row person">
+  <div class="col-lg-10">
+  <form novalidate>
+    <div class="form-group">
+      <label for="inputFirstName">First Name</label>
+      <input type="text" class="form-control" id="inputFirstName" placeholder="eg. John" ng-model="person.firstName"> </input
+    </div>
+    <div class="form-group">
+      <label for="inputLastName">Last Name</label>
+      <input type="text" class="form-control" id="inputLastName" placeholder="eg. Smith" ng-model="person.lastName"></input
+    </div>
+    <div class="form-group">
+      <label for="inputYearOfBirth">Year Of Birth</label>
+      <input type="number" class="form-control" id="inputYearOfBirth" placeholder="eg. 1980" ng-model="person.yearOfBirth"> </input
+    </div>
+    <div class="form-group">
+      <label for="inputPlaceOfBirth">Place Of Birth</label>
+      <input type="text" class="form-control" id="inputPlaceOfBirth" placeholder="eg. Berlin" ng-model="person.placeOfBirth"> </input
+    </div>
+    <div class="form-group">
+      <label for="inputEmail">Email Addresses</label>
+      <div class="input-group" ng-repeat="e in person.emails track by $index">
+        <input type="email" class="form-control" id="inputEmail" ng-model="e"> </input
+        <div class="input-group-btn">
+          <button class="btn btn-default" type="button">-</button>
+        </div>
+      </div>
+      <button type="button" class="btn btn-primary" ng-click="enlargeEmail(person)">+</button>
+    </div>
+    <div class="form-group">
+      <label for="inputNotes">Notes</label>
+      <textarea class="form-control" id="inputNotes" rows="5" placeholder="eg. This author is ..." ng-model="person.notes"></textarea
+    </div>
+    <button type="submit" class="btn btn-primary" ng-click="updatePerson(person)">Save</button>
+  </form>
+</div>
+</div>

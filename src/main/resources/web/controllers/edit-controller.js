@@ -21,9 +21,12 @@ angular.module("crowdedit")
     };
 
     $scope.updatePerson = function(person) {
+      // Prevent further updates until the last write hasn't been followed by
+      // a reload.
       if (!$scope.isUpdatedBlocked) {
         $scope.isUpdatedBlocked = true;
 
+        // Reloads the person completely automatically
         crowdService.updatePerson(person, function(response) {
           loadPerson(person.id);
         });

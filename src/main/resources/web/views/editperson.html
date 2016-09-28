@@ -31,7 +31,7 @@
       <label for="inputNotes">Notes</label>
       <textarea class="form-control" id="inputNotes" rows="5" placeholder="eg. This author is ..." ng-model="person['childs']['dm4.contacts.notes'].value"></textarea
     </div>
-    <button type="submit" class="btn btn-primary" ng-click="updatePerson(person)">Save</button>
+    <button ng-if="!isUpdatedBlocked" type="submit" class="btn btn-primary" ng-click="updatePerson(person)">Save</button>
   </form>
 </div>
 </div>

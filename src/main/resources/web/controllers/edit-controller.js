@@ -1,11 +1,16 @@
-persona=null;
-
 angular.module("crowdedit")
 .controller("EditPersonController", function($scope, $routeParams, $location, crowdService) {
-    crowdService.getEditablePerson($routeParams.personId, function(response) {
-//      persona= response.data;
-      $scope.person = response.data;
-    });
+    var loadPerson = function(personId) {
+      crowdService.getEditablePerson(personId, function(response) {
+        $scope.person = response.data;
+        $scope.isUpdatedBlocked = false;
+      });
+    };
+
+    $scope.isUpdatedBlocked = false;
+
+    // Autoload
+    loadPerson($routeParams.personId);
 
     $scope.enlargeEmail = function(person) {
       person['childs']['dm4.contacts.email_address'].push({
@@ -13,10 +18,16 @@ angular.module("crowdedit")
         type_uri: "dm4.contacts.email_address",
         value: ""
       });
-    }
+    };
 
     $scope.updatePerson = function(person) {
-      crowdService.updatePerson(person);
-    }
+      if (!$scope.isUpdatedBlocked) {
+        $scope.isUpdatedBlocked = true;
+
+        crowdService.updatePerson(person, function(response) {
+          loadPerson(person.id);
+        });
+      }
+    };
 
 })

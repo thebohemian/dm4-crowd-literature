@@ -20,12 +20,4 @@ angular.module("crowdedit")
 
     }
 
-    $scope.updatePerson = function(person) {
-      // TODO: Implement in server
-      crowdService.updatePerson(person);
-    }
-
-    $scope.enlargeEmail = function(person) {
-      person.emails.push("");
-    }
 })

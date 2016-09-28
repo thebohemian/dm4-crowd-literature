@@ -13,7 +13,7 @@ angular.module("crowdedit").service("crowdService", function($http) {
     }
 
     this.updatePerson = function(person, callback) {
-        //$http.put("/crowd/editable_person/" + person.id, person).then(callback);
+        $http.put("/core/topic/" + person.id, person).then(callback);
     }
 
 })

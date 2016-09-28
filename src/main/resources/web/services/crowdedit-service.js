@@ -2,12 +2,18 @@ angular.module("crowdedit").service("crowdService", function($http) {
 
     // --- Person ---
 
-    this.getEditablePersonByUsername = function(username, callback) {
-        $http.get("/crowd/editable_person/by_username/" + username).then(callback);
+    this.getPersonIdByUsername = function(username, callback) {
+        $http.get("/crowd/person/id/by_username/" + username)
+          .then(callback);
+    }
+
+    this.getEditablePerson = function(personId, callback) {
+      $http.get("/core/topic/" + personId + "?include_childs=true")
+        .then(callback);
     }
 
     this.updatePerson = function(person, callback) {
-        $http.put("/crowd/editable_person/" + person.id, person).then(callback);
+        //$http.put("/crowd/editable_person/" + person.id, person).then(callback);
     }
 
 })

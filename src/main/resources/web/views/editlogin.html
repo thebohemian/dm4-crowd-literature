@@ -2,12 +2,12 @@
   <form novalidate>
     <div class="form-group">
       <label for="inputUsername">Username</label>
-      <input type="text" class="form-control" id="inputUsername" ng-model=""> </input
+      <input type="text" class="form-control" id="inputUsername" ng-model="credentials.username"> </input
     </div>
     <div class="form-group">
       <label for="inputPassword">Password</label>
-      <input type="password" class="form-control" id="inputPassword" ng-model=""></input
+      <input type="password" class="form-control" id="inputPassword" ng-model="credentials.password"></input
     </div>
-    <button type="submit" class="btn btn-primary" ng-click="goToEditPerson('testor')">Save</button>
+    <button type="submit" class="btn btn-primary" ng-click="goToEditPerson(credentials.username)">Save</button>
   </form>
 </div>

@@ -5,17 +5,13 @@ import java.util.List;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
-import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
 import org.codehaus.jettison.json.JSONArray;
-import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
-
-import com.sun.jersey.api.NotFoundException;
 
 import de.deepamehta.accesscontrol.AccessControlService;
 import de.deepamehta.contacts.ContactsService;
@@ -26,7 +22,6 @@ import de.deepamehta.core.model.AssociationModel;
 import de.deepamehta.core.osgi.PluginActivator;
 import de.deepamehta.core.service.Inject;
 import de.deepamehta.core.service.event.PreCreateAssociationListener;
-import de.deepamehta.core.storage.spi.DeepaMehtaTransaction;
 import de.deepamehta.core.util.DeepaMehtaUtils;
 import de.deepamehta.events.EventsService;
 import de.deepamehta.geomaps.GeomapsService;
@@ -34,7 +29,6 @@ import de.deepamehta.geomaps.model.GeoCoordinate;
 import de.deepamehta.workspaces.WorkspacesService;
 import eu.crowdliterature.model.Address;
 import eu.crowdliterature.model.DateTime;
-import eu.crowdliterature.model.EditablePerson;
 import eu.crowdliterature.model.EventBasics;
 import eu.crowdliterature.model.Institution;
 import eu.crowdliterature.model.InstitutionOfAddress;
@@ -115,7 +109,7 @@ public class CrowdPlugin extends PluginActivator implements CrowdService, PreCre
     @Path("/persons")
     @Override
     public List<PersonOfMap> getAllPersons() {
-        List<PersonOfMap> persons = new ArrayList();
+        List<PersonOfMap> persons = new ArrayList<PersonOfMap>();
         for (Topic person : dm4.getTopicsByType("dm4.contacts.person")) {
             Topic address = getAddresses(person).get(0);
             GeoCoordinate geoCoord = address != null ? geomapsService.getGeoCoordinate(address) : null;
@@ -130,63 +124,22 @@ public class CrowdPlugin extends PluginActivator implements CrowdService, PreCre
     }
 
     @GET
-    @Path("/editable_person/by_username/{userName}")
+    @Path("/person/id/by_username/{userName}")
     @Override
-    public EditablePerson getEditablePersonByUsername(@PathParam("userName") String userName) {
+    public long getPersonIdByUsername(@PathParam("userName") String userName) {
 	Topic userNameTopic = acService.getUsernameTopic(userName);
 
 	if (userNameTopic == null) {
-		return null;
+		return -1;
 	}
 
 	RelatedTopic person = userNameTopic.getRelatedTopic("dm4.core.association", null, null, "dm4.contacts.person");
 
 	if (person == null) {
-		return null;
+		return -1;
 	}
 
-	ChildTopics childs = person.getChildTopics();
-        return new EditablePerson(
-	    person.getId(),
-            childs.getChildTopics("dm4.contacts.person_name").getStringOrNull("dm4.contacts.first_name"),
-            childs.getChildTopics("dm4.contacts.person_name").getStringOrNull("dm4.contacts.last_name"),
-	    getStrings(person, "dm4.contacts.email_address"),
-            childs.getChildTopics("dm4.datetime.date#dm4.contacts.date_of_birth").getStringOrNull("dm4.datetime.year"),
-            childs.getStringOrNull("dm4.contacts.city#crowd.person.place_of_birth"),
-            childs.getString("dm4.contacts.notes")
-        );
-    }
-
-    @PUT
-    @Path("/editable_person/{personId}")
-    @Override
-    public void updateEditablePerson(@PathParam("personId") long personId, String editablePersonJSON) {
-    	DeepaMehtaTransaction tx = dm4.beginTx();
-    	
-    	try {
-    	JSONObject editablePerson = new JSONObject(editablePersonJSON);
-    	
-        Topic person = dm4.getTopic(personId);
-        
-        if (person != null) {
-            ChildTopics childs = person.getChildTopics();
-            ChildTopics contact = childs.getChildTopics("dm4.contacts.person_name");
-            contact.set("dm4.contacts.first_name", editablePerson.getString("firstName"));
-            contact.set("dm4.contacts.last_name", editablePerson.getString("lastName"));
-//            contact.set("dm4.contacts.email_address", value);
-            childs.set("dm4.contacts.city#crowd.person.place_of_birth", editablePerson.getString("placeOfBirth"));
-            childs.set("dm4.contacts.notes", editablePerson.getString("notes"));
-            
-            tx.success();
-        } else {
-        	throw new NotFoundException("Person does not exist");
-        }
-        
-    	} catch (JSONException e) {
-    		throw new RuntimeException(e);
-    	} finally {
-    		tx.finish();
-    	}
+	return person.getId();
     }
     
     // --- Work ---

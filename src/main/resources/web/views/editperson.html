@@ -20,12 +20,17 @@
     <div class="form-group">
       <label for="inputEmail">Email Addresses</label>
       <div class="input-group" ng-repeat="e in person['childs']['dm4.contacts.email_address'] track by $index">
-        <input type="email" class="form-control" id="inputEmail" ng-model="e.value"> </input
-        <div class="input-group-btn">
+        <input type="email" class="form-control" id="inputEmail" ng-model="e.value" />
+        <span class="input-group-btn">
           <button class="btn btn-default" type="button">-</button>
-        </div>
+        </span>
       </div>
-      <button type="button" class="btn btn-primary" ng-click="enlargeEmail(person)">+</button>
+      <div class="input-group">
+        <input type="email" class="form-control" placeholder="user@domain" />
+        <span class="input-group-btn">
+          <button class="btn btn-primary" ng-click="enlargeEmail(person)">+</button>
+        </span>
+      </div>
     </div>
     <div class="form-group">
       <label for="inputNotes">Notes</label>

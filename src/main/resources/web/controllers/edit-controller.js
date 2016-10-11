@@ -5,7 +5,7 @@ angular.module("crowdedit")
     var loadPerson = function(personId) {
       crowdService.getEditablePerson(personId, function(response) {
         $scope.person = response.data;
-        $scope.isUpdatedBlocked = false;
+        $scope.isUpdateBlocked = false;
 
         persona = $scope.person;
 
@@ -23,14 +23,35 @@ angular.module("crowdedit")
       });
     };
 
+    var updatePerson = function() {
+      var person = $scope.person;
+      // Prevent further updates until the last write hasn't been followed by
+      // a reload.
+      if (!$scope.isUpdateBlocked) {
+        $scope.isUpdateBlocked = true;
+
+        // Reloads the person completely automatically
+        crowdService.updatePerson(person, function(response) {
+          loadPerson(person.id);
+        });
+
+      }
+    };
+
     $scope.newData = {};
 
-    $scope.isUpdatedBlocked = false;
+    $scope.isUpdateBlocked = false;
 
     // Autoload
     loadPerson($routeParams.personId);
 
-    $scope.addNewEmail = function(person) {
+    $scope.addNewEmail = function() {
+      var person = $scope.person;
+
+      if (!person['childs']['dm4.contacts.email_address']) {
+        person['childs']['dm4.contacts.email_address'] = [];
+      }
+
       person['childs']['dm4.contacts.email_address'].push({
         uri: "",
         type_uri: "dm4.contacts.email_address",
@@ -38,9 +59,35 @@ angular.module("crowdedit")
       });
 
       $scope.newData.email = "";
+
+      updatePerson();
     };
 
-    $scope.addNewAddress = function(person) {
+    var moveToTrash = function(array, index) {
+      var old = array[index];
+
+      if (old.id) {
+        // Replace with a trash object
+        array[index] = "del_id:" + old.id;
+      } else {
+        // Has not been saved yet. Just throw away the array entry
+        array.splice(index, 1);
+      }
+    };
+
+    $scope.removeEmail = function(index) {
+      moveToTrash($scope.person['childs']['dm4.contacts.email_address'], index);
+
+      updatePerson();
+    };
+
+    $scope.addNewAddress = function() {
+      var person = $scope.person;
+
+      if (!person['childs']['dm4.contacts.address#dm4.contacts.address_entry']) {
+        person['childs']['dm4.contacts.address#dm4.contacts.address_entry'] = [];
+      }
+
       person['childs']['dm4.contacts.address#dm4.contacts.address_entry'].push({
         uri: "",
         type_uri: "dm4.contacts.address",
@@ -71,19 +118,15 @@ angular.module("crowdedit")
         country: ""
       };
 
+      updatePerson();
     };
 
-    $scope.updatePerson = function(person) {
-      // Prevent further updates until the last write hasn't been followed by
-      // a reload.
-      if (!$scope.isUpdatedBlocked) {
-        $scope.isUpdatedBlocked = true;
+    $scope.removeAddress = function(index) {
+      moveToTrash($scope.person['childs']['dm4.contacts.address#dm4.contacts.address_entry'], index);
 
-        // Reloads the person completely automatically
-        crowdService.updatePerson(person, function(response) {
-          loadPerson(person.id);
-        });
-      }
+      updatePerson();
     };
+
+    $scope.updatePerson = updatePerson;
 
 })

@@ -19,21 +19,21 @@
     </div>
     <div class="form-group">
       <label for="inputEmail">Email Addresses</label>
-      <div class="input-group" ng-repeat="e in person['childs']['dm4.contacts.email_address'] track by $index">
-        <input type="email" class="form-control" id="inputEmail" ng-model="e.value" />
-        <span class="input-group-btn">
-          <button class="btn btn-default" type="button">-</button>
+      <div id="inputEmail" class="input-group" ng-repeat="e in person['childs']['dm4.contacts.email_address'] track by $index" ng-if="e.type_uri">
+        <input ng-disabled="$index == 0" type="email" class="form-control" ng-model="e.value" />
+        <span ng-if="$index > 0" class="input-group-btn">
+          <button class="btn btn-default" type="button" ng-disabled="isUpdateBlocked" ng-click=removeEmail($index)>-</button>
         </span>
       </div>
       <div class="input-group">
         <input type="email" class="form-control" ng-model="newData.email" placeholder="user@domain" />
         <span class="input-group-btn">
-          <button class="btn btn-primary" ng-click="addNewEmail(person)">+</button>
+          <button class="btn btn-primary" ng-disabled="isUpdateBlocked" ng-click="addNewEmail(person)">+</button>
         </span>
       </div>
     </div>
     <div class="form-group">
-      <div ng-repeat="addr in person['childs']['dm4.contacts.address#dm4.contacts.address_entry'] track by $index">
+      <div ng-repeat="addr in person['childs']['dm4.contacts.address#dm4.contacts.address_entry'] track by $index" ng-if="addr.type_uri">
           <label for="inputAddress" >Address {{ $index+1 }}</label>
           <div class="col-lg-12">
             <input type="text" class="form-control" id="inputStreet{{$index}}" ng-model="addr['childs']['dm4.contacts.street'].value" />
@@ -50,7 +50,7 @@
           <div class="input-group">
             <input type="text" class="form-control" id="inputCountry{{$index}}" ng-model="addr['childs']['dm4.contacts.country'].value" />
             <span class="input-group-btn">
-              <button class="btn btn-default" type="button">-</button>
+              <button class="btn btn-default" type="button" ng-disabled="isUpdateBlocked" ng-click="removeAddress($index)">-</button>
             </span>
           </div>
         </div>
@@ -58,21 +58,21 @@
       <div>
         <label for="inputAddressNew" >New Address</label>
         <div class="col-lg-12">
-            <input type="text" class="form-control" id="inputStreetNew" ng-model="newData.address.street" />
+            <input type="text" class="form-control" id="inputStreetNew" placeholder="street" ng-model="newData.address.street" />
         </div>
         <div>
           <div class="col-lg-8">
-            <input type="text" class="form-control" id="inputPostalCodeNew" ng-model="newData.address.postalCode" />
+            <input type="text" class="form-control" id="inputPostalCodeNew" placeholder="postal code" ng-model="newData.address.postalCode" />
           </div>
           <div class="col-lg-4">
-            <input type="text" class="form-control" id="inputCityNew" ng-model="newData.address.city" />
+            <input type="text" class="form-control" id="inputCityNew" placeholder="city" ng-model="newData.address.city" />
           </div>
         </div>
         <div class="col-lg-12">
           <div class="input-group">
-            <input type="text" class="form-control" id="inputCountryNew" ng-model="newData.address.country" />
+            <input type="text" class="form-control" id="inputCountryNew" placeholder="country" ng-model="newData.address.country" />
             <span class="input-group-btn">
-              <button class="btn btn-primary" ng-click="addNewAddress(person)" type="button">+</button>
+              <button class="btn btn-primary" ng-click="addNewAddress(person)" ng-disabled="isUpdateBlocked" type="button">+</button>
             </span>
           </div>
         </div>
@@ -82,7 +82,7 @@
       <label for="inputNotes">Notes</label>
       <textarea class="form-control" id="inputNotes" rows="5" placeholder="eg. This author is ..." ng-model="person['childs']['dm4.contacts.notes'].value"></textarea
     </div>
-    <button ng-if="!isUpdatedBlocked" type="submit" class="btn btn-primary" ng-click="updatePerson(person)">Save</button>
+    <button ng-disabled="isUpdateBlocked" type="submit" class="btn btn-primary" ng-click="updatePerson()">Save</button>
   </form>
 </div>
 </div>

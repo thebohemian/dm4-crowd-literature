@@ -1,8 +1,8 @@
 angular.module("crowdedit", ["ngRoute"])
 .config(function($routeProvider) {
     $routeProvider
-        .when("/login",{templateUrl: "views/editlogin.html",   controller: "EditMainController"})
-        .when("/error-noperson",{templateUrl: "views/edit-error-noperson.html",   controller: "EditMainController"})
+        .when("/login",{templateUrl: "views/editlogin.html", controller: "EditMainController"})
+        .when("/error-noperson",{templateUrl: "views/edit-error-noperson.html"})
         .when("/editperson/:personId",{templateUrl: "views/editperson.html",   controller: "EditPersonController"})
         .otherwise({redirectTo: "/login"})
 })

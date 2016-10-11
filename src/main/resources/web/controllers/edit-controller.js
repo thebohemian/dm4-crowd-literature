@@ -1,13 +1,9 @@
-persona = null;
-
 angular.module("crowdedit")
 .controller("EditPersonController", function($scope, $routeParams, $location, crowdService) {
     var loadPerson = function(personId) {
       crowdService.getEditablePerson(personId, function(response) {
         $scope.person = response.data;
         $scope.isUpdateBlocked = false;
-
-        persona = $scope.person;
 
         // Resets new data
         $scope.newData = {
@@ -43,7 +39,8 @@ angular.module("crowdedit")
     $scope.isUpdateBlocked = false;
 
     // Autoload
-    loadPerson($routeParams.personId);
+    if ($routeParams.personId)
+      loadPerson($routeParams.personId);
 
     $scope.addNewEmail = function() {
       var person = $scope.person;

@@ -126,4 +126,7 @@ angular.module("crowdedit")
 
     $scope.updatePerson = updatePerson;
 
+    $scope.killId = function(topic) {
+      delete topic.id;
+    };
 })

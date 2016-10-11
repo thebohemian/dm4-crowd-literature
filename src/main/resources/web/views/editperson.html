@@ -15,7 +15,7 @@
     </div>
     <div class="form-group">
       <label for="inputPlaceOfBirth">Place Of Birth</label>
-      <input type="text" class="form-control" id="inputPlaceOfBirth" placeholder="eg. Berlin" ng-model="person['childs']['dm4.contacts.city#crowd.person.place_of_birth'].value"> </input
+      <input type="text" class="form-control" id="inputPlaceOfBirth" placeholder="eg. Berlin" ng-change="killId(person['childs']['dm4.contacts.city#crowd.person.place_of_birth'])" ng-model="person['childs']['dm4.contacts.city#crowd.person.place_of_birth'].value"> </input
     </div>
     <div class="form-group">
       <label for="inputEmail">Email Addresses</label>
@@ -43,12 +43,12 @@
             <input type="text" class="form-control" id="inputPostalCode{{$index}}" ng-model="addr['childs']['dm4.contacts.postal_code'].value" />
           </div>
           <div class="col-lg-4">
-            <input type="text" class="form-control" id="inputCity{{$index}}" ng-model="addr['childs']['dm4.contacts.city'].value" />
+            <input type="text" class="form-control" id="inputCity{{$index}}" ng-change="killId(addr['childs']['dm4.contacts.city'])" ng-model="addr['childs']['dm4.contacts.city'].value" />
           </div>
         </div>
         <div class="col-lg-12">
           <div class="input-group">
-            <input type="text" class="form-control" id="inputCountry{{$index}}" ng-model="addr['childs']['dm4.contacts.country'].value" />
+            <input type="text" class="form-control" id="inputCountry{{$index}}" ng-change="killId(addr['childs']['dm4.contacts.country'])" ng-model="addr['childs']['dm4.contacts.country'].value" />
             <span class="input-group-btn">
               <button class="btn btn-default" type="button" ng-disabled="isUpdateBlocked" ng-click="removeAddress($index)">-</button>
             </span>

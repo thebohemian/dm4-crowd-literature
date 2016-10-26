@@ -102,12 +102,12 @@ angular.module("crowd").controller("MainController", function($scope, $rootScope
         var id = args.modelName;
         var typeFromLayer = args.layerName;
         $location.path("/" + typeFromLayer + "/" + id);
-    })
+    });
 
     // --- Controller Methods ---
 
     $scope.resetMap = function() {
-      scope.center = {
+      $scope.center = {
         lat: 56.5,
         lng: 20,
         zoom: 4
@@ -189,7 +189,7 @@ angular.module("crowd").controller("MainController", function($scope, $rootScope
                 icon: icons[layer].normal
             }
         } else {
-            console.log("WARNING: element \"" + element.name + "\" (" + element.id +
+            console.log("WARNING: element \"" + objectOfMap.name + "\" (" + objectOfMap.id +
                 ") can't appear on map -- its geo coordinate is unknown")
         }
     }

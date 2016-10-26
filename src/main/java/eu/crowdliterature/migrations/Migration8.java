@@ -16,6 +16,6 @@ public class Migration8 extends Migration {
     @Override
     public void run() {
         Topic startPage = dm4.getTopicByUri("crowd.omnibus.start_page");
-	startPage.setUri("crowd.meet.start_page");
+        startPage.setUri("crowd.meet.start_page");
     }
 }

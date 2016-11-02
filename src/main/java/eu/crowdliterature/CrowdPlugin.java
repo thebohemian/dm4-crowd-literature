@@ -2,6 +2,7 @@ package eu.crowdliterature;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
@@ -15,12 +16,15 @@ import org.codehaus.jettison.json.JSONObject;
 
 import de.deepamehta.accesscontrol.AccessControlService;
 import de.deepamehta.contacts.ContactsService;
+import de.deepamehta.core.Association;
 import de.deepamehta.core.ChildTopics;
+import de.deepamehta.core.DeepaMehtaObject;
 import de.deepamehta.core.RelatedTopic;
 import de.deepamehta.core.Topic;
 import de.deepamehta.core.model.AssociationModel;
 import de.deepamehta.core.osgi.PluginActivator;
 import de.deepamehta.core.service.Inject;
+import de.deepamehta.core.service.event.PostCreateAssociationListener;
 import de.deepamehta.core.service.event.PreCreateAssociationListener;
 import de.deepamehta.core.util.DeepaMehtaUtils;
 import de.deepamehta.events.EventsService;
@@ -48,8 +52,10 @@ import eu.crowdliterature.model.WorkOfPerson;
 @Path("/crowd")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
-public class CrowdPlugin extends PluginActivator implements CrowdService, PreCreateAssociationListener {
+public class CrowdPlugin extends PluginActivator implements CrowdService, PreCreateAssociationListener, PostCreateAssociationListener {
 
+	private static final Logger log = Logger.getLogger(CrowdPlugin.class.getSimpleName());
+	
 	// ----------------------------------------------------------------------------------------------
 	// Instance Variables
 
@@ -479,4 +485,48 @@ public class CrowdPlugin extends PluginActivator implements CrowdService, PreCre
 		}
 		return strings;
 	}
+	
+	private Topic findPersonWithEmail(String emailAddress) {
+		for (Topic person : dm4.getTopicsByType("dm4.contacts.person")) {
+			ChildTopics childs = person.getChildTopics();
+			List<RelatedTopic> emails = childs.getTopicsOrNull("dm4.contacts.email_address");
+			if (emails == null) {
+				continue;
+			}
+			for (RelatedTopic email : emails) {
+				if (emailAddress.equals(email.getSimpleValue().toString())) {
+					return person;
+				}
+			}
+		}
+		
+		return null;		
+	}
+
+	@Override
+	public void postCreateAssociation(Association assoc) {
+		String assocTypeUri = "org.deepamehta.signup.user_mailbox";
+		//String player1TypeUri = "dm4.contacts.email_address";
+		//String player2TypeUri = "dm4.accesscontrol.username";
+		
+		/** Detects the creation of a new user and its email address and automatically creates
+		 * a link between the username and the person with the same email address. 
+		 */
+		if (assocTypeUri.equals(assoc.getTypeUri())) {
+			DeepaMehtaObject emailTopic = assoc.getPlayer1();
+			DeepaMehtaObject userName = assoc.getPlayer2();
+			
+			String emailAddress = emailTopic.getSimpleValue().toString();
+			Topic person;
+			if (emailAddress != null
+				&& (person = findPersonWithEmail(emailAddress)) != null) {
+				// Found person, now create "me" association
+				dm4.createAssociation(mf.newAssociationModel("dm4.core.association",
+		    			mf.newTopicRoleModel(person.getId(), "dm4.core.default"),
+					mf.newTopicRoleModel(userName.getId(), "dm4.core.default"))); 
+			}
+			
+		}
+	}
+
 }

@@ -515,6 +515,12 @@ public class CrowdPlugin extends PluginActivator implements CrowdService, PreCre
 		if (assocTypeUri.equals(assoc.getTypeUri())) {
 			DeepaMehtaObject emailTopic = assoc.getPlayer1();
 			DeepaMehtaObject userName = assoc.getPlayer2();
+
+			// TODO:
+			// Create public workspace for user:
+			// - user becomes member of this workspace
+			// - crowdadmin becomes member of this workspace
+			// - admin is owner of this workspace
 			
 			String emailAddress = emailTopic.getSimpleValue().toString();
 			Topic person;
@@ -523,7 +529,14 @@ public class CrowdPlugin extends PluginActivator implements CrowdService, PreCre
 				// Found person, now create "me" association
 				dm4.createAssociation(mf.newAssociationModel("dm4.core.association",
 		    			mf.newTopicRoleModel(person.getId(), "dm4.core.default"),
-					mf.newTopicRoleModel(userName.getId(), "dm4.core.default"))); 
+					mf.newTopicRoleModel(userName.getId(), "dm4.core.default")));
+				
+				// TODO:
+				// - move Person and its childs into the public workspace of user (see above)
+				
+			} else {
+				// TODO: Create a new person in the public workspace of the user
+				// 
 			}
 			
 		}

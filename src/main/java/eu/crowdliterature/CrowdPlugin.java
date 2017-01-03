@@ -24,6 +24,7 @@ import de.deepamehta.core.Topic;
 import de.deepamehta.core.model.AssociationModel;
 import de.deepamehta.core.osgi.PluginActivator;
 import de.deepamehta.core.service.Inject;
+import de.deepamehta.core.service.accesscontrol.SharingMode;
 import de.deepamehta.core.service.event.PostCreateAssociationListener;
 import de.deepamehta.core.service.event.PreCreateAssociationListener;
 import de.deepamehta.core.util.DeepaMehtaUtils;
@@ -516,11 +517,12 @@ public class CrowdPlugin extends PluginActivator implements CrowdService, PreCre
 			DeepaMehtaObject emailTopic = assoc.getPlayer1();
 			DeepaMehtaObject userName = assoc.getPlayer2();
 
+			long userWorkspaceId = createUserWorkspace(userName.getSimpleValue().toString());
+			
 			// TODO:
 			// Create public workspace for user:
 			// - user becomes member of this workspace
-			// - crowdadmin becomes member of this workspace
-			// - admin is owner of this workspace
+			// - crowdadmin becomes member of this workspace (this means: usernames that are members of the CROWD workspace)
 			
 			String emailAddress = emailTopic.getSimpleValue().toString();
 			Topic person;
@@ -531,15 +533,22 @@ public class CrowdPlugin extends PluginActivator implements CrowdService, PreCre
 		    			mf.newTopicRoleModel(person.getId(), "dm4.core.default"),
 					mf.newTopicRoleModel(userName.getId(), "dm4.core.default")));
 				
-				// TODO:
-				// - move Person and its childs into the public workspace of user (see above)
-				
+				wsService.assignToWorkspace(person, userWorkspaceId);
 			} else {
 				// TODO: Create a new person in the public workspace of the user
 				// 
 			}
 			
 		}
+	}
+	
+	private long createUserWorkspace(String userName) {
+		Topic typesWs = wsService.createWorkspace(userName + "'s workspace", null,
+				SharingMode.PUBLIC);
+		
+		acService.setWorkspaceOwner(typesWs, AccessControlService.ADMIN_USERNAME);
+		
+		return typesWs.getId();
 	}
 
 }

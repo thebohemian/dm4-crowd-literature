@@ -517,21 +517,33 @@ public class CrowdPlugin extends PluginActivator implements CrowdService, PreCre
 			DeepaMehtaObject emailTopic = assoc.getPlayer1();
 			DeepaMehtaObject userName = assoc.getPlayer2();
 
-			long userWorkspaceId = createUserWorkspace(userName.getSimpleValue().toString());
-			
-			// TODO:
-			// Create public workspace for user:
-			// - user becomes member of this workspace
-			// - crowdadmin becomes member of this workspace (this means: usernames that are members of the CROWD workspace)
-			
 			String emailAddress = emailTopic.getSimpleValue().toString();
 			Topic person;
 			if (emailAddress != null
 				&& (person = findPersonWithEmail(emailAddress)) != null) {
 				// Found person, now create "me" association
-				dm4.createAssociation(mf.newAssociationModel("dm4.core.association",
+				Association asso = dm4.createAssociation(mf.newAssociationModel("dm4.core.association",
 		    			mf.newTopicRoleModel(person.getId(), "dm4.core.default"),
 					mf.newTopicRoleModel(userName.getId(), "dm4.core.default")));
+				
+				// Makes the association part of the crowd workspace
+				Topic crowdWs = dm4.getTopicByUri("crowd.workspace");
+				wsService.assignToWorkspace(asso, crowdWs.getId());
+				
+				// Creates a workspace for the new user
+				long userWorkspaceId = createUserWorkspace(userName.getSimpleValue().toString());
+
+				// Makes all crowdadmins (the members of the crowd workspace) members of the new user workspace
+				List<? extends Topic> crowdAdmins = crowdWs.getRelatedTopics(
+						"dm4.accesscontrol.membership",
+						"dm4.core.default", "dm4.core.default",
+						"dm4.accesscontrol.username");
+				
+				for (Topic crowdAdmin : crowdAdmins) {
+					acService.createMembership(crowdAdmin.getSimpleValue().toString(), userWorkspaceId);
+				}
+				// makes the new new user a member of its own workspace
+				acService.createMembership(userName.getSimpleValue().toString(), userWorkspaceId);
 				
 				wsService.assignToWorkspace(person, userWorkspaceId);
 			} else {
@@ -550,5 +562,5 @@ public class CrowdPlugin extends PluginActivator implements CrowdService, PreCre
 		
 		return typesWs.getId();
 	}
-
+	
 }

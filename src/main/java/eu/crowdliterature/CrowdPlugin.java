@@ -9,6 +9,7 @@ import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
 import org.codehaus.jettison.json.JSONArray;
@@ -89,6 +90,21 @@ public class CrowdPlugin extends PluginActivator implements CrowdService, PreCre
 	public String getStartPageContent() {
 		return dm4.getTopicByUri("crowd.meet.start_page").getChildTopics().getString("dm4.notes.text");
 	}
+	
+	// --- Search functionality ---
+    /**
+     * Performs a fulltext search and creates a search result topic.
+     */
+    @GET
+    @Path("/search")
+    public SearchResult searchTopics(@QueryParam("search") String searchTerm) {
+        try {
+            List<Topic> singleTopics = dm4.searchTopics(searchTerm, null);
+            return DTOHelper.toSearchResult(singleTopics);
+        } catch (Exception e) {
+            throw new RuntimeException("Searching topics failed", e);
+        }
+    }
 
 	// --- Person ---
 
@@ -522,7 +538,7 @@ public class CrowdPlugin extends PluginActivator implements CrowdService, PreCre
 			if (emailAddress != null
 				&& (person = findPersonWithEmail(emailAddress)) != null) {
 				// Found person, now create "me" association
-				Association asso = dm4.createAssociation(mf.newAssociationModel("dm4.core.association",
+				Association asso = dm4.createAssociation(mf.newAssociationModel("crowd.person.me",
 		    			mf.newTopicRoleModel(person.getId(), "dm4.core.default"),
 					mf.newTopicRoleModel(userName.getId(), "dm4.core.default")));
 				

@@ -34,7 +34,16 @@ strong {
 }
 
 #header .start-link {
-    flex-grow: 1;
+}
+
+#header .search-input {
+}
+
+#header .space-span {
+  flex-grow: 1;
+}
+
+#header .map-link {
 }
 
 #content {

@@ -5,7 +5,7 @@
         <meta name="viewport" content="width=device-width">
         <title>CROWD Meet</title>
 
-        <base href="/eu.crowd-literature/"-->     <!-- comment for a save-reload turnaround -->
+        <base href="/eu.crowd-literature/">     <!-- comment for a save-reload turnaround -->
         <link rel="icon" href="crowd-favicon.png">
         <link rel="stylesheet" href="lib/leaflet/leaflet.css">
         <link rel="stylesheet" href="lib/leaflet.markercluster/MarkerCluster.css">
@@ -16,7 +16,8 @@
         <div id="spinner"></div>
         <div id="header">
             <span class="start-link"><a href="#/start">CROWD Meet</a></span>
-            <input type="text" ng-model="search.text" ng-change="onChangeSearch()" />
+            <input class="search-input" type="text" ng-model="search.text" ng-change="onChangeSearch()" maxlength="30" />
+            <span class="space-span"></span>
             <span class="map-link"><a href="edit.html">Login</a></span>
             <span class="map-link" ng-if="portrait"><a href="#/map">Show map</a></span>
         </div>

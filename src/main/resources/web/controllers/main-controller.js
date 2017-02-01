@@ -126,6 +126,7 @@ angular.module("crowd").controller("MainController", function($scope, $rootScope
         });
       } else {
         console.log("resetting filter");
+        $scope.filter = null;
         applyFilter();
       }
     }

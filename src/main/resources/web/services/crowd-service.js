@@ -6,7 +6,7 @@ angular.module("crowd").service("crowdService", function($http) {
 
     // --- Search function ---
     this.search = function(searchTerm, callback) {
-        $http.get("/crowd/search?search=" + searchTerm + "*").then(callback);
+        $http.get("/crowd/search?search=" + searchTerm).then(callback);
     }
 
     // --- Person ---

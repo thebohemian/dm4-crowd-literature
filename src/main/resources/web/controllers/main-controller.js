@@ -116,7 +116,9 @@ angular.module("crowd").controller("MainController", function($scope, $rootScope
 
     $scope.onChangeSearch = function() {
       if ($scope.search.text.length >= 3) {
-        crowdService.search($scope.search.text, function(response) {
+        var searchTerm = "*" + $scope.search.text + "*";
+        
+        crowdService.search(searchTerm, function(response) {
             try {
               $scope.filter = response.data.filter;
               applyFilter();

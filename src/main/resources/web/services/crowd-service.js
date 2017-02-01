@@ -4,6 +4,11 @@ angular.module("crowd").service("crowdService", function($http) {
         $http.get("/crowd/start_page").then(callback);
     }
 
+    // --- Search function ---
+    this.search = function(searchTerm, callback) {
+        $http.get("/crowd/search?search=" + searchTerm + "*").then(callback);
+    }
+
     // --- Person ---
 
     this.getPerson = function(personId, callback) {

@@ -76,7 +76,11 @@ angular.module("crowd").controller("MainController", function($scope, $rootScope
         }
     }
 
-    $scope.filter = [];
+    $scope.search = {
+      text: ""
+    }
+
+    $scope.filter = null;
 
     $scope.markers = {};
 
@@ -110,17 +114,28 @@ angular.module("crowd").controller("MainController", function($scope, $rootScope
 
     // --- Controller Methods ---
 
+    $scope.onChangeSearch = function() {
+      if ($scope.search.text.length >= 3) {
+        crowdService.search($scope.search.text, function(response) {
+            try {
+              $scope.filter = response.data.filter;
+              applyFilter();
+            } catch (err) {
+              console.log(err);
+            }
+        });
+      } else {
+        console.log("resetting filter");
+        applyFilter();
+      }
+    }
+
     $scope.resetMap = function() {
       $scope.center = {
         lat: 56.5,
         lng: 20,
         zoom: 4
       };
-    }
-
-    $scope.setFilter = function(filter) {
-      $scope.filter = filter;
-      applyFilter();
     }
 
     $scope.setMapVisibility = function(mapVisibility) {
@@ -190,7 +205,7 @@ angular.module("crowd").controller("MainController", function($scope, $rootScope
     }
 
     function applyFilter() {
-      if ($scope.filter.length > 0) {
+      if ($scope.filter) {
         // clear the visible markers
         $scope.visibleMarkers = [];
 
@@ -218,7 +233,7 @@ angular.module("crowd").controller("MainController", function($scope, $rootScope
             }
             $scope.markers[objectOfMap.id] = newMarker;
 
-            if ($scope.filter.length == 0 || $scope.filter.indexOf(objectOfMap.id) >= 0) {
+            if (!$scope.filter || $scope.filter.indexOf(objectOfMap.id) >= 0) {
               // marker is currently visible
               $scope.visibleMarkers[objectOfMap.id] = newMarker;
             }

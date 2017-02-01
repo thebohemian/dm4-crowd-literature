@@ -4,7 +4,8 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width">
         <title>CROWD Meet</title>
-        <base href="/eu.crowd-literature/">     <!-- comment for a save-reload turnaround -->
+
+        <base href="/eu.crowd-literature/"-->     <!-- comment for a save-reload turnaround -->
         <link rel="icon" href="crowd-favicon.png">
         <link rel="stylesheet" href="lib/leaflet/leaflet.css">
         <link rel="stylesheet" href="lib/leaflet.markercluster/MarkerCluster.css">
@@ -15,13 +16,15 @@
         <div id="spinner"></div>
         <div id="header">
             <span class="start-link"><a href="#/start">CROWD Meet</a></span>
+            <input type="text" ng-model="search.text" ng-change="onChangeSearch()" />
+            <span class="map-link"><a href="edit.html">Login</a></span>
             <span class="map-link" ng-if="portrait"><a href="#/map">Show map</a></span>
         </div>
         <div id="content">
             <leaflet id="map" lf-center="center" defaults="defaults" tiles="tiles" layers="layers" geojson="bustour"
-                markers="markers" ng-if="landscape || mapVisibility">
+                markers="visibleMarkers" ng-if="landscape || mapVisibility">
             </leaflet>
-            <div id="details" ng-show="landscape || !mapVisibility" ng-view></div>
+            <div id="details" ng-show="landscape || !mapVisibility" ng-view> </div>
         </div>
         <div id="powered-by">
             powered by <a href="http://www.deepamehta.de/">DeepaMehta</a>

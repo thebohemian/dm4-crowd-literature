@@ -76,7 +76,11 @@ angular.module("crowd").controller("MainController", function($scope, $rootScope
         }
     }
 
+    $scope.filter = [];
+
     $scope.markers = {};
+
+    $scope.visibleMarkers = {};
 
     // --- Event Listeners ---
 
@@ -112,6 +116,11 @@ angular.module("crowd").controller("MainController", function($scope, $rootScope
         lng: 20,
         zoom: 4
       };
+    }
+
+    $scope.setFilter = function(filter) {
+      $scope.filter = filter;
+      applyFilter();
     }
 
     $scope.setMapVisibility = function(mapVisibility) {
@@ -180,13 +189,38 @@ angular.module("crowd").controller("MainController", function($scope, $rootScope
         return "lib/leaflet/images/" + iconFile;
     }
 
+    function applyFilter() {
+      if ($scope.filter.length > 0) {
+        // clear the visible markers
+        $scope.visibleMarkers = [];
+
+        // Then move the filtered elements into the other visible set
+        for (var index in $scope.filter) {
+          var filteredId = $scope.filter[index];
+          $scope.visibleMarkers[filteredId] = $scope.markers[filteredId];
+        }
+      } else {
+        // no filter active, place everything into the visible set
+        for (var markerId in $scope.markers) {
+          $scope.visibleMarkers[markerId] = $scope.markers[markerId];
+        }
+      }
+
+    }
+
     function addMarker(layer, objectOfMap) {
         if (objectOfMap.lat != undefined && objectOfMap.lng != undefined) {
-            $scope.markers[objectOfMap.id] = {
+            var newMarker = {
                 lat: objectOfMap.lat,
                 lng: objectOfMap.lng,
                 layer: layer,
                 icon: icons[layer].normal
+            }
+            $scope.markers[objectOfMap.id] = newMarker;
+
+            if ($scope.filter.length == 0 || $scope.filter.indexOf(objectOfMap.id) >= 0) {
+              // marker is currently visible
+              $scope.visibleMarkers[objectOfMap.id] = newMarker;
             }
         } else {
             console.log("WARNING: element \"" + objectOfMap.name + "\" (" + objectOfMap.id +

@@ -13,34 +13,38 @@
     <parent>
         <groupId>de.deepamehta</groupId>
         <artifactId>deepamehta-plugin</artifactId>
-        <version>4.8.3</version>
+        <version>4.8.5</version>
     </parent>
+
+    <properties>
+	<dm4.deploy.dir>../crowd-deepamehta/bundle-deploy</dm4.deploy.dir>
+    </properties>
 
     <dependencies>
         <dependency>
             <groupId>de.deepamehta</groupId>
             <artifactId>deepamehta-contacts</artifactId>
-            <version>4.8.3</version>
+            <version>4.8.5</version>
         </dependency>
         <dependency>
             <groupId>de.deepamehta</groupId>
             <artifactId>deepamehta-events</artifactId>
-            <version>4.8.3</version>
+            <version>4.8.5</version>
         </dependency>
         <dependency>
             <groupId>de.deepamehta</groupId>
             <artifactId>deepamehta-geomaps</artifactId>
-            <version>4.8.3</version>
+            <version>4.8.5</version>
         </dependency>
         <dependency>
             <groupId>de.deepamehta</groupId>
             <artifactId>deepamehta-workspaces</artifactId>
-            <version>4.8.3</version>
+            <version>4.8.5</version>
         </dependency>
         <dependency>
             <groupId>de.deepamehta</groupId>
             <artifactId>deepamehta-accesscontrol</artifactId>
-            <version>4.8.3</version>
+            <version>4.8.5</version>
         </dependency>
     </dependencies>
 

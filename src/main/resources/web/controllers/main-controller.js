@@ -113,12 +113,19 @@ angular.module("crowd").controller("MainController", function($scope, $rootScope
     });
 
     // --- Controller Methods ---
+    $scope.lastSearchTerm = "";
 
     $scope.onChangeSearch = function() {
       if ($scope.search.text.length >= 3) {
         var searchTerm = "*" + $scope.search.text + "*";
-        
+        $scope.lastSearchTerm = searchTerm;
+
         crowdService.search(searchTerm, function(response) {
+            if (searchTerm != $scope.lastSearchTerm) {
+              console.log("search response arrived late. Discarding.");
+              return;
+            }
+
             try {
               $scope.filter = response.data.filter;
               applyFilter();

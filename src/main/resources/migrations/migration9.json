@@ -1,0 +1,9 @@
+{
+    "assoc_types": [
+        {
+            "value": "me",
+            "uri": "crowd.person.me",
+            "data_type_uri": "dm4.core.text"
+        }
+    ]
+}

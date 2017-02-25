@@ -24,8 +24,9 @@ public interface CrowdService {
     List<PersonOfMap> getAllPersons();
 
     // Editable Person
+    void ensureUserToPersonAssociationAndWorkspaceSetup();
     
-    long getPersonIdByUsername(String userName);
+    long getPersonIdByLoggedInUser();
     
     // --- Work ---
 

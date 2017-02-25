@@ -31,12 +31,15 @@ strong {
     display: flex;
     flex: none;
     background-color: black;
+    align-items: baseline;
 }
 
 #header .start-link {
+  margin: 0.1em;
 }
 
 #header .search-input {
+  margin: 0.2em;
 }
 
 #header .space-span {
@@ -44,6 +47,7 @@ strong {
 }
 
 #header .map-link {
+  margin: 0.1em;
 }
 
 #content {

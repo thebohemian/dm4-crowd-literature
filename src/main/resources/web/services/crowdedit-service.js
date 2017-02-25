@@ -2,9 +2,14 @@ angular.module("crowdedit").service("crowdService", function($http) {
 
     // --- Person ---
 
-    this.getPersonIdByUsername = function(username, callback) {
-        $http.get("/crowd/person/id/by_username/" + username)
-          .then(callback);
+    this.getPersonIdByLoggedInUser = function(callback, errorCallback) {
+        $http.get("/crowd/person/id/by_loggedinuser")
+          .then(callback, errorCallback);
+    }
+
+    this.validateSetup = function(successCallback, errorCallback) {
+        $http.get("/crowd/person/validate_setup")
+          .then(successCallback, errorCallback);
     }
 
     this.getEditablePerson = function(personId, callback) {
@@ -14,6 +19,10 @@ angular.module("crowdedit").service("crowdService", function($http) {
 
     this.updatePerson = function(person, callback) {
         $http.put("/core/topic/" + person.id, person).then(callback);
+    }
+
+    this.logout = function(callback) {
+      $http.post("/accesscontrol/logout").then(callback);
     }
 
 })

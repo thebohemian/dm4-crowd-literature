@@ -6,6 +6,7 @@ import java.util.logging.Logger;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -15,6 +16,8 @@ import javax.ws.rs.core.MediaType;
 import org.codehaus.jettison.json.JSONArray;
 import org.codehaus.jettison.json.JSONObject;
 
+import com.sun.jersey.api.NotFoundException;
+
 import de.deepamehta.accesscontrol.AccessControlService;
 import de.deepamehta.contacts.ContactsService;
 import de.deepamehta.core.Association;
@@ -23,8 +26,11 @@ import de.deepamehta.core.DeepaMehtaObject;
 import de.deepamehta.core.RelatedTopic;
 import de.deepamehta.core.Topic;
 import de.deepamehta.core.model.AssociationModel;
+import de.deepamehta.core.model.ChildTopicsModel;
+import de.deepamehta.core.model.TopicModel;
 import de.deepamehta.core.osgi.PluginActivator;
 import de.deepamehta.core.service.Inject;
+import de.deepamehta.core.service.Transactional;
 import de.deepamehta.core.service.accesscontrol.SharingMode;
 import de.deepamehta.core.service.event.PostCreateAssociationListener;
 import de.deepamehta.core.service.event.PreCreateAssociationListener;
@@ -136,24 +142,97 @@ public class CrowdPlugin extends PluginActivator implements CrowdService, PreCre
 		}
 		return persons;
 	}
+	
+	@GET
+	@Path("/person/id/by_loggedinuser")
+	@Override
+	public long getPersonIdByLoggedInUser() {
+		try {
+			Topic userNameTopic = acService.getUsernameTopic();
+
+			if (userNameTopic == null) {
+				throw new NotFoundException("No user is logged in!");
+			}
+			String userName = userNameTopic.getSimpleValue().toString();
+
+			String emailAddress = dm4.getAccessControl().getEmailAddress(userName);
+			if (emailAddress == null) {
+				throw new NotFoundException("No email address for this user: " + userName);
+			}
+
+			Topic person = userNameTopic.getRelatedTopic("crowd.person.me", null, null, "dm4.contacts.person");
+			if (person == null) {
+				log.warning("No 'me' association for this user: " + userName);
+				throw new NotFoundException();
+			} else {
+				if (!personHasEmail(person, emailAddress)) {
+					throw new NotFoundException("Email not set up properly for this user: " + userName);
+				}
+				
+				Topic userWorkspace = dm4.getTopicByUri(USER_WS_NS(userName));
+				if (userWorkspace == null) {
+					throw new NotFoundException("Workspace not set up properly for this user: " + userName);
+				}
+			}
+			return person.getId();
+		} catch (NotFoundException nfe) {
+			log.warning(nfe.getMessage());
+			throw nfe;
+		}
+
+	}
 
 	@GET
-	@Path("/person/id/by_username/{userName}")
+	@Path("/person/validate_setup")
+	@Transactional
 	@Override
-	public long getPersonIdByUsername(@PathParam("userName") String userName) {
-		Topic userNameTopic = acService.getUsernameTopic(userName);
+	public void ensureUserToPersonAssociationAndWorkspaceSetup() {
+		Topic userNameTopic = acService.getUsernameTopic();
 
 		if (userNameTopic == null) {
-			return -1;
+			log.warning("No user is logged in!");
+			throw new NotFoundException();
+		}
+		String userName = userNameTopic.getSimpleValue().toString();
+
+		String emailAddress = dm4.getAccessControl().getEmailAddress(userName);
+		if (emailAddress == null) {
+			log.warning("No email address for this user: " + userName);
+			throw new NotFoundException();
 		}
 
-		RelatedTopic person = userNameTopic.getRelatedTopic("dm4.core.association", null, null, "dm4.contacts.person");
-
-		if (person == null) {
-			return -1;
+		Topic person = userNameTopic.getRelatedTopic("crowd.person.me", null, null, "dm4.contacts.person");
+		if (person == null){
+			log.info("User had no Person topic associated. Attempting to find person: " + userName);
+			person = findPersonWithEmail(emailAddress);
+			
+			// Checks if succeeded and creates a brand new user.
+			if (person == null) {
+				log.info("No person with matching email found. Creating: " + userName);
+				// Person does not exist, we need to create one
+				ChildTopicsModel childs = mf.newChildTopicsModel();
+				childs.put("dm4.contacts.email_address", emailAddress);
+				TopicModel personModel = mf.newTopicModel("dm.contacts.person", childs);
+				
+				person = dm4.createTopic(personModel);
+			}
+			
+			setupPersonAndUser(userNameTopic, person);
+		} else if (!personHasEmail(person, emailAddress)) {
+			// Person existed but email is missing.
+			
+			log.info("Person is missing email address of user. Adding.");
+			ChildTopics childs = person.getChildTopics();
+			childs.add("dm4.contacts.email_address", emailAddress);
+			
+		}
+		
+		// Checks if there is already a user workspace. If not then it needs to be set up.
+		Topic userWorkspace = dm4.getTopicByUri(USER_WS_NS(userName));
+		if (userWorkspace == null) {
+			setupWorkspace(userNameTopic, person);
 		}
 
-		return person.getId();
 	}
 
 	// --- Work ---
@@ -520,6 +599,21 @@ public class CrowdPlugin extends PluginActivator implements CrowdService, PreCre
 		return null;		
 	}
 
+	private boolean personHasEmail(Topic personTopic, String emailAddress) {
+		ChildTopics childs = personTopic.getChildTopics();
+		List<RelatedTopic> emails = childs.getTopicsOrNull("dm4.contacts.email_address");
+		if (emails == null) {
+			return false;
+		}
+		for (RelatedTopic email : emails) {
+			if (emailAddress.equals(email.getSimpleValue().toString())) {
+				return true;
+			}
+		}
+		
+		return false;		
+	}
+
 	@Override
 	public void postCreateAssociation(Association assoc) {
 		String assocTypeUri = "org.deepamehta.signup.user_mailbox";
@@ -534,34 +628,17 @@ public class CrowdPlugin extends PluginActivator implements CrowdService, PreCre
 			DeepaMehtaObject userName = assoc.getPlayer2();
 
 			String emailAddress = emailTopic.getSimpleValue().toString();
-			Topic person;
-			if (emailAddress != null
-				&& (person = findPersonWithEmail(emailAddress)) != null) {
-				// Found person, now create "me" association
-				Association asso = dm4.createAssociation(mf.newAssociationModel("crowd.person.me",
-		    			mf.newTopicRoleModel(person.getId(), "dm4.core.default"),
-					mf.newTopicRoleModel(userName.getId(), "dm4.core.default")));
+			
+			// Ignore if the user has no email adress (its an internal user).
+			if (emailAddress == null)
+				return;
+			
+			Topic person = findPersonWithEmail(emailAddress);
+			if (person != null) {
+				setupPersonAndUser(userName, person);
 				
-				// Makes the association part of the crowd workspace
-				Topic crowdWs = dm4.getTopicByUri("crowd.workspace");
-				wsService.assignToWorkspace(asso, crowdWs.getId());
-				
-				// Creates a workspace for the new user
-				long userWorkspaceId = createUserWorkspace(userName.getSimpleValue().toString());
-
-				// Makes all crowdadmins (the members of the crowd workspace) members of the new user workspace
-				List<? extends Topic> crowdAdmins = crowdWs.getRelatedTopics(
-						"dm4.accesscontrol.membership",
-						"dm4.core.default", "dm4.core.default",
-						"dm4.accesscontrol.username");
-				
-				for (Topic crowdAdmin : crowdAdmins) {
-					acService.createMembership(crowdAdmin.getSimpleValue().toString(), userWorkspaceId);
-				}
-				// makes the new new user a member of its own workspace
-				acService.createMembership(userName.getSimpleValue().toString(), userWorkspaceId);
-				
-				wsService.assignToWorkspace(person, userWorkspaceId);
+				// User was successfully linked, so immediately enable the account.
+				userName.getChildTopics().set("dm4.accesscontrol.login_enabled", true);
 			} else {
 				// TODO: Create a new person in the public workspace of the user
 				// 
@@ -570,8 +647,47 @@ public class CrowdPlugin extends PluginActivator implements CrowdService, PreCre
 		}
 	}
 	
+	private void setupPersonAndUser(DeepaMehtaObject userName, DeepaMehtaObject person) {
+		// Found person, now create "me" association
+		Association asso = dm4.createAssociation(mf.newAssociationModel("crowd.person.me",
+    			mf.newTopicRoleModel(person.getId(), "dm4.core.default"),
+			mf.newTopicRoleModel(userName.getId(), "dm4.core.default")));
+		
+		// Makes the association part of the crowd workspace
+		Topic crowdWs = dm4.getTopicByUri("crowd.workspace");
+		wsService.assignToWorkspace(asso, crowdWs.getId());
+
+		setupWorkspace(userName, person);
+	}
+	
+	private void setupWorkspace(DeepaMehtaObject userName, DeepaMehtaObject person) {
+		Topic crowdWs = dm4.getTopicByUri("crowd.workspace");
+		
+		// Creates a workspace for the new user
+		long userWorkspaceId = createUserWorkspace(userName.getSimpleValue().toString());
+
+		// Makes all crowdadmins (the members of the crowd workspace) members of the new user workspace
+		List<? extends Topic> crowdAdmins = crowdWs.getRelatedTopics(
+				"dm4.accesscontrol.membership",
+				"dm4.core.default", "dm4.core.default",
+				"dm4.accesscontrol.username");
+		
+		for (Topic crowdAdmin : crowdAdmins) {
+			acService.createMembership(crowdAdmin.getSimpleValue().toString(), userWorkspaceId);
+		}
+		// makes the new new user a member of its own workspace
+		acService.createMembership(userName.getSimpleValue().toString(), userWorkspaceId);
+		
+		wsService.assignToWorkspace(person, userWorkspaceId);
+
+	}
+	
+	private static String USER_WS_NS(String userName){
+		return "crowd.workspace.user." + userName;
+	}
+	
 	private long createUserWorkspace(String userName) {
-		Topic typesWs = wsService.createWorkspace(userName + "'s workspace", null,
+		Topic typesWs = wsService.createWorkspace(userName + "'s workspace", USER_WS_NS(userName),
 				SharingMode.PUBLIC);
 		
 		acService.setWorkspaceOwner(typesWs, AccessControlService.ADMIN_USERNAME);

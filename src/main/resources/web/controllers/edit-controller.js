@@ -1,5 +1,6 @@
 angular.module("crowdedit")
 .controller("EditPersonController", function($scope, $routeParams, $location, crowdService) {
+
     var loadPerson = function(personId) {
       crowdService.getEditablePerson(personId, function(response) {
         $scope.person = response.data;
@@ -34,13 +35,25 @@ angular.module("crowdedit")
       }
     };
 
+    var validateAndLoadPerson = function() {
+      var errorCallback = function(errorResponse) {
+        $location.path("/error-noperson");
+      };
+
+      crowdService.validateSetup(function(validateResponse) {
+        crowdService.getPersonIdByLoggedInUser(function(response) {
+            var personId = response.data;
+            loadPerson(personId);
+        }, errorCallback);
+      }, errorCallback);
+    };
+
     $scope.newData = {};
 
     $scope.isUpdateBlocked = false;
 
     // Autoload
-    if ($routeParams.personId)
-      loadPerson($routeParams.personId);
+    validateAndLoadPerson();
 
     $scope.addNewEmail = function() {
       var person = $scope.person;
@@ -126,7 +139,14 @@ angular.module("crowdedit")
 
     $scope.updatePerson = updatePerson;
 
+    $scope.logout = function() {
+      crowdService.logout(function() {
+        $location.path("/start");
+      });
+    };
+
     $scope.killId = function(topic) {
       delete topic.id;
     };
+
 })

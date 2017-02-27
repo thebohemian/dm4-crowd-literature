@@ -1,4 +1,4 @@
-angular.module("crowdedit", ["ngRoute"])
+angular.module("crowdedit", ["ngRoute", "ckeditor"])
 .config(function($routeProvider) {
     var start = {
       controller: function() {

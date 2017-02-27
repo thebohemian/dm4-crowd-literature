@@ -12,6 +12,8 @@
           crossorigin="anonymous">
         </link>
 
+        <link rel="stylesheet" href="/de.deepamehta.webclient/css/ckeditor-overrides.css" type="text/css">
+
         <!--base href="/eu.crowd-literature/"-->     <!-- comment for a save-reload turnaround -->
         <link rel="icon" href="crowd-favicon.png">
     </head>
@@ -28,9 +30,12 @@
         </script>
         <script src="lib/angular/angular.min.js"></script>
         <script src="lib/angular/angular-route.min.js"></script>
+        <script src="/de.deepamehta.webclient/script/vendor/ckeditor/ckeditor.js"></script>
+        <script src="directives/angular-ckeditor.min.js"></script>
         <script src="crowdedit.js"></script>
+        <script src="services/ckeditor-service.js"></script>
+        <script src="services/crowdedit-service.js"></script>
         <script src="controllers/edit-controller.js"></script>
         <script src="directives/dm4-conversion.js"></script>
-        <script src="services/crowdedit-service.js"></script>
     </body>
 </html>

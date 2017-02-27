@@ -135,7 +135,7 @@
     </div>
     <div class="form-group">
       <label for="inputNotes">Notes</label>
-      <textarea class="form-control" id="inputNotes" rows="5" placeholder="eg. This author is ..." ng-model="person['childs']['dm4.contacts.notes'].value"></textarea
+      <textarea ckeditor="ckEditorOptions" class="form-control" id="inputNotes" rows="5" placeholder="eg. This author is ..." ng-model="person['childs']['dm4.contacts.notes'].value"> </textarea>
     </div>
     <button ng-disabled="isUpdateBlocked" type="submit" class="btn btn-primary" ng-click="handleSubmit()">Save</button>
     <button class="btn" type="button" ng-click="logout()">Logout</button>

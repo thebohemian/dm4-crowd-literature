@@ -25,7 +25,7 @@
     <div class="form-group">
       <label for="inputNationality">Nationalities</label>
       <div id="inputNationality" class="input-group" ng-repeat="e in person['childs']['crowd.person.nationality'] track by $index" ng-if="e.type_uri">
-        <input type="email" class="form-control" ng-model="e.value" />
+        <input type="text" class="form-control" ng-change="modify('crowd.person.nationality', e)" ng-model="e.value" />
         <span class="input-group-btn">
           <button class="btn btn-default" type="button" ng-disabled="isUpdateBlocked" ng-click=removeNationality($index)>-</button>
         </span>
@@ -41,7 +41,7 @@
     <div class="form-group">
       <label for="inputLanguage">Languages</label>
       <div id="inputLanguage" class="input-group" ng-repeat="e in person['childs']['crowd.language'] track by $index" ng-if="e.type_uri">
-        <input type="email" class="form-control" ng-model="e.value" />
+        <input type="text" class="form-control" ng-change="modify('crowd.language', e)" ng-model="e.value" />
         <span class="input-group-btn">
           <button class="btn btn-default" type="button" ng-disabled="isUpdateBlocked" ng-click=removeLanguage($index)>-</button>
         </span>
@@ -57,7 +57,7 @@
     <div class="form-group">
       <label for="inputEmail">Email Addresses</label>
       <div id="inputEmail" class="input-group" ng-repeat="e in person['childs']['dm4.contacts.email_address'] track by $index" ng-if="e.type_uri">
-        <input ng-disabled="$index == 0" type="email" class="form-control" ng-model="e.value" />
+        <input ng-disabled="$index == 0" type="email" ng-change="modify('dm4.contacts.email_address', e)" class="form-control" ng-model="e.value" />
         <span ng-if="$index > 0" class="input-group-btn">
           <button class="btn btn-default" type="button" ng-disabled="isUpdateBlocked" ng-click=removeEmail($index)>-</button>
         </span>
@@ -74,7 +74,7 @@
     <div class="form-group">
       <label for="inputURL">URLs</label>
       <div id="inputURL" class="input-group" ng-repeat="e in person['childs']['dm4.webbrowser.url'] track by $index" ng-if="e.type_uri">
-        <input type="email" class="form-control" ng-model="e.value" />
+        <input type="text" class="form-control" ng-change="modify('dm4.webbrowser.url', e)" ng-model="e.value" />
         <span class="input-group-btn">
           <button class="btn btn-default" type="button" ng-disabled="isUpdateBlocked" ng-click=removeURL($index)>-</button>
         </span>

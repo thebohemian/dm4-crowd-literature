@@ -196,4 +196,16 @@ angular.module("crowdedit")
       delete topic.id;
     };
 
+    $scope.modify = function(dmTopicType, topic){
+      if (topic.id) {
+        var delObj = {
+          del_id: topid.id
+        };
+
+        $scope.person['childs'][dmTopicType].push(delObj);
+
+        delete topic.id;
+      }
+    };
+
 })

@@ -9,8 +9,8 @@ angular.module("crowdedit", ["ngRoute", "ckeditor"])
 
     $routeProvider
         .when("/start", start)
-        .when("/error-noperson",{templateUrl: "views/edit-error-noperson.html"})
-        .when("/editperson",{templateUrl: "views/editperson.html",   controller: "EditPersonController"})
+        .when("/error-noperson",{templateUrl: "views/edit-error-noperson.html", controller: "NoPersonController"})
+        .when("/editperson",{templateUrl: "views/editperson.html", controller: "EditPersonController"})
         .otherwise({redirectTo: "/editperson"})
 })
 .config(function($logProvider) {

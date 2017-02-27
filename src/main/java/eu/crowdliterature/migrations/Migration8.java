@@ -17,7 +17,7 @@ public class Migration8 extends Migration {
         ChildTopics childs = signUpConfig.getChildTopics();
         childs.set("org.deepamehta.signup.config_project_title", "CROWD Meet Sign Up Configuration");
         childs.set("org.deepamehta.signup.config_webapp_title", "CROWD Meet");
-        childs.set("org.deepamehta.signup.config_from_mailbox", "XXX");	// TODO!
+        childs.set("org.deepamehta.signup.config_from_mailbox", "root@sudam.lan");	// TODO!
         childs.set("org.deepamehta.signup.loading_app_hint", "Entering CROWD Meet");
         
         childs.set("org.deepamehta.signup.config_admin_mailbox", "thebohemian@gmx.net");

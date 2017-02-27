@@ -10,13 +10,50 @@
       <input type="text" class="form-control" id="inputLastName" placeholder="eg. Smith" ng-model="person['childs']['dm4.contacts.person_name']['childs']['dm4.contacts.last_name'].value"></input
     </div>
     <div class="form-group">
+      <label for="inputGender">Gender</label>
+      <input type="text" class="form-control" id="inputGender" placeholder="eg. female, male" string-to-int ng-model="person['childs']['crowd.person.gender'].value"> </input
+    </div>
+    <div class="form-group">
       <label for="inputYearOfBirth">Year Of Birth</label>
-      <input type="number" class="form-control" id="inputYearOfBirth" placeholder="eg. 1980" string-to-int ng-model="person['childs']['dm4.datetime.date#dm4.contacts.date_of_birth'].value"> </input
+      <input type="number" class="form-control" id="inputYearOfBirth" placeholder="eg. 1980" string-to-int ng-model="person['childs']['dm4.datetime.date#dm4.contacts.date_of_birth']['childs']['dm4.datetime.year'].value"> </input
     </div>
     <div class="form-group">
       <label for="inputPlaceOfBirth">Place Of Birth</label>
       <input type="text" class="form-control" id="inputPlaceOfBirth" placeholder="eg. Berlin" ng-change="killId(person['childs']['dm4.contacts.city#crowd.person.place_of_birth'])" ng-model="person['childs']['dm4.contacts.city#crowd.person.place_of_birth'].value"> </input
     </div>
+
+    <div class="form-group">
+      <label for="inputNationality">Nationalities</label>
+      <div id="inputNationality" class="input-group" ng-repeat="e in person['childs']['crowd.person.nationality'] track by $index" ng-if="e.type_uri">
+        <input type="email" class="form-control" ng-model="e.value" />
+        <span class="input-group-btn">
+          <button class="btn btn-default" type="button" ng-disabled="isUpdateBlocked" ng-click=removeNationality($index)>-</button>
+        </span>
+      </div>
+      <div class="input-group">
+        <input type="nationality" class="form-control" ng-model="newData.nationality" placeholder="e.g. Swedish" />
+        <span class="input-group-btn">
+          <button class="btn btn-primary" ng-disabled="isUpdateBlocked" ng-click="addNewNationality(person)">+</button>
+        </span>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="inputLanguage">Languages</label>
+      <div id="inputLanguage" class="input-group" ng-repeat="e in person['childs']['crowd.language'] track by $index" ng-if="e.type_uri">
+        <input type="email" class="form-control" ng-model="e.value" />
+        <span class="input-group-btn">
+          <button class="btn btn-default" type="button" ng-disabled="isUpdateBlocked" ng-click=removeLanguage($index)>-</button>
+        </span>
+      </div>
+      <div class="input-group">
+        <input type="language" class="form-control" ng-model="newData.language" placeholder="e.g. English" />
+        <span class="input-group-btn">
+          <button class="btn btn-primary" ng-disabled="isUpdateBlocked" ng-click="addNewLanguage(person)">+</button>
+        </span>
+      </div>
+    </div>
+
     <div class="form-group">
       <label for="inputEmail">Email Addresses</label>
       <div id="inputEmail" class="input-group" ng-repeat="e in person['childs']['dm4.contacts.email_address'] track by $index" ng-if="e.type_uri">
@@ -32,6 +69,24 @@
         </span>
       </div>
     </div>
+
+
+    <div class="form-group">
+      <label for="inputURL">URLs</label>
+      <div id="inputURL" class="input-group" ng-repeat="e in person['childs']['dm4.webbrowser.url'] track by $index" ng-if="e.type_uri">
+        <input type="email" class="form-control" ng-model="e.value" />
+        <span class="input-group-btn">
+          <button class="btn btn-default" type="button" ng-disabled="isUpdateBlocked" ng-click=removeURL($index)>-</button>
+        </span>
+      </div>
+      <div class="input-group">
+        <input type="url" class="form-control" ng-model="newData.url" placeholder="e.g. http://www.artistname.com/" />
+        <span class="input-group-btn">
+          <button class="btn btn-primary" ng-disabled="isUpdateBlocked" ng-click="addNewURL(person)">+</button>
+        </span>
+      </div>
+    </div>
+
     <div class="form-group">
       <div ng-repeat="addr in person['childs']['dm4.contacts.address#dm4.contacts.address_entry'] track by $index" ng-if="addr.type_uri">
           <label for="inputAddress" >Address {{ $index+1 }}</label>

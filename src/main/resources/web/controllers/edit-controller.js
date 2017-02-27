@@ -14,7 +14,10 @@ angular.module("crowdedit")
             postalCode: "",
             city: "",
             country: ""
-          }
+          },
+          url: "",
+          nationality: "",
+          language: ""
         };
 
       });
@@ -73,6 +76,36 @@ angular.module("crowdedit")
       updatePerson();
     };
 
+    var addNewMultivalueElement = function(dmTopicType, newDataField) {
+      var person = $scope.person;
+
+      if (!person['childs'][dmTopicType]) {
+        person['childs'][dmTopicType] = [];
+      }
+
+      person['childs'][dmTopicType].push({
+        uri: "",
+        type_uri: dmTopicType,
+        value: $scope.newData[newDataField]
+      });
+
+      $scope.newData[newDataField] = "";
+
+      updatePerson();
+    };
+
+    $scope.addNewURL = function() {
+      addNewMultivalueElement('dm4.webbrowser.url', 'url');
+    };
+
+    $scope.addNewLanguage = function() {
+      addNewMultivalueElement('crowd.language', 'language');
+    };
+
+    $scope.addNewNationality = function() {
+      addNewMultivalueElement('crowd.person.nationality', 'nationality');
+    };
+
     var moveToTrash = function(array, index) {
       var old = array[index];
 
@@ -83,6 +116,24 @@ angular.module("crowdedit")
         // Has not been saved yet. Just throw away the array entry
         array.splice(index, 1);
       }
+    };
+
+    var removeMultivalueElement = function(dmTopicType, index) {
+      moveToTrash($scope.person['childs'][dmTopicType], index);
+
+      updatePerson();
+    };
+
+    $scope.removeURL = function(index) {
+      removeMultivalueElement('dm4.webbrowser.url', index);
+    };
+
+    $scope.removeLanguage = function(index) {
+      removeMultivalueElement('crowd.language', index);
+    };
+
+    $scope.removeNationality = function(index) {
+      removeMultivalueElement('crowd.person.nationality', index);
     };
 
     $scope.removeEmail = function(index) {

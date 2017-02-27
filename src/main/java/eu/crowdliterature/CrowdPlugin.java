@@ -27,6 +27,7 @@ import de.deepamehta.core.RelatedTopic;
 import de.deepamehta.core.Topic;
 import de.deepamehta.core.model.AssociationModel;
 import de.deepamehta.core.model.ChildTopicsModel;
+import de.deepamehta.core.model.SimpleValue;
 import de.deepamehta.core.model.TopicModel;
 import de.deepamehta.core.osgi.PluginActivator;
 import de.deepamehta.core.service.Inject;
@@ -210,11 +211,13 @@ public class CrowdPlugin extends PluginActivator implements CrowdService, PreCre
 			if (person == null) {
 				log.info("No person with matching email found. Creating: " + userName);
 				// Person does not exist, we need to create one
-				ChildTopicsModel childs = mf.newChildTopicsModel();
-				childs.put("dm4.contacts.email_address", emailAddress);
-				TopicModel personModel = mf.newTopicModel("dm.contacts.person", childs);
-				
+
+				TopicModel personModel = mf.newTopicModel("dm4.contacts.person");
 				person = dm4.createTopic(personModel);
+				
+				// Automatically add the email address
+				ChildTopics childs = person.getChildTopics();
+				childs.add("dm4.contacts.email_address", emailAddress);
 			}
 			
 			setupPersonAndUser(userNameTopic, person);

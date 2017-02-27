@@ -88,6 +88,28 @@
     </div>
 
     <div class="form-group">
+      <div ng-init="addr = person['childs']['dm4.contacts.address#dm4.contacts.address_entry'][0]">
+          <label for="inputAddress">Address</label>
+          <div class="col-lg-12">
+            <input type="text" class="form-control" id="inputStreet" placeholder="Street" ng-model="addr['childs']['dm4.contacts.street'].value" />
+        </div>
+        <div>
+          <div class="col-lg-8">
+            <input type="text" class="form-control" id="inputPostalCode" placeholder="Postalcode" ng-model="addr['childs']['dm4.contacts.postal_code'].value" />
+          </div>
+          <div class="col-lg-4">
+            <input type="text" class="form-control" id="inputCity" placeholder="City" ng-change="killId(addr['childs']['dm4.contacts.city'])" ng-model="addr['childs']['dm4.contacts.city'].value" />
+          </div>
+        </div>
+        <div class="col-lg-12">
+          <div class="input-group">
+            <input type="text" class="form-control" id="inputCountry" placeholder="Country" ng-change="killId(addr['childs']['dm4.contacts.country'])" ng-model="addr['childs']['dm4.contacts.country'].value" />
+          </div>
+        </div>
+      </div>
+    </div>
+
+      <!-- Many address support. Disabled for now.
       <div ng-repeat="addr in person['childs']['dm4.contacts.address#dm4.contacts.address_entry'] track by $index" ng-if="addr.type_uri">
           <label for="inputAddress" >Address {{ $index+1 }}</label>
           <div class="col-lg-12">
@@ -133,6 +155,8 @@
         </div>
       </div>
     </div>
+  -->
+
     <div class="form-group">
       <label for="inputNotes">Notes</label>
       <textarea ckeditor="ckEditorOptions" class="form-control" id="inputNotes" rows="5" placeholder="eg. This author is ..." ng-model="person['childs']['dm4.contacts.notes'].value"> </textarea>

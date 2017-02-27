@@ -4,6 +4,11 @@ angular.module("crowdedit")
     var loadPerson = function(personId) {
       crowdService.getEditablePerson(personId, function(response) {
         $scope.person = response.data;
+
+        if (!$scope.person['childs']['dm4.contacts.address#dm4.contacts.address_entry']) {
+          $scope.person['childs']['dm4.contacts.address#dm4.contacts.address_entry'] = [];
+        }
+
         $scope.isUpdateBlocked = false;
 
         // Resets new data
@@ -60,7 +65,6 @@ angular.module("crowdedit")
 
     var addNewMultivalueElement = function(dmTopicType, newDataField, skipUpdatePerson) {
       var person = $scope.person;
-      alert("adding to " + dmTopicType + "- value: " + $scope.newData[newDataField]);
 
       if (!person['childs'][dmTopicType]) {
         person['childs'][dmTopicType] = [];

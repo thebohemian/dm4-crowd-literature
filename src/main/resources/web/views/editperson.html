@@ -1,6 +1,14 @@
 <div class="row person">
   <div class="col-lg-10">
   <form novalidate >
+
+    <div class="form-group">
+      <label>Edit your CROWD Meet data below</label>
+    </div>
+    <div class="form-group">
+      <button ng-disabled="isUpdateBlocked" type="submit" class="btn btn-primary" ng-click="handleSubmit()">Save</button>
+      <button class="btn" type="button" ng-click="logout()">Logout</button>
+    </div>
     <div class="form-group">
       <label for="inputFirstName">First Name</label>
       <input type="text" class="form-control" id="inputFirstName" placeholder="eg. John" ng-model="person['childs']['dm4.contacts.person_name']['childs']['dm4.contacts.first_name'].value"> </input
@@ -24,12 +32,16 @@
 
     <div class="form-group">
       <label for="inputNationality">Nationalities</label>
-      <div id="inputNationality" class="input-group" ng-repeat="e in person['childs']['crowd.person.nationality'] track by $index" ng-if="e.type_uri">
-        <input type="text" class="form-control" ng-change="modify('crowd.person.nationality', e)" ng-model="e.value" />
-        <span class="input-group-btn">
-          <button class="btn btn-default" type="button" ng-disabled="isUpdateBlocked" ng-click=removeNationality($index)>-</button>
-        </span>
+      <div id="inputNationality" class="form-group" ng-repeat="e in person['childs']['crowd.person.nationality'] track by $index" ng-if="e.type_uri">
+        <div class="input-group">
+          <input type="text" class="form-control" ng-change="modify('crowd.person.nationality', e)" ng-model="e.value" />
+          <span class="input-group-btn">
+            <button class="btn btn-default" type="button" ng-disabled="isUpdateBlocked" ng-click=removeNationality($index)>-</button>
+          </span>
+        </div>
       </div>
+    </div>
+    <div class="form-group">
       <div class="input-group">
         <input type="nationality" class="form-control" ng-model="newData.nationality" placeholder="e.g. Swedish" />
         <span class="input-group-btn">
@@ -40,12 +52,16 @@
 
     <div class="form-group">
       <label for="inputLanguage">Languages</label>
-      <div id="inputLanguage" class="input-group" ng-repeat="e in person['childs']['crowd.language'] track by $index" ng-if="e.type_uri">
-        <input type="text" class="form-control" ng-change="modify('crowd.language', e)" ng-model="e.value" />
-        <span class="input-group-btn">
-          <button class="btn btn-default" type="button" ng-disabled="isUpdateBlocked" ng-click=removeLanguage($index)>-</button>
-        </span>
+      <div id="inputLanguage" class="form-group" ng-repeat="e in person['childs']['crowd.language'] track by $index" ng-if="e.type_uri">
+        <div class="input-group">
+          <input type="text" class="form-control" ng-change="modify('crowd.language', e)" ng-model="e.value" />
+          <span class="input-group-btn">
+            <button class="btn btn-default" type="button" ng-disabled="isUpdateBlocked" ng-click=removeLanguage($index)>-</button>
+          </span>
+        </div>
       </div>
+    </div>
+    <div class="form-group">
       <div class="input-group">
         <input type="language" class="form-control" ng-model="newData.language" placeholder="e.g. English" />
         <span class="input-group-btn">
@@ -56,12 +72,16 @@
 
     <div class="form-group">
       <label for="inputEmail">Email Addresses</label>
-      <div id="inputEmail" class="input-group" ng-repeat="e in person['childs']['dm4.contacts.email_address'] track by $index" ng-if="e.type_uri">
-        <input ng-disabled="$index == 0" type="email" ng-change="modify('dm4.contacts.email_address', e)" class="form-control" ng-model="e.value" />
-        <span ng-if="$index > 0" class="input-group-btn">
-          <button class="btn btn-default" type="button" ng-disabled="isUpdateBlocked" ng-click=removeEmail($index)>-</button>
-        </span>
+      <div id="inputEmail" class="form-group" ng-repeat="e in person['childs']['dm4.contacts.email_address'] track by $index" ng-if="e.type_uri">
+        <div class="input-group">
+          <input ng-disabled="$index == 0" type="email" ng-change="modify('dm4.contacts.email_address', e)" class="form-control" ng-model="e.value" />
+          <span ng-if="$index > 0" class="input-group-btn">
+            <button class="btn btn-default" type="button" ng-disabled="isUpdateBlocked" ng-click=removeEmail($index)>-</button>
+          </span>
+        </div>
       </div>
+    </div>
+    <div class="form-group">
       <div class="input-group">
         <input type="email" class="form-control" ng-model="newData.email" placeholder="user@domain" />
         <span class="input-group-btn">
@@ -73,12 +93,16 @@
 
     <div class="form-group">
       <label for="inputURL">URLs</label>
-      <div id="inputURL" class="input-group" ng-repeat="e in person['childs']['dm4.webbrowser.url'] track by $index" ng-if="e.type_uri">
-        <input type="text" class="form-control" ng-change="modify('dm4.webbrowser.url', e)" ng-model="e.value" />
-        <span class="input-group-btn">
-          <button class="btn btn-default" type="button" ng-disabled="isUpdateBlocked" ng-click=removeURL($index)>-</button>
-        </span>
+      <div id="inputURL" class="form-group" ng-repeat="e in person['childs']['dm4.webbrowser.url'] track by $index" ng-if="e.type_uri">
+        <div class="input-group">
+          <input type="text" class="form-control" ng-change="modify('dm4.webbrowser.url', e)" ng-model="e.value" />
+          <span class="input-group-btn">
+            <button class="btn btn-default" type="button" ng-disabled="isUpdateBlocked" ng-click=removeURL($index)>-</button>
+          </span>
+        </div>
       </div>
+    </div>
+    <div class="form-group">
       <div class="input-group">
         <input type="url" class="form-control" ng-model="newData.url" placeholder="e.g. http://www.artistname.com/"/>
         <span class="input-group-btn">
@@ -87,26 +111,24 @@
       </div>
     </div>
 
-    <div class="form-group">
-      <div ng-init="addr = person['childs']['dm4.contacts.address#dm4.contacts.address_entry'][0]">
-          <label for="inputAddress">Address</label>
-          <div class="col-lg-12">
+    <div ng-init="addr = person['childs']['dm4.contacts.address#dm4.contacts.address_entry'][0]">
+      <div class="form-group">
+        <label for="inputStreet">Address</label>
+        <div class="form-group col-lg-12">
             <input type="text" class="form-control" id="inputStreet" placeholder="Street" ng-model="addr['childs']['dm4.contacts.street'].value" />
         </div>
+      </div>
         <div>
-          <div class="col-lg-8">
+          <div class="form-group col-lg-8">
             <input type="text" class="form-control" id="inputPostalCode" placeholder="Postalcode" ng-model="addr['childs']['dm4.contacts.postal_code'].value" />
           </div>
-          <div class="col-lg-4">
+          <div class="form-group col-lg-4">
             <input type="text" class="form-control" id="inputCity" placeholder="City" ng-change="killId(addr['childs']['dm4.contacts.city'])" ng-model="addr['childs']['dm4.contacts.city'].value" />
           </div>
         </div>
-        <div class="col-lg-12">
-          <div class="input-group">
-            <input type="text" class="form-control" id="inputCountry" placeholder="Country" ng-change="killId(addr['childs']['dm4.contacts.country'])" ng-model="addr['childs']['dm4.contacts.country'].value" />
-          </div>
+        <div class="form-group col-lg-12">
+          <input type="text" class="form-control" id="inputCountry" placeholder="Country" ng-change="killId(addr['childs']['dm4.contacts.country'])" ng-model="addr['childs']['dm4.contacts.country'].value" />
         </div>
-      </div>
     </div>
 
       <!-- Many address support. Disabled for now.
@@ -161,8 +183,10 @@
       <label for="inputNotes">Notes</label>
       <textarea ckeditor="ckEditorOptions" class="form-control" id="inputNotes" rows="5" placeholder="eg. This author is ..." ng-model="person['childs']['dm4.contacts.notes'].value"> </textarea>
     </div>
-    <button ng-disabled="isUpdateBlocked" type="submit" class="btn btn-primary" ng-click="handleSubmit()">Save</button>
-    <button class="btn" type="button" ng-click="logout()">Logout</button>
+    <div class="form-group">
+      <button ng-disabled="isUpdateBlocked" type="submit" class="btn btn-primary" ng-click="handleSubmit()">Save</button>
+      <button class="btn" type="button" ng-click="logout()">Logout</button>
+    </div>
   </form>
 </div>
 </div>

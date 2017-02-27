@@ -58,26 +58,9 @@ angular.module("crowdedit")
     // Autoload
     validateAndLoadPerson();
 
-    $scope.addNewEmail = function() {
+    var addNewMultivalueElement = function(dmTopicType, newDataField, skipUpdatePerson) {
       var person = $scope.person;
-
-      if (!person['childs']['dm4.contacts.email_address']) {
-        person['childs']['dm4.contacts.email_address'] = [];
-      }
-
-      person['childs']['dm4.contacts.email_address'].push({
-        uri: "",
-        type_uri: "dm4.contacts.email_address",
-        value: $scope.newData.email
-      });
-
-      $scope.newData.email = "";
-
-      updatePerson();
-    };
-
-    var addNewMultivalueElement = function(dmTopicType, newDataField) {
-      var person = $scope.person;
+      alert("adding to " + dmTopicType + "- value: " + $scope.newData[newDataField]);
 
       if (!person['childs'][dmTopicType]) {
         person['childs'][dmTopicType] = [];
@@ -91,7 +74,13 @@ angular.module("crowdedit")
 
       $scope.newData[newDataField] = "";
 
-      updatePerson();
+      if (!skipUpdatePerson) {
+        updatePerson();
+      }
+    };
+
+    $scope.addNewEmail = function() {
+      addNewMultivalueElement('dm4.contacts.email_address', 'email');
     };
 
     $scope.addNewURL = function() {
@@ -104,6 +93,15 @@ angular.module("crowdedit")
 
     $scope.addNewNationality = function() {
       addNewMultivalueElement('crowd.person.nationality', 'nationality');
+    };
+
+    $scope.handleSubmit = function() {
+      $scope.newData.email && addNewMultivalueElement('dm4.contacts.email_address', 'email', true);
+      $scope.newData.url && addNewMultivalueElement('dm4.webbrowser.url', 'url');
+      $scope.newData.language && addNewMultivalueElement('crowd.language', 'language');
+      $scope.newData.nationality && addNewMultivalueElement('crowd.person.nationality', 'nationality');
+
+      updatePerson();
     };
 
     var moveToTrash = function(array, index) {
@@ -137,9 +135,7 @@ angular.module("crowdedit")
     };
 
     $scope.removeEmail = function(index) {
-      moveToTrash($scope.person['childs']['dm4.contacts.email_address'], index);
-
-      updatePerson();
+      removeMultivalueElement('dm4.contacts.email_address', index);
     };
 
     $scope.addNewAddress = function() {

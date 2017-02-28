@@ -212,6 +212,10 @@ angular.module("crowdedit")
       }
     };
 
+    $scope.message = function(addr) {
+      alert(JSON.stringify(addr));
+    };
+
     $scope.ckEditorOptions = {
          // Avoid loading a config file
          customConfig: "",

@@ -111,49 +111,27 @@
       </div>
     </div>
 
-    <div ng-init="addr = person['childs']['dm4.contacts.address#dm4.contacts.address_entry'][0]">
+    <div ng-repeat="addr in person['childs']['dm4.contacts.address#dm4.contacts.address_entry'] | limitTo:1" ng-if="addr.type_uri">
       <div class="form-group">
-        <label for="inputStreet">Address</label>
+        <label for="inputAddress" >Address</label>
         <div class="form-group col-lg-12">
-            <input type="text" class="form-control" id="inputStreet" placeholder="Street" ng-model="addr['childs']['dm4.contacts.street'].value" />
+          <input type="text" class="form-control" id="inputStreet" ng-model="addr['childs']['dm4.contacts.street'].value" />
         </div>
       </div>
-        <div>
-          <div class="form-group col-lg-8">
-            <input type="text" class="form-control" id="inputPostalCode" placeholder="Postalcode" ng-model="addr['childs']['dm4.contacts.postal_code'].value" />
-          </div>
-          <div class="form-group col-lg-4">
-            <input type="text" class="form-control" id="inputCity" placeholder="City" ng-change="killId(addr['childs']['dm4.contacts.city'])" ng-model="addr['childs']['dm4.contacts.city'].value" />
-          </div>
+      <div>
+        <div class="form-group col-lg-8">
+          <input type="text" class="form-control" id="inputPostalCode" ng-change="killId(addr['childs']['dm4.contacts.postal_code'])" ng-model="addr['childs']['dm4.contacts.postal_code'].value" />
         </div>
-        <div class="form-group col-lg-12">
-          <input type="text" class="form-control" id="inputCountry" placeholder="Country" ng-change="killId(addr['childs']['dm4.contacts.country'])" ng-model="addr['childs']['dm4.contacts.country'].value" />
+        <div class="form-group col-lg-4">
+          <input type="text" class="form-control" id="inputCity" ng-change="killId(addr['childs']['dm4.contacts.city'])" ng-model="addr['childs']['dm4.contacts.city'].value" />
         </div>
+      </div>
+      <div class="form-group col-lg-12">
+        <input type="text" class="form-control" id="inputCountry" ng-change="killId(addr['childs']['dm4.contacts.country'])" ng-model="addr['childs']['dm4.contacts.country'].value" />
+      </div>
     </div>
 
-      <!-- Many address support. Disabled for now.
-      <div ng-repeat="addr in person['childs']['dm4.contacts.address#dm4.contacts.address_entry'] track by $index" ng-if="addr.type_uri">
-          <label for="inputAddress" >Address {{ $index+1 }}</label>
-          <div class="col-lg-12">
-            <input type="text" class="form-control" id="inputStreet{{$index}}" ng-model="addr['childs']['dm4.contacts.street'].value" />
-        </div>
-        <div>
-          <div class="col-lg-8">
-            <input type="text" class="form-control" id="inputPostalCode{{$index}}" ng-model="addr['childs']['dm4.contacts.postal_code'].value" />
-          </div>
-          <div class="col-lg-4">
-            <input type="text" class="form-control" id="inputCity{{$index}}" ng-change="killId(addr['childs']['dm4.contacts.city'])" ng-model="addr['childs']['dm4.contacts.city'].value" />
-          </div>
-        </div>
-        <div class="col-lg-12">
-          <div class="input-group">
-            <input type="text" class="form-control" id="inputCountry{{$index}}" ng-change="killId(addr['childs']['dm4.contacts.country'])" ng-model="addr['childs']['dm4.contacts.country'].value" />
-            <span class="input-group-btn">
-              <button class="btn btn-default" type="button" ng-disabled="isUpdateBlocked" ng-click="removeAddress($index)">-</button>
-            </span>
-          </div>
-        </div>
-      </div>
+<!-- Adding more addresses, disabled for now.
       <div>
         <label for="inputAddressNew" >New Address</label>
         <div class="col-lg-12">

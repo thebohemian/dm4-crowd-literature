@@ -23,7 +23,7 @@
             <span class="map-link" ng-if="portrait"><a href="#/map">Show map</a></span>
         </div>
         <div id="content">
-            <leaflet id="map" lf-center="center" defaults="defaults" tiles="tiles" layers="layers" geojson="bustour"
+            <leaflet id="map" lf-center="center" defaults="defaults" tiles="tiles" layers="layers"
                 markers="visibleMarkers" ng-if="landscape || mapVisibility">
             </leaflet>
             <div id="details" ng-show="landscape || !mapVisibility" ng-view> </div>

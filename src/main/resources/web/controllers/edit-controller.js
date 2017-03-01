@@ -5,8 +5,35 @@ angular.module("crowdedit")
       crowdService.getEditablePerson(personId, function(response) {
         $scope.person = response.data;
 
+        // Auto-add an address array
         if (!$scope.person['childs']['dm4.contacts.address#dm4.contacts.address_entry']) {
           $scope.person['childs']['dm4.contacts.address#dm4.contacts.address_entry'] = [];
+        }
+
+        // Auto-add at least one address
+        if ($scope.person['childs']['dm4.contacts.address#dm4.contacts.address_entry'].length == 0) {
+          $scope.person['childs']['dm4.contacts.address#dm4.contacts.address_entry'].push({
+            uri: "",
+            type_uri: "dm4.contacts.address",
+            childs: {
+              "dm4.contacts.street": {
+                type_uri: "dm4.contacts.street",
+                value: ""
+              },
+              "dm4.contacts.postal_code": {
+                type_uri: "dm4.contacts.postal_code",
+                value: ""
+              },
+              "dm4.contacts.city": {
+                type_uri: "dm4.contacts.city",
+                value: ""
+              },
+              "dm4.contacts.country": {
+                type_uri: "dm4.contacts.country",
+                value: ""
+              }
+            }
+          });
         }
 
         $scope.isUpdateBlocked = false;

@@ -2,7 +2,8 @@ angular.module("crowdedit", ["ngRoute", "ckeditor"])
 .config(function($routeProvider) {
     var start = {
       controller: function() {
-          window.location.replace('/filerepo/dm4-crowd-meet/src/main/resources/web/index.html');
+          window.location.replace('/eu.crowd-literature');
+          // development: window.location.replace('/filerepo/dm4-crowd-meet/src/main/resources/web/index.html');
       },
       template : "<div></div>"
     };

@@ -642,9 +642,6 @@ public class CrowdPlugin extends PluginActivator implements CrowdService, PreCre
 				
 				// User was successfully linked, so immediately enable the account.
 				userName.getChildTopics().set("dm4.accesscontrol.login_enabled", true);
-			} else {
-				// TODO: Create a new person in the public workspace of the user
-				// 
 			}
 			
 		}

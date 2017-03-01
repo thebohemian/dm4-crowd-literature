@@ -301,6 +301,10 @@ public class CrowdPlugin extends PluginActivator implements CrowdService, PreCre
 		// Translation <-> Person
 		DeepaMehtaUtils.associationAutoTyping(assoc, "crowd.work.translation", "dm4.contacts.person",
 				"crowd.work.involvement", "dm4.core.default", "dm4.core.default", dm4);
+
+		// Username <-> Person ("me" relation)
+		DeepaMehtaUtils.associationAutoTyping(assoc, "dm4.accesscontrol.username", "dm4.contacts.person",
+				"crowd.person.me", "dm4.core.default", "dm4.core.default", dm4);
 	}
 
 	// -------------------------------------------------------------------------------------------------

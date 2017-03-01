@@ -224,6 +224,15 @@ angular.module("crowd").controller("MainController", function($scope, $rootScope
           var filteredId = $scope.filter[index];
           $scope.visibleMarkers[filteredId] = $scope.markers[filteredId];
         }
+
+        if ($scope.visibleMarkers.length) {
+          var bounds = L.latLngBounds($scope.visibleMarkers).pad(0.5);
+
+          leafletData.getMap().then(function(map) {
+              console.log("fitbounds! " + new Date());
+              map.fitBounds(bounds);
+          });
+        }
       } else {
         // no filter active, place everything into the visible set
         for (var markerId in $scope.markers) {

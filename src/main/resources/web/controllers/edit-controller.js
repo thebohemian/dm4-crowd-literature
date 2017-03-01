@@ -1,5 +1,5 @@
 angular.module("crowdedit")
-.controller("EditPersonController", function($scope, $routeParams, $location, crowdService) {
+.controller("EditPersonController", function($scope, $routeParams, $location, $timeout, crowdService) {
 
     var loadPerson = function(personId) {
       crowdService.getEditablePerson(personId, function(response) {
@@ -10,21 +10,6 @@ angular.module("crowdedit")
         }
 
         $scope.isUpdateBlocked = false;
-
-        // Resets new data
-        $scope.newData = {
-          email: "",
-          address: {
-            street: "",
-            postalCode: "",
-            city: "",
-            country: ""
-          },
-          url: "",
-          nationality: "",
-          language: ""
-        };
-
       });
     };
 
@@ -32,15 +17,31 @@ angular.module("crowdedit")
       var person = $scope.person;
       // Prevent further updates until the last write hasn't been followed by
       // a reload.
-      if (!$scope.isUpdateBlocked) {
-        $scope.isUpdateBlocked = true;
+      $scope.isUpdateBlocked = true;
 
-        // Reloads the person completely automatically
-        crowdService.updatePerson(person, function(response) {
-          loadPerson(person.id);
-        });
+      // Reloads the person completely automatically
+      crowdService.updatePerson(person, function(response) {
+        loadPerson(person.id);
+      });
 
-      }
+    };
+
+    var blockAware = function(fn) {
+      return function() {
+        var that = this;
+        var args = arguments;
+
+        if (!$scope.isUpdateBlocked) {
+          $scope.isUpdateBlocked = true;
+
+          $timeout(function() {
+            fn.apply(that, args);
+
+            updatePerson();
+          });
+        }
+      };
+
     };
 
     var validateAndLoadPerson = function() {
@@ -77,36 +78,30 @@ angular.module("crowdedit")
       });
 
       $scope.newData[newDataField] = "";
-
-      if (!skipUpdatePerson) {
-        updatePerson();
-      }
     };
 
-    $scope.addNewEmail = function() {
+    $scope.addNewEmail = blockAware(function() {
       addNewMultivalueElement('dm4.contacts.email_address', 'email');
-    };
+    });
 
-    $scope.addNewURL = function() {
+    $scope.addNewURL = blockAware(function() {
       addNewMultivalueElement('dm4.webbrowser.url', 'url');
-    };
+    });
 
-    $scope.addNewLanguage = function() {
+    $scope.addNewLanguage = blockAware(function() {
       addNewMultivalueElement('crowd.language', 'language');
-    };
+    });
 
-    $scope.addNewNationality = function() {
+    $scope.addNewNationality = blockAware(function() {
       addNewMultivalueElement('crowd.person.nationality', 'nationality');
-    };
+    });
 
-    $scope.handleSubmit = function() {
-      $scope.newData.email && addNewMultivalueElement('dm4.contacts.email_address', 'email', true);
+    $scope.handleSubmit = blockAware(function() {
+      $scope.newData.email && addNewMultivalueElement('dm4.contacts.email_address', 'email');
       $scope.newData.url && addNewMultivalueElement('dm4.webbrowser.url', 'url');
       $scope.newData.language && addNewMultivalueElement('crowd.language', 'language');
       $scope.newData.nationality && addNewMultivalueElement('crowd.person.nationality', 'nationality');
-
-      updatePerson();
-    };
+    });
 
     var moveToTrash = function(array, index) {
       var old = array[index];
@@ -122,27 +117,25 @@ angular.module("crowdedit")
 
     var removeMultivalueElement = function(dmTopicType, index) {
       moveToTrash($scope.person['childs'][dmTopicType], index);
-
-      updatePerson();
     };
 
-    $scope.removeURL = function(index) {
+    $scope.removeURL = blockAware(function(index) {
       removeMultivalueElement('dm4.webbrowser.url', index);
-    };
+    });
 
-    $scope.removeLanguage = function(index) {
+    $scope.removeLanguage = blockAware(function(index) {
       removeMultivalueElement('crowd.language', index);
-    };
+    });
 
-    $scope.removeNationality = function(index) {
+    $scope.removeNationality = blockAware(function(index) {
       removeMultivalueElement('crowd.person.nationality', index);
-    };
+    });
 
-    $scope.removeEmail = function(index) {
+    $scope.removeEmail = blockAware(function(index) {
       removeMultivalueElement('dm4.contacts.email_address', index);
-    };
+    });
 
-    $scope.addNewAddress = function() {
+    $scope.addNewAddress = blockAware(function() {
       var person = $scope.person;
 
       if (!person['childs']['dm4.contacts.address#dm4.contacts.address_entry']) {
@@ -178,17 +171,13 @@ angular.module("crowdedit")
         city: "",
         country: ""
       };
+    });
 
-      updatePerson();
-    };
-
-    $scope.removeAddress = function(index) {
+    $scope.removeAddress = blockAware(function(index) {
       moveToTrash($scope.person['childs']['dm4.contacts.address#dm4.contacts.address_entry'], index);
+    });
 
-      updatePerson();
-    };
-
-    $scope.updatePerson = updatePerson;
+    $scope.updatePerson = blockAware(function() { });
 
     $scope.logout = function() {
       crowdService.logout(function() {
@@ -210,10 +199,6 @@ angular.module("crowdedit")
 
         delete topic.id;
       }
-    };
-
-    $scope.message = function(addr) {
-      alert(JSON.stringify(addr));
     };
 
     $scope.ckEditorOptions = {

@@ -42,6 +42,7 @@ import de.deepamehta.geomaps.model.GeoCoordinate;
 import de.deepamehta.workspaces.WorkspacesService;
 import eu.crowdliterature.model.Address;
 import eu.crowdliterature.model.DateTime;
+import eu.crowdliterature.model.Event;
 import eu.crowdliterature.model.EventBasics;
 import eu.crowdliterature.model.Institution;
 import eu.crowdliterature.model.InstitutionOfAddress;
@@ -313,7 +314,22 @@ public class CrowdPlugin extends PluginActivator implements CrowdService, PreCre
 
 	// -------------------------------------------------------------------------------------------------
 	// Private Methods
+	
+	// --- Event ---
 
+	@GET
+	@Path("/event/{id}")
+	@Override
+	public Event getEvent(@PathParam("id") long eventId) {
+		Topic event = dm4.getTopic(eventId);
+		ChildTopics childs = event.getChildTopics();
+		return new Event(event.getSimpleValue().toString(), getDateTime(event, "dm4.datetime#dm4.events.from"),
+				getDateTime(event, "dm4.datetime#dm4.events.to"), getAddress(event),
+				childs.getString("dm4.events.notes"), getParticipants(eventId),
+				childs.getStringOrNull("crowd.event.entrance_fee"), childs.getStringOrNull("dm4.webbrowser.url"),
+				getEventSeries(event), getRecommendedByPersonsOfEvent(eventId));
+	}
+	
 	// --- Person ---
 
 	private JSONArray getInstitutionsOfPerson(long personId) {

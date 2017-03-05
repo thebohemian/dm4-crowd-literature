@@ -16,7 +16,7 @@ public class Event implements JSONEnabled {
     // ---------------------------------------------------------------------------------------------------- Constructors
 
     public Event(String title, JSONObject from, JSONObject to, JSONObject address, String notes, JSONArray participants,
-                 String entranceFee, String url, JSONArray eventSeries) {
+                 String entranceFee, String url, JSONArray eventSeries, JSONArray recommendedByPersons) {
         try {
             json = new JSONObject()
                 .put("title",        title)
@@ -27,7 +27,8 @@ public class Event implements JSONEnabled {
                 .put("participants", participants)
                 .put("entranceFee",  entranceFee)
                 .put("url",          url)
-                .put("eventSeries",  eventSeries);
+                .put("eventSeries",  eventSeries)
+                .put("recommendedBy", recommendedByPersons);
         } catch (Exception e) {
             throw new RuntimeException("Serialization failed (" + this + ")", e);
         }

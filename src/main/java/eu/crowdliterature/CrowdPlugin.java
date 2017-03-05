@@ -127,7 +127,7 @@ public class CrowdPlugin extends PluginActivator implements CrowdService, PreCre
 				childs.getStringOrNull("dm4.contacts.city#crowd.person.place_of_birth"),
 				childs.getString("dm4.contacts.notes"), getStrings(person, "dm4.webbrowser.url"),
 				getStrings(person, "crowd.person.nationality"), getStrings(person, "crowd.language"),
-				getInstitutionsOfPerson(personId), getWorksOfPerson(person), getEventsOfPerson(personId));
+				getInstitutionsOfPerson(personId), getWorksOfPerson(person), getRecommendedEventsOfPerson(personId));
 	}
 
 	@GET
@@ -299,8 +299,8 @@ public class CrowdPlugin extends PluginActivator implements CrowdService, PreCre
 				"dm4.core.default", "dm4.core.default", dm4);
 
 		// Person <-> Event (recommendation)
-		DeepaMehtaUtils.associationAutoTyping(assoc, "dm4.contacts.person", "dm4.events.event",
-				"crowd.person.recommends", "dm4.core.default", "dm4.core.default", dm4);
+//		DeepaMehtaUtils.associationAutoTyping(assoc, "dm4.contacts.person", "dm4.events.event",
+//				"crowd.person.recommendation", "dm4.core.default", "dm4.core.default", dm4);
 		//
 		// Translation <-> Person
 		DeepaMehtaUtils.associationAutoTyping(assoc, "crowd.work.translation", "dm4.contacts.person",
@@ -366,7 +366,7 @@ public class CrowdPlugin extends PluginActivator implements CrowdService, PreCre
 		
 		Topic personTopic = dm4.getTopic(personId);
 		
-		List<RelatedTopic> eventTopics = personTopic.getRelatedTopics("crowd.person.recommends", null, null, "dm4.events.event");
+		List<RelatedTopic> eventTopics = personTopic.getRelatedTopics("crowd.person.recommendation", null, null, "dm4.events.event");
 		if (!eventTopics.isEmpty()) {
 			events = new JSONArray();
 			for (Topic event : eventTopics) {
@@ -382,7 +382,7 @@ public class CrowdPlugin extends PluginActivator implements CrowdService, PreCre
 		
 		Topic eventTopic = dm4.getTopic(eventId);
 		
-		List<RelatedTopic> personTopics = eventTopic.getRelatedTopics("crowd.person.recommends", null, null, "dm4.contacts.person");
+		List<RelatedTopic> personTopics = eventTopic.getRelatedTopics("crowd.person.recommendation", null, null, "dm4.contacts.person");
 		if (!personTopics.isEmpty()) {
 			persons = new JSONArray();
 			for (Topic person : personTopics) {

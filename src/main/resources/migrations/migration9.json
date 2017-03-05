@@ -6,8 +6,8 @@
             "data_type_uri": "dm4.core.text"
         },
         {
-            "value": "recommends",
-            "uri": "crowd.recommends",
+            "value": "Recommendation",
+            "uri": "crowd.person.recommendation",
             "data_type_uri": "dm4.core.text"
         }
     ]

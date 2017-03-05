@@ -191,24 +191,24 @@ angular.module("crowd").controller("MainController", function($scope, $rootScope
     function createMarkerIcon(type, selected) {
         // TODO: Take type into account
         return !$scope.hires ? {
-            iconUrl: markerIconUrl(selected),
-            iconSize: [28, 41],
-            iconAnchor: [14, 41],
+            iconUrl: markerIconUrl(type, selected),
+            iconSize: [38, 38],
+            iconAnchor: [19, 37],
             shadowUrl: "lib/leaflet/images/marker-shadow.png",
             shadowSize: [41, 41],
             shadowAnchor: [12, 41]
         } : {
-            iconUrl: markerIconUrl(selected),
-            iconSize: [36, 53],
-            iconAnchor: [18, 53],
+            iconUrl: markerIconUrl(type, selected),
+            iconSize: [50, 50],
+            iconAnchor: [25, 49],
             shadowUrl: "lib/leaflet/images/marker-shadow.png",
             shadowSize: [41, 41],
             shadowAnchor: [12, 41]
         }
     }
 
-    function markerIconUrl(selected) {
-        var iconFile = "event-marker" +
+    function markerIconUrl(type, selected) {
+        var iconFile = type + "-marker" +
             (selected ? "-selected" : "") +
             ($scope.hires ? "-1.3x" : "") + ".png";
         return "lib/leaflet/images/" + iconFile;

@@ -18,7 +18,7 @@ angular.module("crowd")
 })
 .controller("EventController", function($scope, $routeParams, crowdService) {
     var eventId = $routeParams.eventId;
-    $scope.setMapVisibility(false);
+
     crowdService.getEvent(eventId, function(response) {
         $scope.event = response.data;
     });

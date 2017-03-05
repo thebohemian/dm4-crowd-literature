@@ -26,7 +26,7 @@
         <a ng-repeat-end ng-href="#/event_series/{{series.id}}">{{series.title}}</a>.
     </div>
     <div class="participants" ng-if="event.recommendedBy">
-        <div class="heading">Participants</div>
+        <div class="heading">Recommended By</div>
         <ul>
             <li ng-repeat="person in event.recommendedBy | orderBy:'value'">
                 <a ng-href="#/person/{{person.id}}">{{person.name}}</a>

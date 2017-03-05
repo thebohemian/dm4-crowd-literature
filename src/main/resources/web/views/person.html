@@ -1,7 +1,7 @@
 <div class="person">
     <div class="page-title">{{person.name}}</div>
     <div class="birth" ng-if="person.yearOfBirth || person.placeOfBirth">
-        Born {{person.yearOfBirth}}
+        <span ng-if="person.yearOrBirth">Born {{person.yearOfBirth}}</span>
         <span ng-if="person.placeOfBirth">in {{person.placeOfBirth}}</span>
     </div>
     <div class="birth" ng-if="person.placeOfLiving">
@@ -43,5 +43,6 @@
             </li>
         </ul>
     </div>
+    <dm4-event-list events="person.recommendedEvents"></dm4-event-list>
     <dm4-event-list events="person.events"></dm4-event-list>
 </div>

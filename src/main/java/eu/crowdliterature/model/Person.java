@@ -17,7 +17,7 @@ public class Person implements JSONEnabled {
 
     public Person(String name, String placeOfLiving, String yearOfBirth, String placeOfBirth, String notes, JSONArray urls,
                   JSONArray nationalities, JSONArray languages, JSONArray institutions, JSONArray works,
-                  JSONArray events) {
+                  JSONArray recommendedEvents) {
         try {
             json = new JSONObject()
                 .put("name", name)
@@ -30,7 +30,7 @@ public class Person implements JSONEnabled {
                 .put("languages", languages)
                 .put("institutions", institutions)
                 .put("works", works)
-                .put("events", events);
+                .put("recommendedEvents", recommendedEvents);
         } catch (Exception e) {
             throw new RuntimeException("Serialization failed (" + this + ")", e);
         }

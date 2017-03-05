@@ -297,6 +297,10 @@ public class CrowdPlugin extends PluginActivator implements CrowdService, PreCre
 		// Work <-> Institution
 		DeepaMehtaUtils.associationAutoTyping(assoc, "crowd.work", "dm4.contacts.institution", "crowd.work.involvement",
 				"dm4.core.default", "dm4.core.default", dm4);
+
+		// Person <-> Event (recommendation)
+		DeepaMehtaUtils.associationAutoTyping(assoc, "dm4.contacts.person", "dm4.events.event",
+				"crowd.person.recommends", "dm4.core.default", "dm4.core.default", dm4);
 		//
 		// Translation <-> Person
 		DeepaMehtaUtils.associationAutoTyping(assoc, "crowd.work.translation", "dm4.contacts.person",
@@ -357,17 +361,36 @@ public class CrowdPlugin extends PluginActivator implements CrowdService, PreCre
 				"crowd.work");
 	}
 
-	private JSONArray getEventsOfPerson(long personId) {
+	private JSONArray getRecommendedEventsOfPerson(long personId) {
 		JSONArray events = null;
-
-		/*
-		 * not needed anymore List<RelatedTopic> eventTopics =
-		 * eventsService.getEvents(personId); if (!eventTopics.isEmpty()) {
-		 * events = new JSONArray(); for (Topic event : eventTopics) {
-		 * events.put(eventBasics(event)); } }
-		 */
+		
+		Topic personTopic = dm4.getTopic(personId);
+		
+		List<RelatedTopic> eventTopics = personTopic.getRelatedTopics("crowd.person.recommends", null, null, "dm4.events.event");
+		if (!eventTopics.isEmpty()) {
+			events = new JSONArray();
+			for (Topic event : eventTopics) {
+				events.put(eventBasics(event));
+			}
+		}
 
 		return events;
+	}
+
+	private JSONArray getRecommendedByPersonsOfEvent(long eventId) {
+		JSONArray persons = null;
+		
+		Topic eventTopic = dm4.getTopic(eventId);
+		
+		List<RelatedTopic> personTopics = eventTopic.getRelatedTopics("crowd.person.recommends", null, null, "dm4.contacts.person");
+		if (!personTopics.isEmpty()) {
+			persons = new JSONArray();
+			for (Topic person : personTopics) {
+				persons.put(new PersonOfEvent(person.getId(), person.getSimpleValue().toString()).toJSON());
+			}
+		}
+
+		return persons;
 	}
 
 	// --- Work ---

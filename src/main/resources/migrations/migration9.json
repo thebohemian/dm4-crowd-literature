@@ -4,6 +4,11 @@
             "value": "me",
             "uri": "crowd.person.me",
             "data_type_uri": "dm4.core.text"
+        },
+        {
+            "value": "recommends",
+            "uri": "crowd.recommends",
+            "data_type_uri": "dm4.core.text"
         }
     ]
 }

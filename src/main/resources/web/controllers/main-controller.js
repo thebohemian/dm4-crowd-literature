@@ -102,7 +102,7 @@ angular.module("crowd").controller("MainController", function($scope, $rootScope
         }
         if (oldMarkerId) {
           var marker = $scope.markers[oldMarkerId];
-          $scope.markers[markerId].icon = icons[marker.layer].normal;
+          $scope.markers[oldMarkerId].icon = icons[marker.layer].normal;
         }
     });
 

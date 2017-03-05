@@ -1,5 +1,5 @@
 <div class="event-list" ng-if="events">
-    <div class="heading">Events</div>
+    <div class="heading">{{title}}</div>
     <ul>
         <li class="event" ng-repeat="event in events">
             <div class="date">{{event.from | datetime:event.to}}</div>

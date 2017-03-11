@@ -49,4 +49,20 @@ public class DTOHelper {
 	}
 	
 	static class SearchResultImpl extends JSONEnabledImpl implements SearchResult { }
+	
+	public static String escapeEmail(String email) {
+		if (email == null)
+			return null;
+		
+		StringBuilder sb = new StringBuilder();
+		
+		final int length = email.length();
+		for (int i = 0; i < length; i++) {
+			sb.append("&#");
+			sb.append(String.valueOf(email.codePointAt(i)));
+			sb.append(";");
+		}
+		
+		return sb.toString();
+	}
 }

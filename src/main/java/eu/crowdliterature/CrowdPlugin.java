@@ -122,7 +122,9 @@ public class CrowdPlugin extends PluginActivator implements CrowdService, PreCre
 	public Person getPerson(@PathParam("id") long personId) {
 		Topic person = dm4.getTopic(personId);
 		ChildTopics childs = person.getChildTopics();
-		return new Person(person.getSimpleValue().toString(), getPlaceOfLiving(person),
+		return new Person(person.getSimpleValue().toString(),
+				getEmailOrNull(person),
+				getPlaceOfLiving(person),
 				childs.getChildTopics("dm4.datetime.date#dm4.contacts.date_of_birth").getStringOrNull(
 						"dm4.datetime.year"),
 				childs.getStringOrNull("dm4.contacts.city#crowd.person.place_of_birth"),
@@ -531,6 +533,16 @@ public class CrowdPlugin extends PluginActivator implements CrowdService, PreCre
 
 	private List<RelatedTopic> getAddresses(Topic institution) {
 		return institution.getChildTopics().getTopics("dm4.contacts.address#dm4.contacts.address_entry");
+	}
+
+	private String getEmailOrNull(Topic person) {
+		List<RelatedTopic> emails = person.getChildTopics().getTopicsOrNull("dm4.contacts.email_address");
+		
+		if (emails == null || emails.isEmpty()) {
+			return null;
+		} else {
+			return emails.get(0).getSimpleValue().toString();
+		}
 	}
 
 	private String getPlaceOfLiving(Topic person) {

@@ -1,7 +1,15 @@
 angular.module("crowd")
 .controller("PersonController", function($scope, $routeParams, crowdService) {
     crowdService.getPerson($routeParams.personId, function(response) {
-        $scope.person = response.data;
+        var person = response.data;
+
+        // If email is available unescape it on the fly using the browser.
+        if (person.email) {
+          person.email = angular.element('<textarea />').html(person.email).text();
+        }
+
+        $scope.person = person;
+
         $scope.setSelectedMarker($routeParams.personId);
     })
 })

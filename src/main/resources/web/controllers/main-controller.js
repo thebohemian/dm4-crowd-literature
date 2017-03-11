@@ -256,9 +256,6 @@ angular.module("crowd").controller("MainController", function($scope, $rootScope
               // marker is currently visible
               $scope.visibleMarkers[objectOfMap.id] = newMarker;
             }
-        } else {
-            console.log("WARNING: element \"" + objectOfMap.name + "\" (" + objectOfMap.id +
-                ") can't appear on map -- its geo coordinate is unknown")
         }
     }
 

@@ -1,5 +1,10 @@
 <div class="person">
     <div class="page-title">{{person.name}}</div>
+    <div class="birth" ng-if="person.email">
+      <span>
+        <a href="mailto:{{person.email}}"><img src="images/mail.png" />Contact</a>
+      </span>
+    <div>
     <div class="birth" ng-if="person.yearOfBirth || person.placeOfBirth">
         <span ng-if="person.yearOrBirth">Born {{person.yearOfBirth}}</span>
         <span ng-if="person.placeOfBirth">in {{person.placeOfBirth}}</span>

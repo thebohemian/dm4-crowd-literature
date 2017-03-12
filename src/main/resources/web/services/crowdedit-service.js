@@ -8,7 +8,7 @@ angular.module("crowdedit").service("crowdService", function($http) {
     }
 
     this.validateSetup = function(successCallback, errorCallback) {
-        $http.get("/crowd/person/validate_setup")
+        $http.post("/crowd/person/validate_setup")
           .then(successCallback, errorCallback);
     }
 

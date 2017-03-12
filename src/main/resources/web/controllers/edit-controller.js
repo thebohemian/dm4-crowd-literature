@@ -1,6 +1,12 @@
 angular.module("crowdedit")
 .controller("EditPersonController", function($scope, $routeParams, $location, $timeout, crowdService) {
 
+    $scope.newData = {};
+
+    $scope.isUpdateBlocked = false;
+
+    $scope.person = null;
+
     var loadPerson = function(personId) {
       crowdService.getEditablePerson(personId, function(response) {
         $scope.person = response.data;
@@ -83,13 +89,6 @@ angular.module("crowdedit")
         }, errorCallback);
       }, errorCallback);
     };
-
-    $scope.newData = {};
-
-    $scope.isUpdateBlocked = false;
-
-    // Autoload
-    validateAndLoadPerson();
 
     var addNewMultivalueElement = function(dmTopicType, newDataField, skipUpdatePerson) {
       var person = $scope.person;
@@ -207,6 +206,8 @@ angular.module("crowdedit")
     $scope.updatePerson = blockAware(function() { });
 
     $scope.logout = function() {
+      $scope.person = null;
+
       crowdService.logout(function() {
         $location.path("/start");
       });
@@ -274,4 +275,8 @@ angular.module("crowdedit")
 
          autoGrow_onStartup: true
      };
+
+     // Autoload
+     validateAndLoadPerson();
+
 })

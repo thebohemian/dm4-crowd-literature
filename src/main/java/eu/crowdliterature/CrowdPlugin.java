@@ -164,12 +164,12 @@ public class CrowdPlugin extends PluginActivator implements CrowdService, PreCre
 				throw new NotFoundException("No email address for this user: " + userName);
 			}
 
-			Topic person = userNameTopic.getRelatedTopic("crowd.person.me", null, null, "dm4.contacts.person");
+			Topic person = getPersonViaMeAssociationOrNull(userNameTopic);
 			if (person == null) {
 				log.warning("No 'me' association for this user: " + userName);
 				throw new NotFoundException();
 			} else {
-				if (!personHasEmail(person, emailAddress)) {
+				if (!personHasEmail(person.getId(), emailAddress)) {
 					throw new NotFoundException("Email not set up properly for this user: " + userName);
 				}
 				
@@ -185,8 +185,23 @@ public class CrowdPlugin extends PluginActivator implements CrowdService, PreCre
 		}
 
 	}
+	
+	private Topic getPersonViaMeAssociationOrNull(Topic userNameTopic) {
+		// 'me' association is handled manually, so handle gracefully when there is more than one
+		// association.
+		List<RelatedTopic> persons = userNameTopic.getRelatedTopics("crowd.person.me", null, null, "dm4.contacts.person");
+		if (persons.size() == 1) {
+			return persons.get(0);
+		} else if (persons.size() > 1) {
+			log.warning("Too many 'me' associations for username: " + userNameTopic.getSimpleValue().toString());
+			
+			return persons.get(0);
+		}
+		
+		return null;
+	}
 
-	@GET
+	@POST
 	@Path("/person/validate_setup")
 	@Transactional
 	@Override
@@ -198,6 +213,7 @@ public class CrowdPlugin extends PluginActivator implements CrowdService, PreCre
 			throw new NotFoundException();
 		}
 		String userName = userNameTopic.getSimpleValue().toString();
+		log.info("Validating user setup: " + userName);
 
 		String emailAddress = dm4.getAccessControl().getEmailAddress(userName);
 		if (emailAddress == null) {
@@ -205,7 +221,8 @@ public class CrowdPlugin extends PluginActivator implements CrowdService, PreCre
 			throw new NotFoundException();
 		}
 
-		Topic person = userNameTopic.getRelatedTopic("crowd.person.me", null, null, "dm4.contacts.person");
+
+		Topic person = getPersonViaMeAssociationOrNull(userNameTopic);
 		if (person == null){
 			log.info("User had no Person topic associated. Attempting to find person: " + userName);
 			person = findPersonWithEmail(emailAddress);
@@ -224,7 +241,7 @@ public class CrowdPlugin extends PluginActivator implements CrowdService, PreCre
 			}
 			
 			setupPersonAndUser(userNameTopic, person);
-		} else if (!personHasEmail(person, emailAddress)) {
+		} else if (!personHasEmail(person.getId(), emailAddress)) {
 			// Person existed but email is missing.
 			
 			log.info("Person is missing email address of user. Adding.");
@@ -657,8 +674,8 @@ public class CrowdPlugin extends PluginActivator implements CrowdService, PreCre
 		return null;		
 	}
 
-	private boolean personHasEmail(Topic personTopic, String emailAddress) {
-		ChildTopics childs = personTopic.getChildTopics();
+	private boolean personHasEmail(long personTopicId, String emailAddress) {
+		ChildTopics childs = dm4.getTopic(personTopicId).getChildTopics();
 		List<RelatedTopic> emails = childs.getTopicsOrNull("dm4.contacts.email_address");
 		if (emails == null) {
 			return false;

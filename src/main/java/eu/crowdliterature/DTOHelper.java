@@ -44,7 +44,7 @@ public class DTOHelper {
 		}
 	}
 	
-	private static List<RelatedTopic> parents(Topic topic) {
+	static List<RelatedTopic> parents(Topic topic) {
 		return topic.getRelatedTopics((String) null, "dm4.core.child", "dm4.core.parent",(String) null);
 	}
 	

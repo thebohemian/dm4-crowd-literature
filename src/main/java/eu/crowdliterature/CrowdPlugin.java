@@ -34,9 +34,13 @@ import de.deepamehta.core.service.Inject;
 import de.deepamehta.core.service.Transactional;
 import de.deepamehta.core.service.accesscontrol.SharingMode;
 import de.deepamehta.core.service.event.PostCreateAssociationListener;
+import de.deepamehta.core.service.event.PostCreateTopicListener;
+import de.deepamehta.core.service.event.PostUpdateTopicListener;
 import de.deepamehta.core.service.event.PreCreateAssociationListener;
+import de.deepamehta.core.service.event.PreSendTopicListener;
 import de.deepamehta.core.util.DeepaMehtaUtils;
 import de.deepamehta.events.EventsService;
+import de.deepamehta.facets.FacetsService;
 import de.deepamehta.geomaps.GeomapsService;
 import de.deepamehta.geomaps.model.GeoCoordinate;
 import de.deepamehta.workspaces.WorkspacesService;
@@ -62,7 +66,8 @@ import eu.crowdliterature.model.WorkOfPerson;
 @Path("/crowd")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
-public class CrowdPlugin extends PluginActivator implements CrowdService, PreCreateAssociationListener, PostCreateAssociationListener {
+public class CrowdPlugin extends PluginActivator implements CrowdService, PreCreateAssociationListener, PostCreateAssociationListener,
+		PostCreateTopicListener, PostUpdateTopicListener {
 
 	private static final Logger log = Logger.getLogger(CrowdPlugin.class.getSimpleName());
 	
@@ -83,6 +88,16 @@ public class CrowdPlugin extends PluginActivator implements CrowdService, PreCre
 
 	@Inject
 	private AccessControlService acService; // needed by migration 1
+	
+	@Inject
+	private FacetsService facetsService;
+
+	private GeoMapsHelper geoMapsHelper;
+	
+	@Override
+	public void init() {
+		geoMapsHelper = new GeoMapsHelper(mf, facetsService);
+	}
 
 	// --------------------------------------------------------------------------------------------------
 	// Public Methods
@@ -98,7 +113,7 @@ public class CrowdPlugin extends PluginActivator implements CrowdService, PreCre
 	public String getStartPageContent() {
 		return dm4.getTopicByUri("crowd.meet.start_page").getChildTopics().getString("dm4.notes.text");
 	}
-	
+
 	// --- Search functionality ---
     /**
      * Performs a fulltext search and creates a search result topic.
@@ -140,7 +155,7 @@ public class CrowdPlugin extends PluginActivator implements CrowdService, PreCre
 		List<PersonOfMap> persons = new ArrayList<PersonOfMap>();
 		for (Topic person : dm4.getTopicsByType("dm4.contacts.person")) {
 			Topic address = getAddresses(person).get(0);
-			GeoCoordinate geoCoord = address != null ? geomapsService.getGeoCoordinate(address) : null;
+			GeoCoordinate geoCoord = address != null ? geoMapsHelper.getGeoCoordinate(address) : null;
 			persons.add(new PersonOfMap(person.getId(), person.getSimpleValue().toString(), geoCoord));
 
 		}
@@ -766,5 +781,15 @@ public class CrowdPlugin extends PluginActivator implements CrowdService, PreCre
 		
 		return typesWs.getId();
 	}
-	
+
+    @Override
+    public void postCreateTopic(Topic topic) {
+    	geoMapsHelper.postCreateTopic(topic);
+    }
+    
+    @Override
+    public void postUpdateTopic(Topic topic, TopicModel updateModel, TopicModel oldTopic) {
+    	geoMapsHelper.postUpdateTopic(topic, updateModel, oldTopic);
+    }
+    
 }

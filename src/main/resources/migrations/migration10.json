@@ -1,0 +1,17 @@
+{
+    "topic_types": [
+        {
+            "value":         "CROWD Geo Coordinate Facet",
+            "uri":           "eu.crowdliterature.geo_coordinate_facet",
+            "data_type_uri": "dm4.core.composite",
+            "assoc_defs": [
+                {
+                    "child_type_uri":        "dm4.geomaps.geo_coordinate",
+                    "child_cardinality_uri": "dm4.core.one",
+                    "assoc_type_uri":        "dm4.core.composition_def"
+                }
+            ]
+        }
+    ]
+
+}

@@ -11,7 +11,7 @@ import eu.crowdliterature.GeoMapsHelper;
 
 
 
-public class Migration9 extends Migration {
+public class Migration11 extends Migration {
 	
 	@Inject
 	private FacetsService facetsService;

@@ -1,6 +1,7 @@
 package eu.crowdliterature;
 
 import java.net.URL;
+import java.util.List;
 import java.util.concurrent.Callable;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -8,6 +9,7 @@ import java.util.logging.Logger;
 import org.codehaus.jettison.json.JSONObject;
 
 import de.deepamehta.core.ChildTopics;
+import de.deepamehta.core.RelatedTopic;
 import de.deepamehta.core.Topic;
 import de.deepamehta.core.model.ChildTopicsModel;
 import de.deepamehta.core.model.TopicModel;
@@ -113,10 +115,20 @@ public class GeoMapsHelper implements PostCreateTopicListener,
             }
         }
     }
+    
+    private boolean containsTopicOfType(String topicType, List<RelatedTopic> topics) {
+    	for (RelatedTopic topic : topics) {
+    		if (topic.getTypeUri().equals(topicType)) {
+    			return true;
+    		}
+    	}
+    	
+    	return false;
+    }
 
     @Override
     public void postUpdateTopic(Topic topic, TopicModel updateModel, TopicModel oldTopic) {
-    	if (topic.getTypeUri().equals("dm4.contacts.address") && DTOHelper.parents(topic).contains("dm4.contacts.person")) {
+    	if (topic.getTypeUri().equals("dm4.contacts.address") && containsTopicOfType("dm4.contacts.person", DTOHelper.parents(topic))) {
             if (!abortGeocoding(topic)) {
                 Address address    = new Address(topic.getChildTopics().getModel());
                 Address oldAddress = new Address(oldTopic.getChildTopicsModel());

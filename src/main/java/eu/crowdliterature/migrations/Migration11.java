@@ -19,9 +19,10 @@ public class Migration11 extends Migration {
     @Override
     public void run() {
     	dm4.getTopicType("dm4.contacts.person")
-    		.addAssocDef(mf.newAssociationDefinitionModel("dm4.core.composition_def",
-    			"dm4.contacts.person", "crowd.person.iscontactenabled",
-    			"dm4.core.one", "dm4.core.one"));
+    		.addAssocDef(
+    			mf.newAssociationDefinitionModel("dm4.core.aggregation_def",
+					"dm4.contacts.person", "crowd.person.iscontactenabled",
+    				"dm4.core.many", "dm4.core.one"));
     	
     	GeoMapsHelper geoMapsHelper = new GeoMapsHelper(mf, facetsService);
     	
@@ -33,5 +34,6 @@ public class Migration11 extends Migration {
     			geoMapsHelper.fixGeoCoordinate(address);
     		}
     	}
+    	
     }
 }

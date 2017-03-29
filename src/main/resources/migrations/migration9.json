@@ -25,12 +25,14 @@
                     }
                 }
             ]
-        },
-        {
-            "value":            "Is Contact Enabled",
+        }
+    ],
+   "topic_types": [
+       {
+            "value":            "Is Email Contact Enabled",
             "uri":              "crowd.person.iscontactenabled",
             "data_type_uri":    "dm4.core.boolean",
             "index_mode_uris": ["dm4.core.fulltext"]
-        }       
+        }
     ]
 }

@@ -566,10 +566,14 @@ public class CrowdPlugin extends PluginActivator implements CrowdService, PreCre
 	private List<RelatedTopic> getAddresses(Topic institution) {
 		return institution.getChildTopics().getTopics("dm4.contacts.address#dm4.contacts.address_entry");
 	}
-
+	
 	private String getEmailOrNull(Topic person) {
-		List<RelatedTopic> emails = person.getChildTopics().getTopicsOrNull("dm4.contacts.email_address");
+		ChildTopics childs = person.getChildTopics();
+		if (!Boolean.TRUE.equals(childs.getBooleanOrNull("crowd.person.iscontactenabled"))) {
+			return null;
+		}
 		
+		List<RelatedTopic> emails = childs.getTopicsOrNull("dm4.contacts.email_address");
 		if (emails == null || emails.isEmpty()) {
 			return null;
 		} else {

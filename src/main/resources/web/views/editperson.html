@@ -71,11 +71,6 @@
     </div>
 
     <div class="form-group">
-      <label for="inputContactEnabled">Contact Enabled</label>
-      <input style="width: auto" ng-disabled="isUpdateBlocked" type="checkbox" class="form-control" id="inputContactEnabled" ng-model="person['childs']['crowd.person.iscontactenabled'].value">Email is visible in website</input
-    </div>
-
-    <div class="form-group">
       <label for="inputEmail">Email Addresses</label>
       <div id="inputEmail" class="form-group" ng-repeat="e in person['childs']['dm4.contacts.email_address'] track by $index" ng-if="e.type_uri">
         <div class="input-group">
@@ -95,6 +90,13 @@
       </div>
     </div>
 
+    <div class="form-group">
+      <label>
+        <input style="width:auto" ng-disabled="isUpdateBlocked" type="checkbox" class="form-control" id="inputContactEnabled" ng-model="person['childs']['crowd.person.iscontactenabled'].value">
+        Contact Enabled
+      </label>
+      <p>Check this box if you want the first email adress to show up on the website where it is publicly visible.</p>
+    </div>
 
     <div class="form-group">
       <label for="inputURL">URLs</label>

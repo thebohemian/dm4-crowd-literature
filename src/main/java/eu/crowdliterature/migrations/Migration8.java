@@ -17,10 +17,10 @@ public class Migration8 extends Migration {
         ChildTopics childs = signUpConfig.getChildTopics();
         childs.set("org.deepamehta.signup.config_project_title", "CROWD Meet Sign Up Configuration");
         childs.set("org.deepamehta.signup.config_webapp_title", "CROWD Meet");
-        childs.set("org.deepamehta.signup.config_from_mailbox", "root@sudam.lan");	// TODO!
+        childs.set("org.deepamehta.signup.config_from_mailbox", "root@localhost");
         childs.set("org.deepamehta.signup.loading_app_hint", "Entering CROWD Meet");
         
-        childs.set("org.deepamehta.signup.config_admin_mailbox", "thebohemian@gmx.net");
+        childs.set("org.deepamehta.signup.config_admin_mailbox", "root@localhost");
         childs.set("org.deepamehta.signup.config_email_confirmation", false);
         childs.set("org.deepamehta.signup.start_page_url", "/eu.crowd-literature/edit.html");
         childs.set("org.deepamehta.signup.home_page_url", "/eu.crowd-literature/index.html");
